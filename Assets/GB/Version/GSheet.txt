@@ -1,0 +1,11 @@
+ {
+    "Version":"1.0.0",
+    "DOC" : "https://gb-framework.gitbook.io/gb-framework-docs/gb-assets/gamedatatable",
+    "Model":
+    {
+        "Key":"GSheet",
+        "URL":"https://github.com/shogun0331/gbconnet/releases/download/V1.0.0/GSheet.unitypackage",
+        "PackageType":0
+    },
+    "DependencyList":[]
+}

@@ -1,0 +1,11 @@
+  {
+    "Version":"1.0.0",
+    "DOC" : "https://gb-framework.gitbook.io/gb-framework-docs/gb-assets/integrations",
+    "Model":
+    {
+        "Key":"Localization",
+        "URL":"https://github.com/shogun0331/gbconnet/releases/download/V1.0.0/Localization.unitypackage",
+        "PackageType":0
+    },
+    "DependencyList":[]
+}

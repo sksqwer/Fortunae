@@ -1,0 +1,26 @@
+{
+    "name": "QuickEye.Utility.Editor",
+    "rootNamespace": "",
+    "references": [
+        "QuickEye.Utility"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "QuickEye.Utility.Harmony.dll"
+    ],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [
+        {
+            "name": "com.unity.settings-manager",
+            "expression": "",
+            "define": "UNITY_SETTINGS_MANAGER"
+        }
+    ],
+    "noEngineReferences": false
+}

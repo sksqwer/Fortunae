@@ -1,0 +1,20 @@
+{
+    "name": "Unity.GBCore",
+    "rootNamespace": "",
+    "references": [
+        "QuickEye.Utility",
+        "QuickEye.UI",
+        "NaughtyAttributes.Core",
+        "Unity.TextMeshPro",
+        "UnityUIExtensions"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

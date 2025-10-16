@@ -1,0 +1,34 @@
+{
+  "name": "com.quickeye.utility",
+  "displayName": "QuickEye Utility",
+  "version": "3.1.0",
+  "unity": "2020.3",
+  "author": "Quick Eye",
+  "type": "library",
+  "dependencies": {
+    "com.unity.settings-manager": "2.0.1"
+  },
+  "samples": [
+    {
+      "displayName": "Usage of Singleton classes",
+      "description": "Basic usage of the Singletons classes.",
+      "path": "Samples~/SingletonAssets"
+    },
+    {
+      "displayName": "Usage of Container classes",
+      "description": "UI scene with a simple usage of Container class.",
+      "path": "Samples~/ContainerUsage"
+    },
+    {
+      "displayName": "UI - Character Selection Screen",
+      "description": "UI scene example utilizing lib features.",
+      "path": "Samples~/CharacterCreationScreen"
+    },
+    {
+      "displayName": "New Serializable Types",
+      "description": "Serializable dictionary and other new types editable from inspector.",
+      "path": "Samples~/SerializableTypes"
+    }
+  ],
+  "description": "New Serializable Types:\n- `UnityDictionary`\n- `UnityTimeSpan`\n- `UnityDateOnly`\n- `UnityDateTime`\n\nSingletons:\n- `SingletonMonoBehaviour<T>`\n- `SingletonScriptableObject<T>`\n\nOther:\n- `GameObjectPool`\n- `RepeatingInt`"
+}

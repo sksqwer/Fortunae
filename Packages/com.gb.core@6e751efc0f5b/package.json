@@ -1,0 +1,20 @@
+{
+  "name": "com.gb.core",
+  "displayName": "GB Core",
+  "version": "1.0.8",
+  "unity": "2018.1",
+  "keywords": [
+    "service"
+  ],
+  "author": {
+    "name": "Garibong",
+    "email": "shogun0331@gmail.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/shogun0331/gbmain.git"
+  },
+  "description": "Garibong Core Package",
+  "documentationUrl": "https://gb-framework.gitbook.io/gb-framework-docs",
+  "_fingerprint": "6e751efc0f5b1c60a956d7640e3e4e0447cfcdb6"
+}

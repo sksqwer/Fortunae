@@ -1,0 +1,129 @@
+using System.Collections.Generic;
+using System;
+using Newtonsoft.Json;
+
+
+[Serializable]
+public class $ClassName$  : GameData
+{	
+	 [JsonProperty] public $ClassName$Prob[] Datas{get; private set;}
+	 IReadOnlyDictionary<string, $ClassName$Prob> _DicDatas;
+
+	public void SetJson(string json)
+    {
+        var data = JsonConvert.DeserializeObject <$ClassName$> (json);
+        $ClassName$Prob[] arr = data.Datas;
+        Datas = arr;
+
+		var dic = new Dictionary<string, $ClassName$Prob>();
+
+        for (int i = 0; i < Datas.Length; ++i)
+            dic[Datas[i].$FIRSTPROPERTY$.ToString()] = Datas[i];
+
+        _DicDatas = dic;
+
+    }
+
+	public bool ContainsColumnKey(string name)
+    {
+        switch (name)
+        {
+#CASE2#
+		  default: return false;
+
+        }
+    }
+
+	public override double GetNumber(int row, string col)
+    {
+        return double.Parse(this[row, col].ToString(), System.Globalization.CultureInfo.InvariantCulture);
+    }
+
+    public override double GetNumber(string row, string col)
+    {
+        return double.Parse(this[row, col].ToString(), System.Globalization.CultureInfo.InvariantCulture);
+    }
+
+
+	public object this[int row, string col]
+    {
+        get
+        {
+            $ClassName$Prob data = this[row];
+            switch (col)
+            {
+#CASE1#
+
+                default: return null;
+            }
+        }
+    }
+
+
+    public object this[string row, string col]
+    {
+        get
+        {
+             $ClassName$Prob data = this[row];
+            switch (col)
+            {
+#CASE1#
+
+                default: return null;
+            }
+        }
+    }
+
+
+	 public object this[int row, int col]
+    {
+        get
+        {
+            $ClassName$Prob data = Datas[row];
+
+            switch (col)
+            {
+#CASE#
+                default: return null;
+            }
+        }
+    }
+
+    public $ClassName$Prob this[string name]
+    {
+        get
+        {
+            return _DicDatas[name];
+        }
+    }
+
+
+    public $ClassName$Prob this[int index]
+    {
+        get
+        {
+            return Datas[index];
+        }
+    }
+
+    public bool ContainsKey(string name)
+    {
+        return _DicDatas.ContainsKey(name);
+    }
+
+
+
+    public int Count
+    {
+        get
+        {
+            return Datas.Length;
+        }
+    }
+}
+
+[Serializable]
+public class $ClassName$Prob : GameDataProb
+{
+	$DATAS$
+}

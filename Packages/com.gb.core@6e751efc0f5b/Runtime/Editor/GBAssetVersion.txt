@@ -1,0 +1,310 @@
+[
+    {
+        "Version":"1.0.0",
+        "DOC" : "https://gb-framework.gitbook.io/gb-framework-docs/gb-assets/resources",
+        "Model":
+        {
+            "Key":"Resources",
+            "URL":"https://github.com/shogun0331/gbassets/releases/download/V1.0.0/Resources.unitypackage",
+            "PackageType":0
+        },
+        "DependencyList":[]
+    },
+    {
+        "Version":"1.0.0",
+        "DOC" : "https://gb-framework.gitbook.io/gb-framework-docs/gb-assets/gamedatatable",
+        "Model":
+        {
+            "Key":"GSheet",
+            "URL":"https://github.com/shogun0331/gbassets/releases/download/V1.0.0/GSheet.unitypackage",
+            "PackageType":0
+        },
+        "DependencyList":[]
+    },
+    {
+        "Version":"1.0.0",
+        "DOC" : "https://gb-framework.gitbook.io/gb-framework-docs/gb-assets/integrations",
+        "Model":
+        {
+            "Key":"Localization",
+            "URL":"https://github.com/shogun0331/gbassets/releases/download/V1.0.0/Localization.unitypackage",
+            "PackageType":0
+        },
+        "DependencyList":[]
+    },
+    {
+        "Version":"1.0.0",
+        "DOC" : "https://gb-framework.gitbook.io/gb-framework-docs/gb-assets/fsm",
+        "Model":
+        {
+            "Key":"FSM",
+            "URL":"https://github.com/shogun0331/gbassets/releases/download/V1.0.0/FSM.unitypackage",
+            "PackageType":0
+        },
+        "DependencyList":
+        [
+            {"Key":"SerializableInterface","URL":"https://github.com/Thundernerd/Unity3D-SerializableInterface.git","PackageType":1},
+        ]
+    },
+
+    
+    {
+        "Version":"1.0.0",
+        "DOC" : "https://gb-framework.gitbook.io/gb-framework-docs/gb-assets/userdata",
+        "Model":
+        {
+            "Key":"UserData",
+            "URL":"https://github.com/shogun0331/gbassets/releases/download/V1.0.0/UserData.unitypackage",
+            "PackageType":0
+        },
+        "DependencyList":[]
+    },
+    {
+        "Version":"1.0.0",
+        "DOC" : "https://gb-framework.gitbook.io/gb-framework-docs/gb-assets/spranimation",
+        "Model":
+        {
+            "Key":"SPRAnimation",
+            "URL":"https://github.com/shogun0331/gbassets/releases/download/V1.0.0/SpriteAnimation.unitypackage",
+            "PackageType":0
+        },
+        "DependencyList":[]
+    },
+    {
+        "Version":"1.0.0",
+        "DOC" : "https://gb-framework.gitbook.io/gb-framework-docs/gb-assets/memo",
+        "Model":
+        {
+            "Key":"Memo",
+            "URL":"https://github.com/shogun0331/gbassets/releases/download/V1.0.0/Memo.unitypackage",
+            "PackageType":0
+        },
+        "DependencyList":[]
+    },
+    {
+        "Version":"1.0.0",
+        "DOC" : null,
+        "Model":
+        {
+            "Key":"Spine Util",
+            "URL":"https://github.com/shogun0331/gbassets/releases/download/V1.0.0/GBSpine.unitypackage",
+            "PackageType":0
+        },
+        "DependencyList":[]
+    },
+    {
+        "Version":"1.0.0",
+        "DOC" : null,
+        "Model":
+        {
+            "Key":"TapSystem",
+            "URL":"https://github.com/shogun0331/gbassets/releases/download/V1.0.0/TapSystem.unitypackage",
+            "PackageType":0
+        },
+        "DependencyList":[]
+    },
+    {
+        "Version":"1.0.0",
+        "DOC" : null,
+        "Model":
+        {
+            "Key":"UI Tween",
+            "URL":"https://github.com/shogun0331/gbassets/releases/download/V1.0.0/UI_Tween.unitypackage",
+            "PackageType":0
+        },
+        "DependencyList":
+        [
+            {"Key":"DoTween","URL":"https://github.com/shogun0331/gbconnet/releases/download/V1.0.0/Tween.unitypackage","PackageType":0},
+        ]
+    },
+    {
+        "Version":"1.0.0",
+        "DOC" : null,
+        "Model":
+        {
+            "Key":"GB Inapp",
+            "URL":"https://github.com/shogun0331/gbassets/releases/download/V1.0.0/Inapp.unitypackage",
+            "PackageType":0
+        },
+        "DependencyList":[]
+    },
+    {
+        "Version":"1.0.0",
+        "DOC" : null,
+        "Model":
+        {
+            "Key":"GB Admob",
+            "URL":"https://github.com/shogun0331/gbassets/releases/download/V1.0.0/Admob.unitypackage",
+            "PackageType":0
+        },
+        "DependencyList":[]
+    },
+    {
+        "Version":"1.0.0",
+        "DOC" : null,
+        "Model":
+        {
+            "Key":"GB Playfab",
+            "URL":"https://github.com/shogun0331/gbassets/releases/download/V1.0.0/GBPlayfab.unitypackage",
+            "PackageType":0
+        },
+        "DependencyList":[]
+    },
+    {
+        "Version":"1.0.0",
+        "DOC" : null,
+        "Model":
+        {
+            "Key":"FeedbackDiscord",
+            "URL":"https://github.com/shogun0331/gbassets/releases/download/V1.0.0/FeedbackDiscord.unitypackage",
+            "PackageType":0
+        },
+        "DependencyList":[]
+    },
+
+
+
+    {
+        "Version":"1.0.0",
+        "DOC" : "https://dotween.demigiant.com/",
+        "Model":
+        {
+            "Key":"DoTween",
+            "URL":"https://github.com/shogun0331/gbassets/releases/download/V1.0.0/DoTween.unitypackage",
+            "PackageType":0
+        },
+        "DependencyList":[]
+    },
+    {
+        "Version":"1.0.0",
+        "DOC" : "https://github.com/brunomikoski/Animation-Sequencer",
+        "Model":
+        {
+            "Key":"AnimationSequencer",
+            "URL":"https://github.com/shogun0331/gbassets/releases/download/V1.0.0/AnimationSequencer.unitypackage",
+            "PackageType":0
+        },
+        "DependencyList":[]
+    },
+    {
+        "Version":"1.0.0",
+        "DOC" : "https://github.com/yasirkula/UnityMobileLocalizedAppTitle",
+        "Model":
+        {
+            "Key":"LocalizedAppTitle",
+            "URL":"https://github.com/shogun0331/gbassets/releases/download/V1.0.0/UnityMobileLocalizedAppTitle.unitypackage",
+            "PackageType":0
+        },
+        "DependencyList":[]
+    },
+    {
+        "Version":"1.0.0",
+        "DOC" : "https://assetstore.unity.com/packages/tools/sprite-management/animation-baking-studio-3d-to-2d-31247",
+        "Model":
+        {
+            "Key":"AnimationBaking",
+            "URL":"https://github.com/shogun0331/gbassets/releases/download/V1.0.0/AnimationBakingStudio.3Dto2D.unitypackage",
+            "PackageType":0
+        },
+        "DependencyList":[]
+    },
+    {
+        "Version":"1.0.0",
+        "DOC" : "https://assetstore.unity.com/packages/tools/modeling/mesh-baker-5017",
+        "Model":
+        {
+            "Key":"MeshBaker",
+            "URL":"https://github.com/shogun0331/gbassets/releases/download/V1.0.0/MeshBaker.unitypackage",
+            "PackageType":0
+        },
+        "DependencyList":[]
+    },
+    {
+        "Version":"1.0.0",
+        "DOC" : "https://assetstore.unity.com/packages/tools/integration/log-viewer-12047",
+        "Model":
+        {
+            "Key":"Logs_Viewer",
+            "URL":"https://github.com/shogun0331/gbassets/releases/download/V1.0.0/Unity-Logs_Viewer.unitypackage",
+            "PackageType":0
+        },
+        "DependencyList":[]
+    },
+    {
+        "Version":"1.0.0",
+        "DOC" : "https://assetstore.unity.com/packages/2d/pro-camera-2d-the-definitive-2d-2-5d-camera-plugin-for-unity-42095",
+        "Model":
+        {
+            "Key":"ProCamera2D",
+            "URL":"https://github.com/shogun0331/gbassets/releases/download/V1.0.0/ProCamera2D.unitypackage",
+            "PackageType":0
+        },
+        "DependencyList":[]
+    },
+    {
+        "Version":"1.0.0",
+        "DOC" : "https://github.com/Cysharp/UniTask/tree/master",
+        "Model":
+        {
+            "Key":"UniTask",
+            "URL":"https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask",
+            "PackageType":1
+        },
+        "DependencyList":[]
+    },
+    {
+        "Version":"1.0.0",
+        "DOC" : "https://github.com/BenoitFreslon/Vibration",
+        "Model":
+        {
+            "Key":"Vibration",
+            "URL":"https://github.com/BenoitFreslon/Vibration.git",
+            "PackageType":1
+        },
+        "DependencyList":[]
+    },
+    {
+        "Version":"1.0.0",
+        "DOC" : "https://github.com/neuecc/UniRx",
+        "Model":
+        {
+            "Key":"UniRX",
+            "URL":"https://github.com/neuecc/UniRx.git?path=Assets/Plugins/UniRx/Scripts",
+            "PackageType":1
+        },
+        "DependencyList":[]
+    },
+    {
+        "Version":"1.0.0",
+        "DOC" : "https://learn.microsoft.com/en-us/gaming/playfab/what-is-playfab",
+        "Model":
+        {
+            "Key":"PlayFab",
+            "URL":"https://aka.ms/PlayFabUnityEdEx",
+            "PackageType":1
+        },
+        "DependencyList":[]
+    },
+    {
+        "Version":"1.0.0",
+        "DOC" : "https://github.com/3DI70R/Unity-SensorKit",
+        "Model":
+        {
+            "Key":"SensorKit",
+            "URL":"https://github.com/3DI70R/Unity-SensorKit.git",
+            "PackageType":1
+        },
+        "DependencyList":[]
+    },
+    {
+        "Version":"1.0.0",
+        "DOC" : "https://github.com/VeriorPies/ParrelSync/tree/master",
+        "Model":
+        {
+            "Key":"ParrelSync",
+            "URL":"https://github.com/VeriorPies/ParrelSync.git?path=/ParrelSync",
+            "PackageType":1
+        },
+        "DependencyList":[]
+    },
+]

@@ -1,0 +1,11 @@
+   {
+        "Version":"1.0.0",
+        "DOC" : "https://dotween.demigiant.com/",
+        "Model":
+        {
+            "Key":"DoTween",
+            "URL":"https://github.com/shogun0331/gbconnet/releases/download/V1.0.0/Tween.unitypackage",
+            "PackageType":0
+        },
+        "DependencyList":[]
+    }
