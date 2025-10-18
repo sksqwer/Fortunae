@@ -1,0 +1,267 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2353435bc16bece4e8a78a527da98426, type: 3}
+  m_Name: RouletteDefinition
+  m_EditorClassIdentifier: 
+  spotBaseList:
+  - id: 1
+    color: Red
+    basePayout: 36
+    isOdd: 1
+    isHighNumber: 0
+    dozenGroup: 1
+    columnGroup: 1
+  - id: 2
+    color: Black
+    basePayout: 36
+    isOdd: 0
+    isHighNumber: 0
+    dozenGroup: 1
+    columnGroup: 2
+  - id: 3
+    color: Red
+    basePayout: 36
+    isOdd: 1
+    isHighNumber: 0
+    dozenGroup: 1
+    columnGroup: 3
+  - id: 4
+    color: Black
+    basePayout: 36
+    isOdd: 0
+    isHighNumber: 0
+    dozenGroup: 1
+    columnGroup: 1
+  - id: 5
+    color: Red
+    basePayout: 36
+    isOdd: 1
+    isHighNumber: 0
+    dozenGroup: 1
+    columnGroup: 2
+  - id: 6
+    color: Black
+    basePayout: 36
+    isOdd: 0
+    isHighNumber: 0
+    dozenGroup: 1
+    columnGroup: 3
+  - id: 7
+    color: Red
+    basePayout: 36
+    isOdd: 1
+    isHighNumber: 0
+    dozenGroup: 1
+    columnGroup: 1
+  - id: 8
+    color: Black
+    basePayout: 36
+    isOdd: 0
+    isHighNumber: 0
+    dozenGroup: 1
+    columnGroup: 2
+  - id: 9
+    color: Red
+    basePayout: 36
+    isOdd: 1
+    isHighNumber: 0
+    dozenGroup: 1
+    columnGroup: 3
+  - id: 10
+    color: Black
+    basePayout: 36
+    isOdd: 0
+    isHighNumber: 0
+    dozenGroup: 1
+    columnGroup: 1
+  - id: 11
+    color: Black
+    basePayout: 36
+    isOdd: 1
+    isHighNumber: 0
+    dozenGroup: 1
+    columnGroup: 2
+  - id: 12
+    color: Red
+    basePayout: 36
+    isOdd: 0
+    isHighNumber: 0
+    dozenGroup: 1
+    columnGroup: 3
+  - id: 13
+    color: Black
+    basePayout: 36
+    isOdd: 1
+    isHighNumber: 0
+    dozenGroup: 2
+    columnGroup: 1
+  - id: 14
+    color: Red
+    basePayout: 36
+    isOdd: 0
+    isHighNumber: 0
+    dozenGroup: 2
+    columnGroup: 2
+  - id: 15
+    color: Black
+    basePayout: 36
+    isOdd: 1
+    isHighNumber: 0
+    dozenGroup: 2
+    columnGroup: 3
+  - id: 16
+    color: Red
+    basePayout: 36
+    isOdd: 0
+    isHighNumber: 0
+    dozenGroup: 2
+    columnGroup: 1
+  - id: 17
+    color: Black
+    basePayout: 36
+    isOdd: 1
+    isHighNumber: 0
+    dozenGroup: 2
+    columnGroup: 2
+  - id: 18
+    color: Red
+    basePayout: 36
+    isOdd: 0
+    isHighNumber: 0
+    dozenGroup: 2
+    columnGroup: 3
+  - id: 19
+    color: Red
+    basePayout: 36
+    isOdd: 1
+    isHighNumber: 1
+    dozenGroup: 2
+    columnGroup: 1
+  - id: 20
+    color: Black
+    basePayout: 36
+    isOdd: 0
+    isHighNumber: 1
+    dozenGroup: 2
+    columnGroup: 2
+  - id: 21
+    color: Red
+    basePayout: 36
+    isOdd: 1
+    isHighNumber: 1
+    dozenGroup: 2
+    columnGroup: 3
+  - id: 22
+    color: Black
+    basePayout: 36
+    isOdd: 0
+    isHighNumber: 1
+    dozenGroup: 2
+    columnGroup: 1
+  - id: 23
+    color: Red
+    basePayout: 36
+    isOdd: 1
+    isHighNumber: 1
+    dozenGroup: 2
+    columnGroup: 2
+  - id: 24
+    color: Black
+    basePayout: 36
+    isOdd: 0
+    isHighNumber: 1
+    dozenGroup: 2
+    columnGroup: 3
+  - id: 25
+    color: Red
+    basePayout: 36
+    isOdd: 1
+    isHighNumber: 1
+    dozenGroup: 3
+    columnGroup: 1
+  - id: 26
+    color: Black
+    basePayout: 36
+    isOdd: 0
+    isHighNumber: 1
+    dozenGroup: 3
+    columnGroup: 2
+  - id: 27
+    color: Red
+    basePayout: 36
+    isOdd: 1
+    isHighNumber: 1
+    dozenGroup: 3
+    columnGroup: 3
+  - id: 28
+    color: Black
+    basePayout: 36
+    isOdd: 0
+    isHighNumber: 1
+    dozenGroup: 3
+    columnGroup: 1
+  - id: 29
+    color: Black
+    basePayout: 36
+    isOdd: 1
+    isHighNumber: 1
+    dozenGroup: 3
+    columnGroup: 2
+  - id: 30
+    color: Red
+    basePayout: 36
+    isOdd: 0
+    isHighNumber: 1
+    dozenGroup: 3
+    columnGroup: 3
+  - id: 31
+    color: Black
+    basePayout: 36
+    isOdd: 1
+    isHighNumber: 1
+    dozenGroup: 3
+    columnGroup: 1
+  - id: 32
+    color: Red
+    basePayout: 36
+    isOdd: 0
+    isHighNumber: 1
+    dozenGroup: 3
+    columnGroup: 2
+  - id: 33
+    color: Black
+    basePayout: 36
+    isOdd: 1
+    isHighNumber: 1
+    dozenGroup: 3
+    columnGroup: 3
+  - id: 34
+    color: Red
+    basePayout: 36
+    isOdd: 0
+    isHighNumber: 1
+    dozenGroup: 3
+    columnGroup: 1
+  - id: 35
+    color: Black
+    basePayout: 36
+    isOdd: 1
+    isHighNumber: 1
+    dozenGroup: 3
+    columnGroup: 2
+  - id: 36
+    color: Red
+    basePayout: 36
+    isOdd: 0
+    isHighNumber: 1
+    dozenGroup: 3
+    columnGroup: 3

@@ -13,10 +13,10 @@ namespace GB
         {
             get
             {
-                if (_current == null)
-                {
-                    _current = FindObjectOfType<T>();
-                }
+            if (_current == null)
+            {
+                _current = FindFirstObjectByType<T>();
+            }
 
                 if (_current == null)
                 {

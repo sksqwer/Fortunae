@@ -33,7 +33,7 @@ namespace GB
         [SerializeField] string _PopupPath = "UI/Popup";
 
         private Dictionary<string, UIScreen> _UIScreenList = new Dictionary<string, UIScreen>();
-        [SerializeField] private UIScreen _scene = new UIScreen();
+        [SerializeField] private UIScreen _scene; // null로 초기화 (Inspector에서 할당)
         [SerializeField] List<UIScreen> _popupList = new List<UIScreen>();
 
         Transform _popupParent;
