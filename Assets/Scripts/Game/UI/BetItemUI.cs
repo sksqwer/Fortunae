@@ -89,7 +89,7 @@ public class BetItemUI : MonoBehaviour
         if (betData != null)
         {
             // Presenter로 배팅 제거 이벤트 전달
-            GB.Presenter.Send(GamePresenter.DOMAIN, GamePresenter.Keys.CMD_REMOVE_BET, betData);
+            GB.Presenter.Send(Game.DOMAIN, Game.Keys.CMD_REMOVE_BET, betData);
         }
     }
 }

@@ -10,28 +10,34 @@ using GB;
 public class SpotObject : BetObject
 {
     private Spot spotData; // 데이터 참조
-    
+
     // 색상
     private Color redColor = new Color(1f, 0.2f, 0.2f);
     private Color blackColor = new Color(0.2f, 0.2f, 0.2f);
     private Color destroyedColor = new Color(0.5f, 0.5f, 0.5f, 0.5f);
-    
+
     public int SpotID => objectID;
-        
+
     public void SetSpotData(Spot data)
     {
+        Debug.Log($"[SpotObject] SetSpotData: Spot {objectID}, Number={data?.currentNumber}, Multiplier={data?.currentPayoutMultiplier}");
         spotData = data;
         UpdateVisual();
     }
-    
+
     /// <summary>
     /// 비주얼 업데이트 (BetObject override)
     /// </summary>
     public override void UpdateVisual()
     {
+        Debug.Log($"[SpotObject] UpdateVisual: Spot {objectID}");
+
         if (objectRenderer == null || spotData == null)
+        {
+            Debug.LogWarning($"[SpotObject] UpdateVisual failed: objectRenderer={objectRenderer != null}, spotData={spotData != null}");
             return;
-        
+        }
+
         // 숫자 표시
         if (displayText != null)
         {
@@ -40,19 +46,15 @@ public class SpotObject : BetObject
             else
                 displayText.text = spotData.currentNumber.ToString();
         }
-        
-        // 색상 업데이트
-        if (!isHighlighted)
-        {
-            if (spotData.isDestroyed)
-                objectRenderer.material.color = destroyedColor;
-            else if (spotData.currentColor == SpotColor.Red)
-                objectRenderer.material.color = redColor;
-            else
-                objectRenderer.material.color = blackColor;
-        }
+
+        if (spotData.isDestroyed)
+            objectRenderer.material.color = destroyedColor;
+        else if (spotData.currentColor == SpotColor.Red)
+            objectRenderer.material.color = redColor;
+        else
+            objectRenderer.material.color = blackColor;
     }
-    
+
     /// <summary>
     /// 배팅 타입 반환 (BetObject override)
     /// </summary>
@@ -60,7 +62,7 @@ public class SpotObject : BetObject
     {
         return BetType.Number;
     }
-    
+
     /// <summary>
     /// 타겟 값 반환 (BetObject override)
     /// </summary>
@@ -68,40 +70,53 @@ public class SpotObject : BetObject
     {
         return spotData != null ? spotData.currentNumber : objectID;
     }
-    
+
     /// <summary>
     /// SpotObject 특별한 클릭 처리 (아이템 사용 + 배팅)
     /// </summary>
     protected override void HandleClick()
     {
         Debug.Log($"[SpotObject] HandleClick called for Spot {objectID}");
-        
+
+        // 팝업이 켜져 있으면 클릭 차단
+        if (Game.isPopupOpen)
+        {
+            Debug.Log($"[SpotObject] Popup is open, blocking click for Spot {objectID}");
+            return;
+        }
+
+        // 스핀 중이면 클릭 차단
+        var game = FindFirstObjectByType<Game>();
+        if (game != null && game.IsSpinning)
+        {
+            Debug.LogWarning($"[SpotObject] Spinning in progress, blocking click for Spot {objectID}");
+            return;
+        }
+
         if (spotData == null || spotData.isDestroyed)
         {
             Debug.LogWarning($"[SpotObject] Spot {objectID} is destroyed or not initialized!");
             return;
         }
-        
-        Debug.Log($"[SpotObject] Spot {objectID} clicked successfully! Sending message to GameUI...");
-        
-        // GameUI로 직접 메시지 전달 (DOMAIN_UI 사용)
-        GB.Presenter.Send(GameUI.DOMAIN_UI, GamePresenter.Keys.CMD_SPOT_CLICKED, objectID);
-        Debug.Log($"[SpotObject] Message sent to GameUI for Spot {objectID}");
+
+        Debug.Log($"[SpotObject] Spot {objectID} clicked successfully! Sending message to GamePresenter...");
+
+        // Game으로 메시지 전달 (Game이 직접 처리)
+        GB.Presenter.Send(Game.DOMAIN, Game.Keys.CMD_SPOT_CLICKED, objectID);
+        Debug.Log($"[SpotObject] Message sent to GamePresenter for Spot {objectID}");
     }
-    
+
     /// <summary>
     /// 마우스 호버 (툴팁 표시)
     /// </summary>
     protected override void OnMouseEnter()
     {
-        if (!spotData.isDestroyed)
-        {
-            SetHighlight(true);
-        }
+        Debug.Log($"[SpotObject] OnMouseEnter: Spot {objectID}");
     }
 
     protected override void OnMouseExit()
     {
+        Debug.Log($"[SpotObject] OnMouseExit: Spot {objectID}");
         SetHighlight(false);
 
         // 툴팁 상태 리셋
@@ -110,20 +125,22 @@ public class SpotObject : BetObject
         // 툴팁 자동 닫기 (지연을 늘려서 더 부드럽게)
         CloseTooltipAfterDelay();
     }
-    
+
     private void CloseTooltipAfterDelay()
-    {        
+    {
+        Debug.Log($"[SpotObject] CloseTooltipAfterDelay: Spot {objectID}, isTooltipShowing={isTooltipShowing}");
+
         if (!isTooltipShowing)
         {
             UIManager.ClosePopup("SpotItemUI");
         }
     }
-    
+
     private bool IsMouseOverObject()
     {
         // 2D Collider와 3D Collider 모두 확인
         Collider2D collider2D = GetComponent<Collider2D>();
-        
+
         if (collider2D != null)
         {
             // 2D Collider 사용
@@ -136,21 +153,27 @@ public class SpotObject : BetObject
             return false;
         }
     }
-    
+
     /// <summary>
     /// 마우스 호버 시 Spot 정보 툴팁 표시
     /// </summary>
     private void OnMouseOver()
     {
         // 마우스가 오브젝트 위에 있을 때 툴팁 표시 (짧은 지연)
-        if (!isTooltipShowing)
+        if (!isTooltipShowing && Game.isPopupOpen == false)
         {
-            ShowTooltipAfterDelay(); // 0.3초 → 0.2초로 단축
+            ShowTooltip();
+            if (spotData != null && !spotData.isDestroyed)
+            {
+                SetHighlight(true);
+            }
         }
     }
-    
-    private void ShowTooltipAfterDelay()
-    {        
+
+    private void ShowTooltip()
+    {
+        Debug.Log($"[SpotObject] ShowTooltip called: Spot {objectID}, isTooltipShowing={isTooltipShowing}");
+
         // 마우스가 여전히 오브젝트 위에 있고 툴팁이 표시되지 않았다면
         if (!isTooltipShowing)
         {
@@ -158,23 +181,27 @@ public class SpotObject : BetObject
             isTooltipShowing = true;
         }
     }
-    
+
     private bool isTooltipShowing = false;
-    
+
     private void ShowSpotTooltip()
     {
+        Debug.Log($"[SpotObject] ShowSpotTooltip called: Spot {objectID}");
+
         if (spotData != null)
         {
+            Debug.Log($"[SpotObject] Showing tooltip for Spot {objectID}: Number={spotData.currentNumber}, Multiplier={spotData.currentPayoutMultiplier}");
+
             // SpotObject의 스크린 좌표 계산
             Vector3 worldPos = transform.position;
             Vector2 screenPos = Camera.main.WorldToScreenPoint(worldPos);
-            
+
             // 박싱/언박싱 없이 직접 데이터 전달
             var tooltipData = new TooltipData(spotData, screenPos);
             UIManager.ShowPopup("SpotItemUI", tooltipData);
             Debug.Log($"[SpotObject] Tooltip shown for Spot {objectID}");
         }
     }
-    
+
 }
 

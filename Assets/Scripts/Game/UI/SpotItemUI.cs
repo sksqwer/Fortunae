@@ -27,14 +27,12 @@ public class SpotItemUI : UIScreen
     public override void Initialize()
     {
         base.Initialize();
-        SetScreenType(ScreenType.POPUP);
+
+        Regist();
         
         // 닫기 버튼 이벤트
         if (closeButton != null)
             closeButton.onClick.AddListener(OnCloseClicked);
-        
-        // UIManager에 등록
-        UIManager.I.RegistUIScreen(this);
     }
     
     /// <summary>

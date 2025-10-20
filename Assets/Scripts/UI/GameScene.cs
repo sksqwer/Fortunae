@@ -18,7 +18,6 @@ public class GameScene : UIScreen
     private void OnDisable() 
     {
         Presenter.UnBind("GameScene", this);
-
     }
 
     public void RegistButton()

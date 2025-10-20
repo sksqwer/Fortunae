@@ -346,9 +346,10 @@ public static class SpotCalculator
         Spot changedSpot = gameState.spots[changedSpotID];
         
         // 1. Chameleon 트리거
-        if (gameState.HasChameleonCharm())
+        ItemData chameleonCharm = gameState.GetItemByID("CHAMELEON_CHARM");
+        if (chameleonCharm != null && chameleonCharm.count > 0)
         {
-            TriggerChameleon(changedSpot, gameState.GetChameleonCharm(), changedSpotID);
+            TriggerChameleon(changedSpot, chameleonCharm, changedSpotID);
         }
         
         // 2. 추가 트리거 (미래 확장용)
@@ -388,7 +389,8 @@ public static class SpotCalculator
     /// </summary>
     public static void ProcessDeathCharm(GameState gameState, int winningSpotID)
     {
-        if (!gameState.HasDeathCharm())
+        ItemData deathCharm = gameState.GetItemByID("DEATH_CHARM");
+        if (deathCharm == null || deathCharm.count <= 0)
             return;
         
         Spot winningSpot = gameState.spots[winningSpotID];
@@ -400,7 +402,7 @@ public static class SpotCalculator
         winningSpot.isDestroyed = true;
         
         // Death 기록 추가 (targetSpotID에 파괴된 스팟 정보 포함)
-        var deathRecord = new AppliedItemRecord(gameState.GetDeathCharm(), winningSpotID);
+        var deathRecord = new AppliedItemRecord(deathCharm, winningSpotID);
         
         winningSpot.AddRecord(deathRecord);
         
@@ -506,7 +508,7 @@ public static class SpotCalculator
         foreach (var bet in bets)
         {
             bool hasWing = bet.isAppliedItem(ChipItemType.HatWing);
-            bool isWin = CheckBetWin(bet, winningSpot);
+            bool isWin = IsBetWin(bet, winningSpotID, winningSpot);
             
             // Wing 적용: 당첨되지 않아도 당첨 처리 (보상 50%)
             if (!isWin && !hasWing)
@@ -546,9 +548,9 @@ public static class SpotCalculator
     }
     
     /// <summary>
-    /// 특정 베팅이 당첨됐는지 확인
+    /// 특정 베팅이 당첨됐는지 확인 (public - Game에서도 사용)
     /// </summary>
-    private static bool CheckBetWin(BetData bet, Spot winningSpot)
+    public static bool IsBetWin(BetData bet, int winningSpotID, Spot winningSpot)
     {
         switch (bet.betType)
         {
@@ -581,14 +583,15 @@ public static class SpotCalculator
     }
     
     /// <summary>
-    /// 배팅 타입별 배당률 반환
+    /// 배팅 타입별 실제 배당률 반환 (배당 계산용)
+    /// Number 타입은 Spot의 동적 배당률(currentPayoutMultiplier)을 사용합니다.
     /// </summary>
     private static double GetPayoutMultiplier(BetData bet, Spot winningSpot)
     {
         switch (bet.betType)
         {
             case BetType.Number:
-                // 숫자 배팅: Spot의 현재 배당률 적용
+                // 숫자 배팅: Spot의 현재 배당률 적용 (동적 배당률)
                 return winningSpot.currentPayoutMultiplier;
                 
             case BetType.Color:
@@ -600,6 +603,36 @@ public static class SpotCalculator
             case BetType.Dozen:
             case BetType.Column:
                 // 3배 배팅
+                return 3.0;
+                
+            default:
+                return 1.0;
+        }
+    }
+    
+    /// <summary>
+    /// 배팅 타입별 기본 배당률 반환 (UI 표시용)
+    /// Number 타입의 경우 특정 Spot이 필요하면 GameState를 넘겨서 조회 가능
+    /// </summary>
+    public static double GetBasePayout(BetType betType, GameState gameState = null, int spotID = -1)
+    {
+        switch (betType)
+        {
+            case BetType.Number:
+                // 숫자 배팅: GameState가 있고 spotID가 유효하면 Spot의 배당률 반환
+                if (gameState != null && spotID >= 0 && gameState.spots.ContainsKey(spotID))
+                {
+                    return gameState.spots[spotID].currentPayoutMultiplier;
+                }
+                return 36.0; // 기본값
+                
+            case BetType.Color:
+            case BetType.OddEven:
+            case BetType.HighLow:
+                return 2.0;
+                
+            case BetType.Dozen:
+            case BetType.Column:
                 return 3.0;
                 
             default:

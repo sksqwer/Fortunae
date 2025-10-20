@@ -108,6 +108,9 @@ public static class ChipTypeCache
 
     // --- 2. 빠른 '반복(Iteration)'을 위한 Array 캐시 ---
     public static readonly ChipType[] AllTypes;
+    
+    // --- 2-1. 역순 Array 캐시 (큰 칩부터) ---
+    public static readonly ChipType[] AllTypesReversed;
 
     // --- 3. 개수 캐시 ---
     public static readonly int Count;
@@ -127,5 +130,37 @@ public static class ChipTypeCache
         {
             Values.Add(type, (int)type);
         }
+        
+        // 역순 배열 생성 (큰 칩부터: Chip100 -> Chip50 -> Chip10 -> Chip5 -> Chip1)
+        AllTypesReversed = new ChipType[Count];
+        for (int i = 0; i < Count; i++)
+        {
+            AllTypesReversed[i] = AllTypes[Count - 1 - i];
+        }
+    }
+    
+    /// <summary>
+    /// ChipType을 스프라이트 인덱스로 변환
+    /// $1=<sprite=0>, $5=<sprite=1>, $10=<sprite=2>, $50=<sprite=3>
+    /// </summary>
+    public static int GetSpriteIndex(ChipType chipType)
+    {
+        switch (chipType)
+        {
+            case ChipType.Chip1: return 0;
+            case ChipType.Chip5: return 1;
+            case ChipType.Chip10: return 2;
+            case ChipType.Chip50: return 3;
+            default: return 0;
+        }
+    }
+    
+    /// <summary>
+    /// 칩 가치를 스프라이트 태그로 변환
+    /// 예: $1 → <sprite=0>
+    /// </summary>
+    public static string ToSpriteTag(ChipType chipType)
+    {
+        return $"<sprite={GetSpriteIndex(chipType)}>";
     }
 }

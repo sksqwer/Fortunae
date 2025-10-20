@@ -21,12 +21,9 @@ public class BetObject : MonoBehaviour, IPointerClickHandler
      // Color(0=Red,1=Black), OddEven(0=Odd,1=Even), HighLow(0=Low,1=High), Dozen(1-3), Column(1-3)
 
     [Header("Colors")]
-    protected Color normalColor = new Color(0.2f, 0.2f, 0.2f);
+    protected Color normalColor = new Color(1f, 1f, 1f);
     protected Color highlightColor = new Color(1f, 1f, 0f);
     protected Color betColor = new Color(0.3f, 0.6f, 0.9f);
-    
-    protected bool isHighlighted = false;
-    protected float lastClickTime = 0f;
     
     public int ObjectID => objectID;
     
@@ -39,18 +36,19 @@ public class BetObject : MonoBehaviour, IPointerClickHandler
         objectRenderer = GetComponent<Renderer>();
         // 자신의 SpriteRenderer는 제외하고 자식에서만 찾기
         SpriteRenderer[] allSpriteRenderers = GetComponentsInChildren<SpriteRenderer>();
-        highlightRenderer = null;
-        
+
+
         // 자신을 제외한 자식 오브젝트에서만 찾기
-        foreach (SpriteRenderer sr in allSpriteRenderers)
-        {
-            if (sr.gameObject != gameObject) // 자신이 아닌 경우만
+        if(highlightRenderer == null)
+            foreach (SpriteRenderer sr in allSpriteRenderers)
             {
-                highlightRenderer = sr;
-                highlightRenderer.gameObject.SetActive(false);
-                break;
+                if (sr.gameObject != gameObject) // 자신이 아닌 경우만
+                {
+                    highlightRenderer = sr;
+                    highlightRenderer.gameObject.SetActive(false);
+                    break;
+                }
             }
-        }
         
         displayText = GetComponentInChildren<TextMeshPro>();
         Debug.Log($"[BetObject] Basic initialization for ID: {id}");
@@ -61,14 +59,11 @@ public class BetObject : MonoBehaviour, IPointerClickHandler
     /// </summary>
     public virtual void UpdateVisual()
     {
-        if (objectRenderer != null && !isHighlighted)
+        Debug.Log($"[BetObject] UpdateVisual: {GetType().Name} {objectID}");
+        
+        if (objectRenderer != null)
         {
             objectRenderer.material.color = normalColor;
-        }
-        
-        if (displayText != null)
-        {
-            displayText.text = $"ID: {objectID}";
         }
     }
     
@@ -77,7 +72,7 @@ public class BetObject : MonoBehaviour, IPointerClickHandler
     /// </summary>
     public virtual void SetHighlight(bool highlight)
     {
-        isHighlighted = highlight;
+        Debug.Log($"[BetObject] SetHighlight: {GetType().Name} {objectID}, highlight={highlight}");
         
         if (highlightRenderer != null)
         {
@@ -98,6 +93,7 @@ public class BetObject : MonoBehaviour, IPointerClickHandler
     /// </summary>
     public virtual void OnPointerClick(PointerEventData eventData)
     {
+        Debug.Log($"[BetObject] OnPointerClick: {GetType().Name} {objectID}");
         HandleClick();
     }
     
@@ -115,17 +111,25 @@ public class BetObject : MonoBehaviour, IPointerClickHandler
     /// </summary>
     protected virtual void HandleClick()
     {
-        // 중복 클릭 방지
-        if (Time.time - lastClickTime < 0.5f)
+        // 팝업이 켜져 있으면 클릭 차단
+        if (Game.isPopupOpen)
+        {
+            Debug.Log($"[BetObject] Popup is open, blocking click for {GetType().Name} {objectID}");
             return;
-            
-        lastClickTime = Time.time;
+        }
         
-        double payout = Game.GetPayoutMultiplier(GetBetType());
-        Debug.Log($"[BetObject] {GetType().Name} {objectID} clicked! (Payout: x{payout})");
+        // 스핀 중이면 클릭 차단
+        var game = FindFirstObjectByType<Game>();
+        if (game != null && game.IsSpinning)
+        {
+            Debug.LogWarning($"[BetObject] Spinning in progress, blocking click for {GetType().Name} {objectID}");
+            return;
+        }
         
-        // GameUI로 직접 클릭 이벤트 전달 (DOMAIN_UI 사용)
-        GB.Presenter.Send(GameUI.DOMAIN_UI, GamePresenter.Keys.CMD_BET_OBJECT_CLICKED, 
+        Debug.Log($"[BetObject] {GetType().Name} {objectID} clicked! Type: {GetBetType()}");
+        
+        // Game으로 클릭 이벤트 전달 (Game이 직접 처리)
+        GB.Presenter.Send(Game.DOMAIN, Game.Keys.CMD_BET_OBJECT_CLICKED, 
                          new BetObjectClickData(objectID, GetBetType(), GetTargetValue()));
     }
     
@@ -152,11 +156,13 @@ public class BetObject : MonoBehaviour, IPointerClickHandler
     /// </summary>
     protected virtual void OnMouseEnter()
     {
+        Debug.Log($"[BetObject] OnMouseEnter: {GetType().Name} {objectID}");
         SetHighlight(true);
     }
     
     protected virtual void OnMouseExit()
     {
+        Debug.Log($"[BetObject] OnMouseExit: {GetType().Name} {objectID}");
         SetHighlight(false);
     }
 }

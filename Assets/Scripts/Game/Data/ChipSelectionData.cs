@@ -7,9 +7,9 @@ public struct ChipSelectionData
 {
     public readonly int objectID;
     public readonly ChipCollection availableChips;
-    public readonly Action<ChipType, int> callback;
+    public readonly Action<int, ChipType, int> callback;
     
-    public ChipSelectionData(int objectID, ChipCollection availableChips, Action<ChipType, int> callback)
+    public ChipSelectionData(int objectID, ChipCollection availableChips, Action<int, ChipType, int> callback)
     {
         this.objectID = objectID;
         this.availableChips = availableChips;

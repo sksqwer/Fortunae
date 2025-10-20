@@ -10,57 +10,51 @@ using GB;
 /// </summary>
 public class GameUI : UIScreen
 {
-    // UI 도메인 상수
-    public const string DOMAIN_UI = "GameUI";
-    
-    [Header("Presenter Reference")]
-    [SerializeField] private GamePresenter presenter; // MVP: View -> Presenter 명령 전달용
     
     [Header("UI Panels")]
-    [SerializeField] private GameObject spotListPanel;
     [SerializeField] private GameObject bettingPanel;
     [SerializeField] private GameObject itemPanel;
     
     [Header("Prefabs")]
-    [SerializeField] private GameObject spotItemPrefab;
     [SerializeField] private GameObject betItemPrefab;
-    [SerializeField] private ChipSelectionPopup chipSelectionPopup;
     
     // 동적 생성된 UI 요소들
-    private List<SpotItemUI> spotItems = new List<SpotItemUI>();
     private List<GameObject> betItems = new List<GameObject>();
     
-    private GameState currentGameState;
-    
-    // Spot 선택 모드0
+    // Spot 선택 모드
     private bool isSpotSelectionMode = false;
     private SpotItemType currentItemType;
     private int selectedSpotID = -1; // Copy Spot 첫 번째 선택용
     
+    public void Awake()
+    {   
+        Initialize();
+    }
+    
     public override void Initialize()
     {
+        Debug.Log("[GameUI] Initialize called");
+
         base.Initialize();
-              
-        // GameUI 도메인에 바인딩 (직접 메시지 수신용)
-        Presenter.Bind(DOMAIN_UI, this);
+
+        Regist();
         
         // 버튼 이벤트 등록
         RegisterButtonEvents();
 
-        // 초기 GameState 요청
-        if (presenter != null)
-        {
-            currentGameState = presenter.GetGameState();
-            Debug.Log($"[GameUI] Initialized with GameState: {(currentGameState != null ? "OK" : "NULL")}");
-        }
-        
-        Debug.Log("[GameUI] Initialized and bound to Presenter");
+        Debug.Log("[GameUI] GameUI Initialized");
     }
     
-    private void OnDestroy()
+    private void OnEnable()
     {
-        // Presenter에서 View 언바인딩
-        Presenter.UnBind(DOMAIN_UI, this);
+        // Game으로부터 메시지 수신용 바인드
+        Presenter.Bind("GameUI", this);
+    }
+
+    private void OnDisable() 
+    {
+        // 메시지 수신 해제
+        Presenter.UnBind("GameUI", this);
     }
     
     /// <summary>
@@ -68,6 +62,8 @@ public class GameUI : UIScreen
     /// </summary>
     private void RegisterButtonEvents()
     {
+        Debug.Log("[GameUI] RegisterButtonEvents called");
+        
         if (mButtons.ContainsKey("SpinButton"))
             mButtons["SpinButton"].onClick.AddListener(OnSpinButtonClicked);
         
@@ -99,66 +95,105 @@ public class GameUI : UIScreen
         Debug.Log($"[GameUI] ViewQuick called with key: {key}");
         switch (key)
         {
-            case GamePresenter.Keys.UPDATE_GAME_STATE:
+            case Game.Keys.UPDATE_GAME_STATE:
                 if (data != null && data is OData<GameState> gameStateData)
                 {
                     SetGameState(gameStateData.Get());
                 }
                 break;
                 
-            case GamePresenter.Keys.UPDATE_SPIN_START:
-                OnSpinStarted();
+            case Game.Keys.UPDATE_TURN_INFO:
+                if (data != null && data is OData<GameState> turnInfoGameState)
+                {
+                    RefreshTurnInfo(turnInfoGameState.Get());
+                }
                 break;
                 
-            case GamePresenter.Keys.UPDATE_SPIN_COMPLETE:
+            case Game.Keys.UPDATE_SPIN_START:
+                Debug.Log("[GameUI] Spin started - disable spin and reset buttons");
+                
+                // 스핀 버튼과 리셋 버튼 비활성화
+                if (mButtons.ContainsKey("SpinButton"))
+                    mButtons["SpinButton"].interactable = false;
+                if (mButtons.ContainsKey("ResetButton"))
+                    mButtons["ResetButton"].interactable = false;
+                    
+                break;
+                
+            case Game.Keys.UPDATE_SPIN_BUTTON:
+                Debug.Log($"<color=magenta>[GameUI] UPDATE_SPIN_BUTTON received! data: {data?.GetType()}</color>");
+                if (data != null && data is OData<bool> buttonData)
+                {
+                    bool isEnabled = buttonData.Get();
+                    Debug.Log($"<color=magenta>[GameUI] Setting spin button enabled: {isEnabled}</color>");
+                    
+                    // 스핀 버튼만 활성화/비활성화
+                    if (mButtons.ContainsKey("SpinButton"))
+                    {
+                        mButtons["SpinButton"].interactable = isEnabled;
+                        Debug.Log($"<color=magenta>[GameUI] SpinButton.interactable = {isEnabled}</color>");
+                    }
+                    else
+                    {
+                        Debug.LogError("[GameUI] SpinButton not found in mButtons!");
+                    }
+                }
+                else
+                {
+                    Debug.LogError($"[GameUI] Invalid data type for UPDATE_SPIN_BUTTON: {data?.GetType()}");
+                }
+                break;
+                
+            case Game.Keys.UPDATE_RESET_BUTTON:
+                if (data != null && data is OData<bool> resetButtonData)
+                {
+                    bool isEnabled = resetButtonData.Get();
+                    Debug.Log($"[GameUI] Setting reset button enabled: {isEnabled}");
+                    
+                    if (mButtons.ContainsKey("ResetButton"))
+                    {
+                        mButtons["ResetButton"].interactable = isEnabled;
+                    }
+                }
+                break;
+                
+            case Game.Keys.UPDATE_SPIN_COMPLETE:
                 if (data != null && data is OData<SpinResult> resultData)
                 {
                     ShowResult(resultData.Get());
                 }
                 break;
                 
-            case GamePresenter.Keys.UPDATE_GAME_OVER:
+            case Game.Keys.UPDATE_GAME_OVER:
                 if (data != null && data is OData<double> totalData)
                 {
                     ShowGameOver(totalData.Get());
                 }
                 break;
                 
-            case GamePresenter.Keys.UPDATE_BET_LIST:
-                RefreshBettingInfo();
+            case Game.Keys.UPDATE_GAME_RESET:
+                if (data != null && data is OData<int> maxTurnsData)
+                {
+                    ShowGameReset(maxTurnsData.Get());
+                }
+                else
+                {
+                    ShowGameReset(3); // 기본값
+                }
                 break;
                 
-            case GamePresenter.Keys.CMD_SHOW_BET_POPUP:
+            case Game.Keys.UPDATE_BET_LIST:
+                if (data != null && data is OData<GameState> betListGameState)
+                {
+                    RefreshBettingInfo(betListGameState.Get());
+                }
+                break;
+                
+            case Game.Keys.CMD_SHOW_BET_POPUP:
                 HandleShowBetPopup(data);
                 break;
                 
-            case GamePresenter.Keys.CMD_SPOT_CLICKED:
-                Debug.Log($"[GameUI] CMD_SPOT_CLICKED received! data: {data}");
-                if (data != null && data is OData<int> spotData)
-                {
-                    int spotID = spotData.Get();
-                    Debug.Log($"[GameUI] Received spot click for Spot {spotID}");
-                    OnSpotClicked(spotID);
-                }
-                else
-                {
-                    Debug.LogError($"[GameUI] Invalid data for CMD_SPOT_CLICKED: {data}");
-                }
-                break;
-                
-            case GamePresenter.Keys.CMD_BET_OBJECT_CLICKED:
-                Debug.Log($"[GameUI] CMD_BET_OBJECT_CLICKED received! data: {data}");
-                if (data != null && data is OData<BetObjectClickData> clickData)
-                {
-                    BetObjectClickData betData = clickData.Get();
-                    Debug.Log($"[GameUI] Received bet object click for {betData.betType} {betData.targetValue}");
-                    OnBetObjectClicked(betData);
-                }
-                else
-                {
-                    Debug.LogError($"[GameUI] Invalid data for CMD_BET_OBJECT_CLICKED: {data}");
-                }
-                break;
+            // CMD_SPOT_CLICKED와 CMD_BET_OBJECT_CLICKED는 Game에서 직접 팝업 처리
         }
     }
     
@@ -166,66 +201,62 @@ public class GameUI : UIScreen
     
     #region UI Update Methods
     
-    public override void Refresh()
-    {
-        base.Refresh();
-        
-        if (currentGameState == null)
-            return;
-        
-        RefreshTurnInfo();
-        RefreshSpotList();
-        RefreshBettingInfo();
-        RefreshInventory();
-    }
-    
     private void SetGameState(GameState gameState)
     {
-        currentGameState = gameState;
+        Debug.Log($"[GameUI] SetGameState called");
         
-        // UI 업데이트
-        RefreshSpotList();
-        RefreshBettingInfo();
-        RefreshInventory();
-        
-        if (mTMPText.ContainsKey("MoneyText"))
-            mTMPText["MoneyText"].text = $"Money: ${currentGameState.GetTotalMoney():F2}";
-    }
-    
-    private void RefreshTurnInfo()
-    {
-        if (mTMPText.ContainsKey("TurnText"))
-            mTMPText["TurnText"].text = $"Turn {currentGameState.currentTurn} / 3";
-        
-        if (mTMPText.ContainsKey("ChipText"))
-            mTMPText["ChipText"].text = $"Chips: {currentGameState.availableChips.ToString()}";
-        
-        if (mTMPText.ContainsKey("MoneyText"))
-            mTMPText["MoneyText"].text = $"Money: ${currentGameState.GetTotalMoney():F2}";
-    }
-    
-    private void RefreshSpotList()
-    {
-        if (currentGameState == null || currentGameState.spots == null) return;
-        
-        // SpotItemUI들 업데이트
-        for (int i = 0; i < spotItems.Count; i++)
+        if (gameState == null)
         {
-            if (spotItems[i] != null)
-            {
-                spotItems[i].Refresh();
-            }
+            Debug.LogWarning("[GameUI] Received null GameState!");
+            return;
         }
         
-        Debug.Log($"[GameUI] Spot list refreshed: {spotItems.Count} spots");
+        Debug.Log($"[GameUI] Updating UI with GameState: Turn {gameState.currentTurn}, Money ${gameState.GetTotalMoney():F2}");
+        
+        // UI 전체 업데이트 (파라미터로 gameState 전달)
+        RefreshTurnInfo(gameState);
+        RefreshSpotList(gameState);
+        RefreshBettingInfo(gameState);
+        RefreshInventory(gameState);
+        
+        Debug.Log($"[GameUI] SetGameState completed");
     }
     
-    private void RefreshBettingInfo()
+    private void RefreshTurnInfo(GameState gameState)
     {
-        if (currentGameState == null || presenter == null) return;
+        Debug.Log($"[GameUI] RefreshTurnInfo: Turn {gameState.currentTurn}, Money ${gameState.GetTotalMoney():F2}");
         
-        // 현재 배팅 리스트 가져오기
-        var currentBets = presenter.GetCurrentBets();
+        if (mTMPText.ContainsKey("TurnText"))
+            mTMPText["TurnText"].text = $"Turn {gameState.currentTurn} / 3";
+        
+        if (mTMPText.ContainsKey("ChipText"))
+            mTMPText["ChipText"].text = $"Chips: {gameState.availableChips.ToSpriteString()}";
+        
+        if (mTMPText.ContainsKey("MoneyText"))
+            mTMPText["MoneyText"].text = $"Money: ${gameState.GetTotalMoney():F2}";
+    }
+    
+    private void RefreshSpotList(GameState gameState)
+    {
+        if (gameState == null || gameState.spots == null) return;
+        
+        // SpotItemUI는 더 이상 GameUI에서 관리하지 않음 (3D SpotObject가 직접 관리)
+        Debug.Log($"[GameUI] Spot list refresh requested (handled by 3D objects)");
+    }
+    
+    private void RefreshBettingInfo(GameState gameState)
+    {
+        Debug.Log($"[GameUI] RefreshBettingInfo called");
+        
+        if (gameState == null)
+        {
+            Debug.LogWarning("[GameUI] RefreshBettingInfo: gameState is null");
+            return;
+        }
+        
+        // 배팅 리스트는 gameState에서 직접 가져오기
+        var currentBets = gameState.currentBets;
+        Debug.Log($"[GameUI] RefreshBettingInfo: {currentBets.Count} bets to display");
         
         // 기존 BetItemUI들 제거
         foreach (var betItem in betItems)
@@ -253,40 +284,48 @@ public class GameUI : UIScreen
         Debug.Log($"[GameUI] Betting info refreshed: {currentBets.Count} bets");
     }
     
-    private void RefreshInventory()
+    private void RefreshInventory(GameState gameState)
     {
-        if (currentGameState == null) return;
+        Debug.Log($"[GameUI] RefreshInventory called");
+        
+        if (gameState == null)
+        {
+            Debug.LogWarning("[GameUI] RefreshInventory: gameState is null");
+            return;
+        }
+        
+        Debug.Log($"[GameUI] RefreshInventory: {gameState.inventory.Count} items in inventory");
         
         // 인벤토리 아이템 표시 업데이트
         if (mTMPText.ContainsKey("InventoryText"))
         {
             string inventoryText = "Inventory:\n";
             
-            foreach (var item in currentGameState.inventory)
+            foreach (var item in gameState.inventory)
             {
                 if (item.count > 0)
                 {
-                    inventoryText += $"• {item.itemType} ({item.count})\n";
+                    inventoryText += $"• {item.itemID} : ({item.count})\n";
                 }
             }
             
             mTMPText["InventoryText"].text = inventoryText;
         }
         
-        // Charm 상태 표시
+        // Charm 상태 표시 (ID 기반)
         if (mTMPText.ContainsKey("DeathCharmStatus"))
         {
-            string deathStatus = currentGameState.HasDeathCharm() ? "Active" : "Inactive";
+            string deathStatus = gameState.HasItem("DEATH_CHARM") ? "Active" : "Inactive";
             mTMPText["DeathCharmStatus"].text = $"Death Charm: {deathStatus}";
         }
         
         if (mTMPText.ContainsKey("ChameleonCharmStatus"))
         {
-            string chameleonStatus = currentGameState.HasChameleonCharm() ? "Active" : "Inactive";
+            string chameleonStatus = gameState.HasItem("CHAMELEON_CHARM") ? "Active" : "Inactive";
             mTMPText["ChameleonCharmStatus"].text = $"Chameleon Charm: {chameleonStatus}";
         }
         
-        Debug.Log($"[GameUI] Inventory refreshed: {currentGameState.inventory.Count} items");
+        Debug.Log($"[GameUI] Inventory refreshed: {gameState.inventory.Count} items");
     }
     
     #endregion
@@ -297,67 +336,81 @@ public class GameUI : UIScreen
     {
         Debug.Log("[GameUI] Spin button clicked");
         
-        if (presenter != null)
-            presenter.StartSpin();
+        // Game에 스핀 시작 명령 전송
+        GB.Presenter.Send(Game.DOMAIN, Game.Keys.CMD_START_SPIN);
     }
     
     private void OnResetButtonClicked()
     {
         Debug.Log("[GameUI] Reset button clicked");
         
-        if (presenter != null)
-            presenter.ResetGame();
+        // Game에 게임 리셋 명령 전송
+        GB.Presenter.Send(Game.DOMAIN, Game.Keys.CMD_RESET_GAME);
     }
     
     private void OnItemButtonClicked(SpotItemType itemType)
     {
         Debug.Log($"[GameUI] Item button clicked: {itemType}");
+        Debug.Log($"[GameUI] Activating spot selection mode for {itemType}");
         
         // Spot 선택 모드 활성화
         isSpotSelectionMode = true;
         currentItemType = itemType;
         selectedSpotID = -1;
+        
+        Debug.Log($"[GameUI] Spot selection mode active: isSpotSelectionMode={isSpotSelectionMode}");
     }
     
     private void OnCharmToggled(CharmType charmType)
     {
         Debug.Log($"[GameUI] Charm toggled: {charmType}");
         
-        if (currentGameState == null) return;
-        
-        // Charm 아이템 찾기
-        ItemData charmItem = null;
-        if (charmType == CharmType.Death)
-            charmItem = currentGameState.GetDeathCharm();
-        else if (charmType == CharmType.Chameleon)
-            charmItem = currentGameState.GetChameleonCharm();
-            
-        if (charmItem == null || charmItem.count <= 0)
+        // Game에서 현재 GameState 가져오기
+        var game = FindFirstObjectByType<Game>();
+        if (game == null)
         {
-            Debug.LogWarning($"[GameUI] Charm {charmType} not available");
+            Debug.LogError("[GameUI] Game object not found!");
             return;
         }
         
-        // Charm 사용 (타겟 없음)
-        if (presenter != null)
+        Debug.Log("[GameUI] Getting GameState from Game");
+        GameState gameState = game.GetGameState();
+        if (gameState == null)
         {
-            presenter.UseItem(charmItem);
-            Debug.Log($"[GameUI] Used Charm: {charmType}");
+            Debug.LogError("[GameUI] GameState is null!");
+            return;
         }
+        
+        // Charm 아이템 ID 결정
+        string charmID = charmType == CharmType.Death ? "DEATH_CHARM" : "CHAMELEON_CHARM";
+        Debug.Log($"[GameUI] Looking for charm: {charmID}");
+        
+        ItemData charmItem = gameState.GetItemByID(charmID);
+        if (charmItem == null || charmItem.count <= 0)
+        {
+            Debug.LogWarning($"[GameUI] Charm {charmID} not available (count={charmItem?.count ?? 0})");
+            return;
+        }
+        
+        Debug.Log($"[GameUI] Charm {charmID} available (count={charmItem.count})");
+        
+        // Charm 사용 명령 전송 (타겟 없음)
+        GB.Presenter.Send(Game.DOMAIN, Game.Keys.CMD_USE_ITEM, charmItem);
+        Debug.Log($"[GameUI] Sent CMD_USE_ITEM for Charm: {charmID}");
     }
     
     #endregion
     
     #region Spot Click Handling
     
-    public void OnSpotClicked(int spotID)
+    public void OnSpotClicked(int spotID, GameState gameState)
     {
         Debug.Log($"[GameUI] OnSpotClicked called with spotID: {spotID}");
         
-        // currentGameState 체크
-        if (currentGameState == null)
+        // gameState 체크
+        if (gameState == null)
         {
-            Debug.LogError("[GameUI] currentGameState is null! Cannot process spot click.");
+            Debug.LogError("[GameUI] gameState is null! Cannot process spot click.");
             return;
         }
         
@@ -371,25 +424,23 @@ public class GameUI : UIScreen
         Debug.Log($"[GameUI] 3D Spot {spotID} clicked!");
         
         // 칩 선택 팝업 표시
-        int totalChips = currentGameState.availableChips.GetTotalCount();
+        int totalChips = gameState.availableChips.GetTotalCount();
         Debug.Log($"[GameUI] Total chips available: {totalChips}");
         
-        Debug.Log($"[GameUI] chipSelectionPopup != null: {chipSelectionPopup != null}, totalChips: {totalChips}");
-        
-        if (chipSelectionPopup != null && totalChips > 0)
+        if (totalChips > 0)
         {
             Debug.Log($"[GameUI] Showing chip selection popup for spot {spotID}");
             
             // 박싱/언박싱 없이 구조체 사용
             var chipSelectionData = new ChipSelectionData(
                 spotID,
-                currentGameState.availableChips,
-                (chipType, chipCount) =>
+                gameState.availableChips,
+                (spotID, chipType, chipCount) =>
                 {
-                    if (presenter != null)
-                    {
-                        presenter.PlaceBet(BetType.Number, spotID, chipType, chipCount);
-                    }
+                    // 배팅 명령 전송
+                    GB.Presenter.Send(Game.DOMAIN, Game.Keys.CMD_PLACE_BET, 
+                        new object[] { BetType.Number, spotID, chipType, chipCount });
+                    
                     int chipValue = ChipTypeCache.Values[chipType];
                     Debug.Log($"[GameUI] Bet placed on Spot {spotID}: {chipCount}x ${chipValue} chips");
                 }
@@ -399,30 +450,35 @@ public class GameUI : UIScreen
             UIManager.ShowPopup("ChipSelectionPopup", chipSelectionData);
             Debug.Log($"[GameUI] UIManager.ShowPopup call completed");
         }
-        else if (totalChips <= 0)
+        else
         {
             Debug.LogWarning("[GameUI] No chips available!");
         }
-        else
+    }
+    
+    private void OnSpotClickedFallback(int spotID, GameState gameState)
+    {
+        // 팝업이 없을 때의 대체 동작
+        if (gameState != null)
         {
-            // 팝업 없으면 사용 가능한 첫 번째 칩 타입으로 1개 배팅
-            ChipType firstAvailable = GetFirstAvailableChipType();
-            if (currentGameState.availableChips.HasChip(firstAvailable, 1))
+            // 사용 가능한 첫 번째 칩 타입으로 1개 배팅
+            ChipType firstAvailable = GetFirstAvailableChipType(gameState);
+            if (gameState.availableChips.HasChip(firstAvailable, 1))
             {
-                if (presenter != null)
-                {
-                    presenter.PlaceBet(BetType.Number, spotID, firstAvailable, 1);
-                }
+                // 배팅 명령 전송
+                GB.Presenter.Send(Game.DOMAIN, Game.Keys.CMD_PLACE_BET, 
+                    new object[] { BetType.Number, spotID, firstAvailable, 1 });
+                
                 Debug.Log($"[GameUI] Bet placed on Spot {spotID}: 1x ${ChipTypeCache.Values[firstAvailable]} chip");
             }
         }
     }
     
-    private ChipType GetFirstAvailableChipType()
+    private ChipType GetFirstAvailableChipType(GameState gameState)
     {
         foreach (ChipType type in ChipTypeCache.AllTypes)
         {
-            if (currentGameState.availableChips[type] > 0)
+            if (gameState.availableChips[type] > 0)
             {
                 return type;
             }
@@ -450,37 +506,43 @@ public class GameUI : UIScreen
     
     private void HandleSpotSelection(int spotID)
     {
+        Debug.Log($"[GameUI] HandleSpotSelection called: spotID={spotID}, currentItemType={currentItemType}");
+        
         string itemID = GetItemIDFromType(currentItemType);
+        Debug.Log($"[GameUI] Item ID for {currentItemType}: {itemID}");
         
         switch (currentItemType)
         {
             case SpotItemType.PlusSpot:
             case SpotItemType.UpgradedMultiSpot:
-                // 단일 타겟 아이템 (ID로 요청)
-                if (presenter != null)
-                {
-                    presenter.UseItemByID(itemID, spotID);
-                }
+                Debug.Log($"[GameUI] Single target item - sending CMD_USE_ITEM_BY_ID for {itemID} on spot {spotID}");
+                // 단일 타겟 아이템 사용 명령 전송
+                GB.Presenter.Send(Game.DOMAIN, Game.Keys.CMD_USE_ITEM_BY_ID, 
+                    new object[] { itemID, new int[] { spotID } });
+                
                 isSpotSelectionMode = false;
                 Debug.Log($"[GameUI] {itemID} used on Spot {spotID}");
                 break;
-                
+            
             case SpotItemType.CopySpot:
+                Debug.Log($"[GameUI] CopySpot handling - selectedSpotID={selectedSpotID}, new spotID={spotID}");
                 // 2개 타겟 필요
                 if (selectedSpotID == -1)
                 {
                     selectedSpotID = spotID;
-                    Debug.Log($"[GameUI] Copy from Spot {spotID} - select target");
+                    Debug.Log($"[GameUI] First spot selected for copy: {spotID} - waiting for target selection");
                 }
                 else
                 {
-                    if (presenter != null)
-                    {
-                        presenter.UseItemByID(itemID, selectedSpotID, spotID);
-                    }
-                    Debug.Log($"[GameUI] Copy Spot: {selectedSpotID} -> {spotID}");
+                    Debug.Log($"[GameUI] Second spot selected for copy: {spotID} - sending CMD_USE_ITEM_BY_ID");
+                    // 두 번째 선택 완료 - 아이템 사용 명령 전송
+                    GB.Presenter.Send(Game.DOMAIN, Game.Keys.CMD_USE_ITEM_BY_ID, 
+                        new object[] { itemID, new int[] { selectedSpotID, spotID } });
+                    
+                    Debug.Log($"[GameUI] Copy Spot command sent: {selectedSpotID} -> {spotID}");
                     isSpotSelectionMode = false;
                     selectedSpotID = -1;
+                    Debug.Log($"[GameUI] Spot selection mode deactivated");
                 }
                 break;
         }
@@ -490,24 +552,115 @@ public class GameUI : UIScreen
     
     #region Game Event Display
     
-    private void OnSpinStarted()
-    {
-        Debug.Log("[GameUI] Spin started - disable buttons");
-        
-        if (mButtons.ContainsKey("SpinButton"))
-            mButtons["SpinButton"].interactable = false;
-    }
+    // OnSpinStarted 메서드 제거됨 - Presenter.Send로 통일
     
     private void ShowResult(SpinResult result)
     {
-        Debug.Log($"[GameUI] Showing result: Spot {result.winningSpotID}, Number {result.winningNumber}, Payout ${result.totalPayout:F2}");
+        Debug.Log($"[GameUI] ShowResult called");
+        
+        // 색깔 이름과 Rich Text 색상 코드
+        string colorName = result.winningColor == SpotColor.Red ? "Red" : "Black";
+        string colorCodeConsole = result.winningColor == SpotColor.Red ? "red" : "white";
+        string colorCodeUI = result.winningColor == SpotColor.Red ? "#FF4444" : "#FFFFFF";
+        
+        // 번호 속성
+        bool isOdd = result.winningNumber % 2 == 1;
+        bool isHigh = result.winningNumber >= 19;
+        int dozen = (result.winningNumber - 1) / 12 + 1;
+        int column = ((result.winningNumber - 1) % 3) + 1;
+        
+        // Console 로그에 색깔 입히기
+        if (result.hasWon)
+        {
+            Debug.Log($"<color=green>[GameUI] ★★★ WIN ★★★</color>");
+        }
+        else
+        {
+            Debug.Log($"<color=red>[GameUI] ✖✖✖ LOSE ✖✖✖</color>");
+        }
+        
+        Debug.Log($"<color={colorCodeConsole}>[GameUI] Winning: Spot {result.winningSpotID}, Number {result.winningNumber} ({colorName})</color>");
+        Debug.Log($"[GameUI] Properties: {(isOdd ? "Odd" : "Even")}, {(isHigh ? "High" : "Low")}, Dozen {dozen}, Column {column}");
+        Debug.Log($"<color=yellow>[GameUI] Payout: ${result.totalPayout:F2}</color>");
+        
+        // 당첨된 배팅 로그
+        if (result.winningBets != null && result.winningBets.Count > 0)
+        {
+            Debug.Log($"<color=cyan>[GameUI] Winning Bets ({result.winningBets.Count}):</color>");
+            foreach (var bet in result.winningBets)
+            {
+                string betDetail = GetBetDetail(bet);
+                Debug.Log($"<color=lime>  ✓ {betDetail}</color>");
+            }
+        }
         
         // 결과 텍스트 표시
         if (mTMPText.ContainsKey("ResultText"))
         {
-            string resultMessage = result.hasWon
-                ? $"WIN!\nSpot: {result.winningSpotID}\nNumber: {result.winningNumber}\nPayout: ${result.totalPayout:F2}"
-                : $"LOSE\nSpot: {result.winningSpotID}\nNumber: {result.winningNumber}";
+            string resultMessage = "";
+            
+            if (result.hasWon)
+            {
+                resultMessage = $"<color=#00FF00><b>WIN!</b></color>\n";
+                resultMessage += $"<color={colorCodeUI}><b>Spot: {result.winningSpotID}  Number: {result.winningNumber}  ({colorName})</b></color>\n";
+                
+                // 속성들 (강조)
+                string oddEvenText = isOdd ? "<color=#FF88FF>Odd</color>" : "<color=#88FF88>Even</color>";
+                string highLowText = isHigh ? "<color=#FFAA44>High(19-36)</color>" : "<color=#44AAFF>Low(1-18)</color>";
+                string dozenRange = dozen == 1 ? "1-12" : dozen == 2 ? "13-24" : "25-36";
+                string dozenText = $"<color=#FF99CC>Dozen {dozen}({dozenRange})</color>";
+                string columnText = $"<color=#99CCFF>Column {column}</color>";
+                
+                resultMessage += $"• {oddEvenText}  • {highLowText} ";
+                resultMessage += $"• {dozenText}  • {columnText}\n";
+                resultMessage += $"<color=#FFFF00><b>Payout: ${result.totalPayout:F2}</b></color>\n";
+                
+                // 내 배팅 표시
+                if (result.allBets != null && result.allBets.Count > 0)
+                {
+                    resultMessage += "<color=#CCCCCC>My Bets:</color>";
+                    foreach (var bet in result.allBets)
+                    {
+                        string betDetail = GetBetDetail(bet);
+                        bool isWinning = result.winningBets != null && result.winningBets.Contains(bet);
+                        
+                        if (isWinning)
+                        {
+                            resultMessage += $"<color=#00FF00>  ✓ {betDetail} (WIN!)</color>\n";
+                        }
+                        else
+                        {
+                            resultMessage += $"<color=#FF6666>  ✗ {betDetail} (LOSE)</color>\n";
+                        }
+                    }
+                }
+            }
+            else
+            {
+                resultMessage = $"<color=#FF0000><b>LOSE</b></color>\n";
+                resultMessage += $"<color={colorCodeUI}><b>Spot: {result.winningSpotID}  Number: {result.winningNumber}  ({colorName})</b></color>\n";
+                
+                // 속성들 (강조)
+                string oddEvenText = isOdd ? "<color=#FF88FF>Odd</color>" : "<color=#88FF88>Even</color>";
+                string highLowText = isHigh ? "<color=#FFAA44>High(19-36)</color>" : "<color=#44AAFF>Low(1-18)</color>";
+                string dozenRange = dozen == 1 ? "1-12" : dozen == 2 ? "13-24" : "25-36";
+                string dozenText = $"<color=#FF99CC>Dozen {dozen}({dozenRange})</color>";
+                string columnText = $"<color=#99CCFF>Column {column}</color>";
+                
+                resultMessage += $"• {oddEvenText}  • {highLowText} "; 
+                resultMessage += $"• {dozenText}  • {columnText}\n";
+                
+                // 내 배팅 표시
+                if (result.allBets != null && result.allBets.Count > 0)
+                {
+                    resultMessage += "<color=#CCCCCC>My Bets:</color>";
+                    foreach (var bet in result.allBets)
+                    {
+                        string betDetail = GetBetDetail(bet);
+                        resultMessage += $"<color=#FF6666>  ✗ {betDetail} (LOSE)</color>\n";
+                    }
+                }
+            }
             
             mTMPText["ResultText"].text = resultMessage;
         }
@@ -515,6 +668,57 @@ public class GameUI : UIScreen
         // 스핀 버튼 재활성화
         if (mButtons.ContainsKey("SpinButton"))
             mButtons["SpinButton"].interactable = true;
+    }
+    
+    /// <summary>
+    /// BetType을 읽기 쉬운 이름으로 변환
+    /// </summary>
+    private string GetBetTypeName(BetType betType)
+    {
+        switch (betType)
+        {
+            case BetType.Number: return "Number";
+            case BetType.Color: return "Color";
+            case BetType.OddEven: return "Odd/Even";
+            case BetType.HighLow: return "High/Low";
+            case BetType.Dozen: return "Dozen";
+            case BetType.Column: return "Column";
+            default: return betType.ToString();
+        }
+    }
+    
+    /// <summary>
+    /// 배팅의 구체적인 정보 반환
+    /// </summary>
+    private string GetBetDetail(BetData bet)
+    {
+        switch (bet.betType)
+        {
+            case BetType.Number:
+                return $"Number {bet.targetValue}";
+                
+            case BetType.Color:
+                string colorName = bet.targetValue == 0 ? "Red" : "Black";
+                return $"Color: {colorName}";
+                
+            case BetType.OddEven:
+                string oddEven = bet.targetValue == 0 ? "Odd" : "Even";
+                return $"{oddEven}";
+                
+            case BetType.HighLow:
+                string highLow = bet.targetValue == 0 ? "Low(1-18)" : "High(19-36)";
+                return $"{highLow}";
+                
+            case BetType.Dozen:
+                string dozenRange = bet.targetValue == 1 ? "1-12" : bet.targetValue == 2 ? "13-24" : "25-36";
+                return $"Dozen {bet.targetValue} ({dozenRange})";
+                
+            case BetType.Column:
+                return $"Column {bet.targetValue}";
+                
+            default:
+                return $"{bet.betType} ({bet.targetValue})";
+        }
     }
     
     private void ShowGameOver(double totalEarned)
@@ -528,57 +732,83 @@ public class GameUI : UIScreen
         Debug.Log($"[GameUI] Game Over: ${totalEarned:F2}");
     }
     
+    private void ShowGameReset(int maxTurns)
+    {
+        Debug.Log($"<color=cyan>[GameUI] ═══════════ GAME RESET ═══════════</color>");
+        
+        if (mTMPText.ContainsKey("ResultText"))
+        {
+            string resetMessage = "";
+            resetMessage += $"<color=#00FFFF><b>═══════════════════════</b></color>\n";
+            resetMessage += $"<color=#FFFF00><size=24><b>- GAME RESET -</b></size></color>\n";
+            resetMessage += $"<color=#00FFFF><b>═══════════════════════</b></color>\n\n";
+            resetMessage += $"<color=#FFFFFF>New game started!</color>\n";
+            resetMessage += $"<color=#AAFFAA>• Starting chips: <b><sprite=0> x5</b></color>\n";
+            resetMessage += $"<color=#AAFFAA>• Total turns: <b>{maxTurns}</b></color>\n\n";
+            resetMessage += $"<color=#FFAA44>Place your bet and spin!</color>";
+            
+            mTMPText["ResultText"].text = resetMessage;
+        }
+        
+        Debug.Log($"<color=lime>[GameUI] Game reset message displayed (maxTurns: {maxTurns})</color>");
+    }
+    
     /// <summary>
     /// BetObject 배팅 팝업 표시 처리
     /// </summary>
     private void HandleShowBetPopup(IOData data)
     {
+        Debug.Log($"[GameUI] HandleShowBetPopup called with data: {data?.GetType()}");
+        
         if (data is OData<BetObjectClickData> clickData)
         {
             BetObjectClickData betClickData = clickData.Get();
-            ShowBetObjectPopup(betClickData);
+            Debug.Log($"[GameUI] BetObject clicked: ID={betClickData.objectID}, Type={betClickData.betType}, Value={betClickData.targetValue}");
+            
+            // GameState 가져오기
+            var game = FindFirstObjectByType<Game>();
+            if (game != null)
+            {
+                GameState gameState = game.GetGameState();
+                ShowBetObjectPopup(betClickData, gameState);
+            }
         }
     }
     
-    /// <summary>
-    /// BetObject 클릭 처리 (직접 메시지 수신)
-    /// </summary>
-    private void OnBetObjectClicked(BetObjectClickData clickData)
-    {
-        Debug.Log($"[GameUI] OnBetObjectClicked: {clickData.betType} {clickData.targetValue}");
-        ShowBetObjectPopup(clickData);
-    }
+    // OnBetObjectClicked 메서드 제거됨 - Game에서 직접 팝업 처리
     
     /// <summary>
     /// BetObject 배팅 팝업 표시
     /// </summary>
-    private void ShowBetObjectPopup(BetObjectClickData clickData)
+    private void ShowBetObjectPopup(BetObjectClickData clickData, GameState gameState)
     {
-        if (currentGameState == null)
+        Debug.Log($"[GameUI] ShowBetObjectPopup called: Type={clickData.betType}, Value={clickData.targetValue}");
+        
+        if (gameState == null)
         {
-            Debug.LogError("[GameUI] currentGameState is null! Cannot show bet popup.");
+            Debug.LogError("[GameUI] gameState is null! Cannot show bet popup.");
             return;
         }
         
-        int totalChips = currentGameState.availableChips.GetTotalCount();
+        int totalChips = gameState.availableChips.GetTotalCount();
         Debug.Log($"[GameUI] Total chips available: {totalChips}");
         
-        if (chipSelectionPopup != null && totalChips > 0)
+        if (totalChips > 0)
         {
             Debug.Log($"[GameUI] Showing chip selection popup for BetObject {clickData.objectID}");
             
             // 박싱/언박싱 없이 구조체 사용
             var chipSelectionData = new ChipSelectionData(
                 clickData.objectID,
-                currentGameState.availableChips,
-                (chipType, chipCount) =>
+                gameState.availableChips,
+                (spotID, chipType, chipCount) =>
                 {
-                    if (presenter != null)
-                    {
-                        presenter.PlaceBet(clickData.betType, clickData.targetValue, chipType, chipCount);
-                    }
+                    // 배팅 명령 전송
+                    GB.Presenter.Send(Game.DOMAIN, Game.Keys.CMD_PLACE_BET, 
+                        new object[] { clickData.betType, clickData.targetValue, chipType, chipCount });
+                    
                     int chipValue = ChipTypeCache.Values[chipType];
-                    double payout = Game.GetPayoutMultiplier(clickData.betType);
+                    double payout = SpotCalculator.GetBasePayout(clickData.betType, gameState, clickData.targetValue);
                     Debug.Log($"[GameUI] Bet placed on BetObject {clickData.objectID}: {chipCount}x ${chipValue} chips (Payout: x{payout})");
                 }
             );
@@ -598,32 +828,36 @@ public class GameUI : UIScreen
     /// </summary>
     private void UseSpotItem(int spotID, SpotItemType itemType, int? targetSpotID = null)
     {
-        if (currentGameState == null) return;
+        // Game에서 현재 GameState 가져오기
+        var game = FindFirstObjectByType<Game>();
+        if (game == null) return;
+        
+        GameState gameState = game.GetGameState();
+        if (gameState == null) return;
         
         // 해당 아이템이 있는지 확인
-        ItemData item = currentGameState.inventory.Find(i => i.itemType == ItemType.SpotItem && i.spotItemType == itemType);
+        ItemData item = gameState.inventory.Find(i => i.itemType == ItemType.SpotItem && i.spotItemType == itemType);
         if (item == null)
         {
             Debug.LogWarning($"[GameUI] Item {itemType} not found in inventory");
             return;
         }
         
-        // 아이템 사용
-        if (presenter != null)
+        // 아이템 사용 명령 전송
+        if (targetSpotID.HasValue)
         {
-            if (targetSpotID.HasValue)
-            {
-                // 타겟이 있는 경우 (Copy 등)
-                presenter.UseItem(item, spotID, targetSpotID.Value);
-            }
-            else
-            {
-                // 타겟이 없는 경우 (Plus 등)
-                presenter.UseItem(item, spotID);
-            }
-            
-            Debug.Log($"[GameUI] Used SpotItem: {itemType} on spot {spotID}");
+            // 타겟이 있는 경우 (Copy 등)
+            GB.Presenter.Send(Game.DOMAIN, Game.Keys.CMD_USE_ITEM, 
+                new object[] { item, new int[] { spotID, targetSpotID.Value } });
         }
+        else
+        {
+            // 타겟이 없는 경우 (Plus 등)
+            GB.Presenter.Send(Game.DOMAIN, Game.Keys.CMD_USE_ITEM, 
+                new object[] { item, new int[] { spotID } });
+        }
+        
+        Debug.Log($"[GameUI] Used SpotItem: {itemType} on spot {spotID}");
     }
     
     

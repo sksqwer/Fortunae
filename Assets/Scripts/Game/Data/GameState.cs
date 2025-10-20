@@ -14,15 +14,19 @@ public class GameState
     // === 스팟 상태 (1~36) ===
     public Dictionary<int, Spot> spots;
     
+    // === 현재 배팅 정보 ===
+    public List<BetData> currentBets;      // 현재 턴의 배팅 리스트
+    
     // === 턴 기록 ===
     public List<TurnData> turnHistory;
     
     public GameState(SpotSO spotDefinition)
     {
         availableChips = new ChipCollection(ChipType.Chip1, 5);
-        currentTurn = 1;
+        currentTurn = 0;
         inventory = new List<ItemData>();
         spots = new Dictionary<int, Spot>();
+        currentBets = new List<BetData>();
         turnHistory = new List<TurnData>();
         
         // Charm은 외부(Game)에서 추가됨
@@ -35,39 +39,69 @@ public class GameState
         }
     }
     
-    // 턴 시작 (칩 리셋)
+    // 턴 시작 (첫 턴에만 칩 지급, 이후는 유지)
     public void StartNewTurn()
     {
-        availableChips.Clear();
-        availableChips.AddChip(ChipType.Chip1, 5);
         currentTurn++;
+        
+        // 첫 턴에만 초기 칩 지급
+        if (currentTurn == 1)
+        {
+            availableChips.Clear();
+            availableChips.AddChip(ChipType.Chip1, 5);
+            availableChips.AddChip(ChipType.Chip5, 5);
+            availableChips.AddChip(ChipType.Chip10, 5);
+            availableChips.AddChip(ChipType.Chip50, 5);
+            Debug.Log($"[GameState] First turn - initial chips granted: {availableChips.ToString()}");
+        }
+        else
+        {
+            Debug.Log($"[GameState] Turn {currentTurn} - chips carried over: {availableChips.ToString()}");
+        }
     }
     
     // 턴 시작 시 스팟 리셋 (Active 아이템만)
     public void ResetSpotsForNewTurn()
     {
+        Debug.Log($"[GameState] ResetSpotsForNewTurn called - Turn {currentTurn}");
+        
+        int spotCount = 0;
         foreach (var spot in spots.Values)
         {
             spot.ResetForNewTurn();
+            spotCount++;
         }
+        
+        Debug.Log($"[GameState] Reset {spotCount} spots for new turn");
     }
     
     // 새 게임 시작 시 완전 리셋
     public void ResetAllSpots()
     {
+        Debug.Log($"[GameState] ResetAllSpots called");
+        
+        int spotCount = 0;
         foreach (var spot in spots.Values)
         {
             spot.ResetAll();
+            spotCount++;
         }
+        
+        Debug.Log($"[GameState] Fully reset {spotCount} spots");
     }
     
-    // Charm 활성 여부 (inventory에서 확인)
-    public bool HasDeathCharm() => inventory.Exists(i => i.charmType == CharmType.Death);
-    public bool HasChameleonCharm() => inventory.Exists(i => i.charmType == CharmType.Chameleon);
+    // 아이템 ID로 아이템 가져오기
+    public ItemData GetItemByID(string itemID)
+    {
+        return inventory.Find(i => i.itemID == itemID);
+    }
     
-    // Charm 아이템 가져오기
-    public ItemData GetDeathCharm() => inventory.Find(i => i.charmType == CharmType.Death);
-    public ItemData GetChameleonCharm() => inventory.Find(i => i.charmType == CharmType.Chameleon);
+    // 아이템 ID로 아이템 존재 여부 확인
+    public bool HasItem(string itemID)
+    {
+        var item = GetItemByID(itemID);
+        return item != null && item.count > 0;
+    }
     
     // 총 보유 금액 계산 (ChipCollection에서)
     public double GetTotalMoney() => availableChips.GetTotalValue();

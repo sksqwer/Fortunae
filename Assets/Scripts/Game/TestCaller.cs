@@ -75,15 +75,15 @@ public class TestCaller : MonoBehaviour
         
         // ColorBetObject 클릭 시뮬레이션
         BetObjectClickData redClick = new BetObjectClickData(100, BetType.Color, 0); // Red
-        GB.Presenter.Send(GamePresenter.DOMAIN, GamePresenter.Keys.CMD_BET_OBJECT_CLICKED, redClick);
+        GB.Presenter.Send(Game.DOMAIN, Game.Keys.CMD_BET_OBJECT_CLICKED, redClick);
         
         // OddEvenBetObject 클릭 시뮬레이션
         BetObjectClickData evenClick = new BetObjectClickData(101, BetType.OddEven, 1); // Even
-        GB.Presenter.Send(GamePresenter.DOMAIN, GamePresenter.Keys.CMD_BET_OBJECT_CLICKED, evenClick);
+        GB.Presenter.Send(Game.DOMAIN, Game.Keys.CMD_BET_OBJECT_CLICKED, evenClick);
         
         // DozenBetObject 클릭 시뮬레이션
         BetObjectClickData dozenClick = new BetObjectClickData(102, BetType.Dozen, 1); // 1-12
-        GB.Presenter.Send(GamePresenter.DOMAIN, GamePresenter.Keys.CMD_BET_OBJECT_CLICKED, dozenClick);
+        GB.Presenter.Send(Game.DOMAIN, Game.Keys.CMD_BET_OBJECT_CLICKED, dozenClick);
     }
     
     /// <summary>
@@ -109,13 +109,13 @@ public class TestCaller : MonoBehaviour
         
         // 다양한 배팅 테스트
         object[] bet1 = { BetType.Number, 7, ChipType.Chip1, 2 }; // Spot 7에 2개 칩
-        GB.Presenter.Send(GamePresenter.DOMAIN, GamePresenter.Keys.CMD_PLACE_BET, bet1);
+        GB.Presenter.Send(Game.DOMAIN, Game.Keys.CMD_PLACE_BET, bet1);
         
         object[] bet2 = { BetType.Color, 0, ChipType.Chip5, 1 }; // Red에 1개 칩
-        GB.Presenter.Send(GamePresenter.DOMAIN, GamePresenter.Keys.CMD_PLACE_BET, bet2);
+        GB.Presenter.Send(Game.DOMAIN, Game.Keys.CMD_PLACE_BET, bet2);
         
         object[] bet3 = { BetType.Dozen, 2, ChipType.Chip1, 3 }; // 2nd Dozen에 3개 칩
-        GB.Presenter.Send(GamePresenter.DOMAIN, GamePresenter.Keys.CMD_PLACE_BET, bet3);
+        GB.Presenter.Send(Game.DOMAIN, Game.Keys.CMD_PLACE_BET, bet3);
     }
     
     /// <summary>
@@ -127,10 +127,10 @@ public class TestCaller : MonoBehaviour
         Debug.Log("[TestCaller] 스핀 테스트 시작");
         
         // 스핀 시작
-        GB.Presenter.Send(GamePresenter.DOMAIN, GamePresenter.Keys.CMD_START_SPIN);
+        GB.Presenter.Send(Game.DOMAIN, Game.Keys.CMD_START_SPIN);
         
         // 게임 리셋
-        GB.Presenter.Send(GamePresenter.DOMAIN, GamePresenter.Keys.CMD_RESET_GAME);
+        GB.Presenter.Send(Game.DOMAIN, Game.Keys.CMD_RESET_GAME);
     }
     
     /// <summary>
@@ -142,9 +142,9 @@ public class TestCaller : MonoBehaviour
         Debug.Log("[TestCaller] Spot 클릭 테스트 시작");
         
         // Spot 클릭 시뮬레이션
-        GB.Presenter.Send(GamePresenter.DOMAIN, GamePresenter.Keys.CMD_SPOT_CLICKED, 15);
-        GB.Presenter.Send(GamePresenter.DOMAIN, GamePresenter.Keys.CMD_SPOT_CLICKED, 22);
-        GB.Presenter.Send(GamePresenter.DOMAIN, GamePresenter.Keys.CMD_SPOT_CLICKED, 33);
+        GB.Presenter.Send(Game.DOMAIN, Game.Keys.CMD_SPOT_CLICKED, 15);
+        GB.Presenter.Send(Game.DOMAIN, Game.Keys.CMD_SPOT_CLICKED, 22);
+        GB.Presenter.Send(Game.DOMAIN, Game.Keys.CMD_SPOT_CLICKED, 33);
     }
     
     /// <summary>

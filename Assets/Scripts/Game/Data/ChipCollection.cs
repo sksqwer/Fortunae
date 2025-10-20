@@ -179,5 +179,23 @@ public class ChipCollection
         }
         return result.TrimEnd() + $" (총 ${GetTotalValue()})";
     }
+    
+    /// <summary>
+    /// 칩을 스프라이트 태그로 표시
+    /// </summary>
+    public string ToSpriteString()
+    {
+        string result = "";
+        foreach (ChipType type in ChipTypeCache.AllTypes)
+        {
+            int count = chips[type];
+            if (count > 0)
+            {
+                string chipSprite = ChipTypeCache.ToSpriteTag(type);
+                result += $"{chipSprite}x{count}  ";
+            }
+        }
+        return result.TrimEnd();
+    }
 }
 

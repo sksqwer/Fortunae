@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEngine;
 
 /// <summary>
 /// 룰렛 판의 물리적인 '칸' (1~36)의 현재 '상태'를 저장하는
@@ -68,19 +69,24 @@ public class Spot
     // 리셋 (턴 시작 시 - Active 아이템만 제거, Passive는 유지)
     public void ResetForNewTurn()
     {
-        currentNumber = spotBase.id;
-        currentColor = spotBase.color;
-        isDestroyed = false;
-        currentProbability = baseProbability;
-        currentPayoutMultiplier = basePayoutMultiplier;
+        Debug.Log($"[Spot] ResetForNewTurn called for Spot {spotBase.id}");
         
         // Active 아이템만 제거 (Passive는 유지, 순서 보존)
-        appliedRecords.RemoveAll(record => record.effectType == EffectType.Active);
+        int removedCount = appliedRecords.RemoveAll(record => record.effectType == EffectType.Active);
+        Debug.Log($"[Spot] Removed {removedCount} Active records from Spot {spotBase.id}");
+        
+        // Passive 아이템이 남아있으면 재계산하지 않고 유지
+        // isDestroyed, currentNumber, currentColor, currentProbability, currentPayoutMultiplier는 
+        // 아이템 적용 결과를 유지해야 하므로 리셋하지 않음
+        
+        Debug.Log($"[Spot] Spot {spotBase.id} state: Number={currentNumber}, Multiplier={currentPayoutMultiplier}, Destroyed={isDestroyed}");
     }
     
     // 완전 리셋 (새 게임 시작)
     public void ResetAll()
     {
+        Debug.Log($"[Spot] ResetAll called for Spot {spotBase.id}");
+        
         currentNumber = spotBase.id;
         currentColor = spotBase.color;
         isDestroyed = false;
@@ -89,6 +95,8 @@ public class Spot
         
         // 모든 기록 클리어
         appliedRecords.Clear();
+        
+        Debug.Log($"[Spot] Spot {spotBase.id} fully reset to base state");
     }
     
     // 아이템 기록 추가 (순서대로)

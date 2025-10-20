@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using GB;
 
 /// <summary>
-/// 룰렛 보드 (3D Spot 오브젝트 관리)
+/// 룰렛 보드 (3D Spot 및 BetObject 오브젝트 관리)
 /// </summary>
 public class Board : MonoBehaviour
 {
     [SerializeField] private SpotObject[] spotObjects = new SpotObject[36];
+    [SerializeField] private BetObject[] betObjects; // Color, OddEven, Dozen, Column 등
     
     private Dictionary<int, Spot> spotDataDictionary;
     
@@ -16,12 +17,35 @@ public class Board : MonoBehaviour
     /// </summary>
     public void Init()
     {
+        Debug.Log("[Board] Init called");
+        
         // SpotObject 자동 찾기
         if (spotObjects == null || spotObjects.Length == 0 || spotObjects[0] == null)
         {
             spotObjects = GetComponentsInChildren<SpotObject>();
             Debug.Log($"[Board] Found {spotObjects.Length} SpotObjects");
         }
+        
+        // BetObject 자동 찾기 (SpotObject 제외)
+        if (betObjects == null || betObjects.Length == 0)
+        {
+            var allBetObjects = GetComponentsInChildren<BetObject>();
+            List<BetObject> nonSpotBetObjects = new List<BetObject>();
+            
+            foreach (var betObj in allBetObjects)
+            {
+                // SpotObject가 아닌 BetObject만 추가
+                if (!(betObj is SpotObject))
+                {
+                    nonSpotBetObjects.Add(betObj);
+                }
+            }
+            
+            betObjects = nonSpotBetObjects.ToArray();
+            Debug.Log($"[Board] Found {betObjects.Length} BetObjects (excluding SpotObjects)");
+        }
+        
+        Debug.Log("[Board] Init completed");
     }
     
     /// <summary>
@@ -52,7 +76,37 @@ public class Board : MonoBehaviour
         
         UpdateAllVisuals();
         
+        // BetObject 초기화
+        InitializeBetObjects();
+        
         Debug.Log($"[Board] Connected {spotObjects.Length} SpotObjects to data");
+    }
+    
+    /// <summary>
+    /// BetObject 초기화
+    /// </summary>
+    private void InitializeBetObjects()
+    {
+        if (betObjects == null || betObjects.Length == 0)
+        {
+            Debug.LogWarning("[Board] No BetObjects to initialize");
+            return;
+        }
+        
+        Debug.Log($"[Board] Initializing {betObjects.Length} BetObjects");
+        
+        foreach (var betObj in betObjects)
+        {
+            if (betObj != null)
+            {
+                betObj.Initialize(betObj.ObjectID);
+                // BetObject는 Inspector에서 이미 설정되어 있음 (betType, objectID 등)
+                // 추가 초기화가 필요하면 여기서 처리
+                Debug.Log($"[Board] BetObject initialized: {betObj.GetType().Name} ID={betObj.name}");
+            }
+        }
+        
+        Debug.Log("[Board] BetObjects initialized");
     }
     
     /// <summary>
@@ -79,5 +133,21 @@ public class Board : MonoBehaviour
         {
             spotObj.SetHighlight(highlight);
         }
+    }
+    
+    /// <summary>
+    /// 모든 BetObject 목록 가져오기
+    /// </summary>
+    public BetObject[] GetAllBetObjects()
+    {
+        return betObjects;
+    }
+    
+    /// <summary>
+    /// 모든 SpotObject 목록 가져오기
+    /// </summary>
+    public SpotObject[] GetAllSpotObjects()
+    {
+        return spotObjects;
     }
 }
