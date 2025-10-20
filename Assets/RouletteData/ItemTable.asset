@@ -1,0 +1,120 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 429a4cf4088359e4cbf55856d12b099e, type: 3}
+  m_Name: ItemTable
+  m_EditorClassIdentifier: 
+  items:
+  - itemID: PLUS_SPOT
+    itemName: Plus Spot
+    description: "\uC120\uD0DD\uD55C Spot\uC758 \uC22B\uC790(1~35)\uB97C +1 \uC99D\uAC00"
+    itemType: 0
+    spotItemType: 1
+    chipItemType: 0
+    charmType: 0
+    baseCount: 1
+    maxCount: 5
+    isConsumable: 1
+    isStackable: 1
+    multiplier: 0
+    addValue: 1
+    targetCount: 0
+    icon: {fileID: -7012710134733120385, guid: 60c0360a2e5fd5f4ca1839b0713ed7ed, type: 3}
+    itemColor: {r: 1, g: 1, b: 1, a: 0}
+  - itemID: COPY_SPOT
+    itemName: Copy Spot
+    description: "\uCCAB \uBC88\uC9F8 \uC120\uD0DD\uD55C Spot\uC744, \uB450 \uBC88\uC9F8
+      \uC120\uD0DD\uD55C Spot\uC5D0 \uBCF5\uC0AC"
+    itemType: 0
+    spotItemType: 2
+    chipItemType: 0
+    charmType: 0
+    baseCount: 1
+    maxCount: 5
+    isConsumable: 1
+    isStackable: 1
+    multiplier: 0
+    addValue: 0
+    targetCount: 0
+    icon: {fileID: 201472674591762203, guid: 3bf152ed2bc578b4dabbbdae3b01e05e, type: 3}
+    itemColor: {r: 1, g: 1, b: 1, a: 0}
+  - itemID: UPGRADED_MULTI_SPOT
+    itemName: Upgraded Multi Spot
+    description: "\uC120\uD0DD\uD55C Spot x1.2\uBC30(\uAC00\uB85C\uC138\uB85C \uC778\uC811\uD55C
+      4\uAC1C spot \uCD94\uAC00 \uC801\uC6A9)  "
+    itemType: 0
+    spotItemType: 3
+    chipItemType: 0
+    charmType: 0
+    baseCount: 1
+    maxCount: 5
+    isConsumable: 1
+    isStackable: 1
+    multiplier: 1.2
+    addValue: 1
+    targetCount: 0
+    icon: {fileID: -7107532474056750921, guid: e5348def00f22e24fbf0e54e5dbaf3dd, type: 3}
+    itemColor: {r: 1, g: 1, b: 1, a: 0}
+  - itemID: HAT_WING
+    itemName: Wing
+    description: "\uC774 \uC544\uC774\uD15C\uC744 \uC7A5\uCC29\uD55C \uCE69\uC740
+      Spot\uC774 \uB2F9\uCCA8\uB418\uC9C0 \uC54A\uC544\uB3C4, \uADF8 Spot\uC774 \uB2F9\uCCA8\uB41C
+      \uAC83\uC73C\uB85C \uCC98\uB9AC"
+    itemType: 1
+    spotItemType: 0
+    chipItemType: 1
+    charmType: 0
+    baseCount: 1
+    maxCount: 5
+    isConsumable: 1
+    isStackable: 1
+    multiplier: 0
+    addValue: 1
+    targetCount: 0
+    icon: {fileID: -62535250835104902, guid: aabed621eb4c7424d96d5936940e4ed8, type: 3}
+    itemColor: {r: 1, g: 1, b: 1, a: 0}
+  - itemID: DEATH_CHARM
+    itemName: Death
+    description: "4\uAC00 \uD3EC\uD568\uB41C Spot\uC5D0 \uBC30\uD305 \uBC0F \uB2F9\uCCA8
+      \uC2DC, \uB2F9\uCCA8 Spot \uD30C\uAD34"
+    itemType: 2
+    spotItemType: 0
+    chipItemType: 0
+    charmType: 1
+    baseCount: 0
+    maxCount: 0
+    isConsumable: 1
+    isStackable: 1
+    multiplier: 0
+    addValue: 1
+    targetCount: 0
+    icon: {fileID: 703743461650552282, guid: ed55f5c97d9c51b48bb68d31f395fef3, type: 3}
+    itemColor: {r: 1, g: 1, b: 1, a: 0}
+  - itemID: CHAMELEON_CHARM
+    itemName: Chameleon
+    description: "Spot\uC758 \uC22B\uC790\uB098 \uC0C9\uC774 \uBCC0\uACBD\uB420 \uB54C\uB9C8\uB2E4,
+      \uBCC0\uACBD\uB41C spot x1.3\uBC30(\uC774 Charm\uC744 \uD310\uB9E4\uD574\uB3C4
+      \uC99D\uAC00\uB41C \uC218\uCE58 \uC720\uC9C0)  "
+    itemType: 2
+    spotItemType: 0
+    chipItemType: 0
+    charmType: 2
+    baseCount: 0
+    maxCount: 0
+    isConsumable: 1
+    isStackable: 1
+    multiplier: 0
+    addValue: 0
+    targetCount: 0
+    icon: {fileID: -8880590609113154749, guid: fe43d6d36e93a4d43888ad367d69dac2, type: 3}
+    itemColor: {r: 1, g: 1, b: 1, a: 0}
+  tableName: Roulette Item Table
+  version: 1.0.0

@@ -109,7 +109,7 @@ public class BallSettlingState : FSMState<BallController>
         // 타겟까지 거리
         float distanceToTarget = Vector2.Distance(orbitPos, targetPos);
         
-        Debug.Log($"[Settling] 현재각:{currentAngle:F1}, 남은각도:{remainingAngle:F1}, 진행도:{progress:F2}, 속도배율:{speedMultiplier:F2}, 거리:{distanceToTarget:F3}");
+//        Debug.Log($"[Settling] 현재각:{currentAngle:F1}, 남은각도:{remainingAngle:F1}, 진행도:{progress:F2}, 속도배율:{speedMultiplier:F2}, 거리:{distanceToTarget:F3}");
         
         // 완료 체크: 타겟 각도에 도달하고 거리도 가까우면 안착
         if (progress >= 0.98f)

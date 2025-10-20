@@ -2,9 +2,7 @@ using GB;
 
 
 public class GameScene : UIScreen
-{
-
-    
+{  
 
     private void Awake()
     {

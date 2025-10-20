@@ -1,75 +1,111 @@
-using UnityEngine;
-using UnityEngine.UI; // (UGUI 사용 시)
-using TMPro; // (TextMeshPro 사용 시)
-using System;
+using System.Collections.Generic;
 
-
-[Serializable]
+/// <summary>
+/// 룰렛 판의 물리적인 '칸' (1~36)의 현재 '상태'를 저장하는
+/// 핵심 데이터 모델 (런타임 상태)
+/// </summary>
 public class Spot
-{[Header("시각적 요소 연결")]
-    // TextMeshPro를 사용하지 않는다면 'Text'로 변경하세요.
-    [SerializeField] private TextMeshProUGUI numberText; 
-    [SerializeField] private Image background; 
+{
+    // === 원본 데이터 참조 (불변) ===
+    public readonly SpotBase spotBase;  // ScriptableObject 원본 데이터
+    public int SpotID => spotBase.id;
+    public SpotColor OriginalColor => spotBase.color;
+
+    // === 상태 정보 (아이템으로 변경됨) ===
+    public int currentNumber;           // 현재 표시 숫자 (PlusSpot 적용)
+    public SpotColor currentColor;      // 현재 색상 (아이템으로 변경 가능)
+    public bool isDestroyed;            // 파괴 여부 (Death Charm)
     
-    // (선택 사항) 디버깅이나 확률/배당률 표시에 사용
-    [SerializeField] private TextMeshProUGUI debugInfoText; 
+    // === 확률/배당 정보 (계산 결과) ===
+    public double baseProbability;         // 기본 확률 (1/36)
+    public double currentProbability;      // 현재 확률 (계산기가 재계산)
+    public double basePayoutMultiplier;    // 기본 배당 (x36)
+    public double currentPayoutMultiplier; // 현재 배당 (계산기가 재계산)
 
-    // --- 내부 참조 ---
-    private SpotData myData; // GameManager로부터 주입받을 나의 '데이터(두뇌)'
-    private GameManager gameManager; // GameManager의 싱글톤 인스턴스
+    // === 적용된 아이템 내역 (순서가 중요! Active/Passive 구분 없이 하나로) ===
+    public List<AppliedItemRecord> appliedRecords;
+    
+    // 4로 나누어떨어지는지 체크 (Death 판정용: 4, 14, 24, 34)
+    public bool HasNumber4() => currentNumber % 10 == 4;
 
-    /// <summary>
-    /// GameManager가 호출하여 이 Spot 객체에게 '너의 데이터는 이것이다'라고 알려주는 함수
-    /// </summary>
-    public void Initialize(SpotData data, GameManager manager)
+    // 생성자 (SpotBase 기반)
+    public Spot(SpotBase spotBase)
     {
-        this.myData = data;
-        this.gameManager = manager;
+        this.spotBase = spotBase;
+        this.currentNumber = spotBase.id;
+        this.currentColor = spotBase.color;
+        this.isDestroyed = false;
         
-        // 초기 시각적 설정
-        UpdateVisuals();
-    }
-
-    /// <summary>
-    /// GameManager의 데이터(myData)를 기반으로 화면의 UI를 갱신합니다.
-    /// GameManager가 데이터 변경 후 이 함수를 호출해줘야 합니다.
-    /// </summary>
-    public void UpdateVisuals()
-    {
-        if (myData == null) return; // 데이터가 아직 없으면 중단
-
-        // 1. 숫자 표시
-        numberText.text = myData.displayNumber.ToString();
-
-        // 2. 파괴 상태 표시
-        if (myData.isDestroyed)
-        {
-            background.color = Color.grey; // (예시) 파괴되면 회색으로
-            numberText.color = Color.black;
-            debugInfoText.text = "DESTROYED";
-        }
-        else
-        {
-            // (예시) 원래 색상으로 복구 (myData.color 값에 따라 Red/Black 설정)
-            background.color = (myData.color == "Red") ? Color.red : Color.black;
-            numberText.color = Color.white;
-
-            // 3. (선택 사항) 확률 및 배당률 표시
-            debugInfoText.text = $"P: {(myData.currentProbability * 100f).ToString("F2")}%\n" +
-                                 $"X: {myData.FinalPayout.ToString("F1")}";
-        }
-    }
-
-    /// <summary>
-    /// 플레이어가 이 Spot 객체를 클릭했을 때 호출됩니다.
-    /// (UI Button의 OnClick() 이벤트에 이 함수를 연결하세요)
-    /// </summary>
-    public void OnSpotClicked()
-    {
-        if (myData.isDestroyed) return; // 파괴된 Spot은 클릭 불가
-
-        // 나는 계산하지 않는다. GameManager에게 보고만 한다.
-        // gameManager.HandleSpotClick(myData);
+        // 확률/배당 초기화
+        this.baseProbability = 1.0 / 36.0;
+        this.currentProbability = baseProbability;
+        this.basePayoutMultiplier = 36.0;
+        this.currentPayoutMultiplier = basePayoutMultiplier;
+        
+        // 아이템 내역 초기화
+        this.appliedRecords = new List<AppliedItemRecord>();
     }
     
+    // 인접 스팟 ID 반환 (UpgradedMultiSpot용)
+    public List<int> GetAdjacentSpots()
+    {
+        List<int> adjacent = new List<int>();
+        int id = SpotID;
+        
+        // 룰렛 레이아웃: 3x12 그리드 가정
+        int row = (id - 1) / 3;
+        int col = (id - 1) % 3;
+        
+        // 상하좌우
+        if (row > 0) adjacent.Add((row - 1) * 3 + col + 1);    // 위
+        if (row < 11) adjacent.Add((row + 1) * 3 + col + 1);   // 아래
+        if (col > 0) adjacent.Add(row * 3 + col);              // 왼쪽
+        if (col < 2) adjacent.Add(row * 3 + col + 2);          // 오른쪽
+        
+        return adjacent;
+    }
+    
+    // 리셋 (턴 시작 시 - Active 아이템만 제거, Passive는 유지)
+    public void ResetForNewTurn()
+    {
+        currentNumber = spotBase.id;
+        currentColor = spotBase.color;
+        isDestroyed = false;
+        currentProbability = baseProbability;
+        currentPayoutMultiplier = basePayoutMultiplier;
+        
+        // Active 아이템만 제거 (Passive는 유지, 순서 보존)
+        appliedRecords.RemoveAll(record => record.effectType == EffectType.Active);
+    }
+    
+    // 완전 리셋 (새 게임 시작)
+    public void ResetAll()
+    {
+        currentNumber = spotBase.id;
+        currentColor = spotBase.color;
+        isDestroyed = false;
+        currentProbability = baseProbability;
+        currentPayoutMultiplier = basePayoutMultiplier;
+        
+        // 모든 기록 클리어
+        appliedRecords.Clear();
+    }
+    
+    // 아이템 기록 추가 (순서대로)
+    public void AddRecord(AppliedItemRecord record)
+    {
+        appliedRecords.Add(record);
+    }
+    
+    // Active 기록만 가져오기
+    public List<AppliedItemRecord> GetActiveRecords()
+    {
+        return appliedRecords.FindAll(r => r.effectType == EffectType.Active);
+    }
+    
+    // Passive 기록만 가져오기
+    public List<AppliedItemRecord> GetPassiveRecords()
+    {
+        return appliedRecords.FindAll(r => r.effectType == EffectType.Passive);
+    }
 }
