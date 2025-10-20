@@ -10,8 +10,11 @@ using GB;
 /// </summary>
 public class GameUI : UIScreen
 {
+    // UI 도메인 상수
+    public const string DOMAIN_UI = "GameUI";
+    
     [Header("Presenter Reference")]
-    [SerializeField] private GamePresenter presenter;
+    [SerializeField] private GamePresenter presenter; // MVP: View -> Presenter 명령 전달용
     
     [Header("UI Panels")]
     [SerializeField] private GameObject spotListPanel;
@@ -29,7 +32,7 @@ public class GameUI : UIScreen
     
     private GameState currentGameState;
     
-    // Spot 선택 모드
+    // Spot 선택 모드0
     private bool isSpotSelectionMode = false;
     private SpotItemType currentItemType;
     private int selectedSpotID = -1; // Copy Spot 첫 번째 선택용
@@ -37,13 +40,13 @@ public class GameUI : UIScreen
     public override void Initialize()
     {
         base.Initialize();
-        
-        // Presenter에 View 바인딩
-        Presenter.Bind(GamePresenter.DOMAIN, this);
+              
+        // GameUI 도메인에 바인딩 (직접 메시지 수신용)
+        Presenter.Bind(DOMAIN_UI, this);
         
         // 버튼 이벤트 등록
         RegisterButtonEvents();
-        
+
         // 초기 GameState 요청
         if (presenter != null)
         {
@@ -57,7 +60,7 @@ public class GameUI : UIScreen
     private void OnDestroy()
     {
         // Presenter에서 View 언바인딩
-        Presenter.UnBind(GamePresenter.DOMAIN, this);
+        Presenter.UnBind(DOMAIN_UI, this);
     }
     
     /// <summary>
@@ -140,6 +143,20 @@ public class GameUI : UIScreen
                 else
                 {
                     Debug.LogError($"[GameUI] Invalid data for CMD_SPOT_CLICKED: {data}");
+                }
+                break;
+                
+            case GamePresenter.Keys.CMD_BET_OBJECT_CLICKED:
+                Debug.Log($"[GameUI] CMD_BET_OBJECT_CLICKED received! data: {data}");
+                if (data != null && data is OData<BetObjectClickData> clickData)
+                {
+                    BetObjectClickData betData = clickData.Get();
+                    Debug.Log($"[GameUI] Received bet object click for {betData.betType} {betData.targetValue}");
+                    OnBetObjectClicked(betData);
+                }
+                else
+                {
+                    Debug.LogError($"[GameUI] Invalid data for CMD_BET_OBJECT_CLICKED: {data}");
                 }
                 break;
         }
@@ -521,6 +538,15 @@ public class GameUI : UIScreen
             BetObjectClickData betClickData = clickData.Get();
             ShowBetObjectPopup(betClickData);
         }
+    }
+    
+    /// <summary>
+    /// BetObject 클릭 처리 (직접 메시지 수신)
+    /// </summary>
+    private void OnBetObjectClicked(BetObjectClickData clickData)
+    {
+        Debug.Log($"[GameUI] OnBetObjectClicked: {clickData.betType} {clickData.targetValue}");
+        ShowBetObjectPopup(clickData);
     }
     
     /// <summary>

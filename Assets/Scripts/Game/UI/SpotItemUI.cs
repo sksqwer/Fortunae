@@ -76,7 +76,6 @@ public class SpotItemUI : UIScreen
         if (rectTransform != null)
         {
             rectTransform.sizeDelta = new Vector2(200, 150);
-            Debug.Log($"[SpotItemUI] Tooltip size set to: {rectTransform.sizeDelta}");
         }
         
         // 위치 설정
@@ -147,8 +146,6 @@ public class SpotItemUI : UIScreen
                 }
                 
                 rectTransform.anchoredPosition = finalPosition;
-                
-                Debug.Log($"[SpotItemUI] Tooltip positioned at: {rectTransform.anchoredPosition}, Size: {rectTransform.sizeDelta}");
             }
         }
     }

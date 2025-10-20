@@ -124,8 +124,8 @@ public class BetObject : MonoBehaviour, IPointerClickHandler
         double payout = Game.GetPayoutMultiplier(GetBetType());
         Debug.Log($"[BetObject] {GetType().Name} {objectID} clicked! (Payout: x{payout})");
         
-        // Presenter로 클릭 이벤트 전달
-        GB.Presenter.Send(GamePresenter.DOMAIN, GamePresenter.Keys.CMD_BET_OBJECT_CLICKED, 
+        // GameUI로 직접 클릭 이벤트 전달 (DOMAIN_UI 사용)
+        GB.Presenter.Send(GameUI.DOMAIN_UI, GamePresenter.Keys.CMD_BET_OBJECT_CLICKED, 
                          new BetObjectClickData(objectID, GetBetType(), GetTargetValue()));
     }
     

@@ -84,8 +84,8 @@ public class SpotObject : BetObject
         
         Debug.Log($"[SpotObject] Spot {objectID} clicked successfully! Sending message to GameUI...");
         
-        // GameUI로 직접 메시지 전달 (무한 루프 방지)
-        GB.Presenter.Send(GamePresenter.DOMAIN, GamePresenter.Keys.CMD_SPOT_CLICKED, objectID);
+        // GameUI로 직접 메시지 전달 (DOMAIN_UI 사용)
+        GB.Presenter.Send(GameUI.DOMAIN_UI, GamePresenter.Keys.CMD_SPOT_CLICKED, objectID);
         Debug.Log($"[SpotObject] Message sent to GameUI for Spot {objectID}");
     }
     

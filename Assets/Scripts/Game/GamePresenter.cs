@@ -9,6 +9,7 @@ using System.Collections.Generic;
 public class GamePresenter : MonoBehaviour, IView
 {
     public const string DOMAIN = "Game";
+    public const string DOMAIN_UI = "GameUI";
     
     // Presenter 메시지 키
     public static class Keys
@@ -190,20 +191,15 @@ public class GamePresenter : MonoBehaviour, IView
     {
         Debug.Log($"[GamePresenter] ViewQuick called with key: {key}");
         
-        // CMD_SPOT_CLICKED는 GameUI에서 직접 처리하므로 여기서 무시
-        if (key == Keys.CMD_SPOT_CLICKED)
+        // CMD_SPOT_CLICKED와 CMD_BET_OBJECT_CLICKED는 GameUI에서 직접 처리하므로 여기서 무시
+        if (key == Keys.CMD_SPOT_CLICKED || key == Keys.CMD_BET_OBJECT_CLICKED)
         {
-            Debug.Log($"[GamePresenter] Ignoring CMD_SPOT_CLICKED - handled by GameUI directly");
+            Debug.Log($"[GamePresenter] Ignoring {key} - handled by GameUI directly");
             return;
         }
         
         switch (key)
         {
-            case Keys.CMD_BET_OBJECT_CLICKED:
-                BetObjectClickData clickData = data.Get<BetObjectClickData>();
-                HandleBetObjectClick(clickData);
-                break;
-                
             case Keys.CMD_PLACE_BET:
                 HandlePlaceBet(data);
                 break;
@@ -224,19 +220,8 @@ public class GamePresenter : MonoBehaviour, IView
                 ResetGame();
                 break;
                 
-             // CMD_SPOT_CLICKED는 GameUI에서 직접 처리 (무한 루프 방지)
+            // CMD_SPOT_CLICKED와 CMD_BET_OBJECT_CLICKED는 GameUI에서 직접 처리
         }
-    }
-    
-    /// <summary>
-    /// BetObject 클릭 처리
-    /// </summary>
-    private void HandleBetObjectClick(BetObjectClickData clickData)
-    {
-        Debug.Log($"[GamePresenter] BetObject clicked: {clickData.betType} on {clickData.targetValue} (Payout: x{Game.GetPayoutMultiplier(clickData.betType)})");
-        
-        // GameUI로 배팅 팝업 표시 요청
-        Presenter.Send(DOMAIN, Keys.CMD_SHOW_BET_POPUP, clickData);
     }
     
     /// <summary>
