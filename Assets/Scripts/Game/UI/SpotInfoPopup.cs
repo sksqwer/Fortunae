@@ -11,11 +11,13 @@ using System.Text;
 /// </summary>
 public class SpotInfoPopup : UIScreen
 {
+    // === UI 요소 필드 ===
     [Header("UI Elements")]
     [SerializeField] private Button closeButton;
     [SerializeField] private ScrollRect scrollRect;
     [SerializeField] private TMP_Text contentText;
     
+    // === 데이터 필드 ===
     private GameState gameState;
 
     private void Awake()

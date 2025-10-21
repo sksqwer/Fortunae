@@ -10,22 +10,25 @@ using GB;
 /// </summary>
 public class GameUI : UIScreen
 {
-    
+    // === UI 패널 필드 ===
     [Header("UI Panels")]
     [SerializeField] private GameObject bettingPanel;
     [SerializeField] private GameObject itemPanel;
     
+    // === 프리팹 필드 ===
     [Header("Prefabs")]
     [SerializeField] private GameObject betItemPrefab;
     
+    // === CopySpot 메시지 필드 ===
     [Header("CopySpot Message")]
     [SerializeField] private GameObject copySpotMessagePanel;
     [SerializeField] private TMP_Text copySpotMessageText;
     
+    // === 스크롤 필드 ===
     [Header("Result Scroll")]
     [SerializeField] private ScrollRect resultScrollRect;
     
-    // 동적 생성된 UI 요소들
+    // === 동적 UI 요소들 ===
     private List<GameObject> betItems = new List<GameObject>();
     
 

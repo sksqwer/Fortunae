@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: f45c80fab09e06844af6f42feab72a46
+guid: 14dacfac6a1babf4ba31a2ac55dca745
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 676081519455925722
-    second: roulette_Board_0
+      213: -7194290778291032618
+    second: icon-Photoroom_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -24,7 +24,7 @@ TextureImporter:
     heightScale: 0.25
     normalMapFilter: 0
     flipGreenChannel: 0
-  isReadable: 0
+  isReadable: 1
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
@@ -75,7 +75,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -87,12 +87,12 @@ TextureImporter:
     buildTarget: Standalone
     maxTextureSize: 2048
     resizeAlgorithm: 0
-    textureFormat: -1
+    textureFormat: 4
     textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
-    overridden: 0
+    overridden: 1
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: roulette_Board_0
+      name: icon-Photoroom_0
       rect:
         serializedVersion: 2
-        x: 189
-        y: 212
-        width: 553
-        height: 279
+        x: 51
+        y: 45
+        width: 307
+        height: 307
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: ad570665f8ce16900800000000000000
-      internalID: 676081519455925722
+      spriteID: 6dd281577aeb82c90800000000000000
+      internalID: -7194290778291032618
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      roulette_Board_0: 676081519455925722
+      icon-Photoroom_0: -7194290778291032618
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

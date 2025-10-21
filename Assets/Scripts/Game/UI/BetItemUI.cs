@@ -8,12 +8,14 @@ using GB;
 /// </summary>
 public class BetItemUI : MonoBehaviour
 {
+    // === UI 요소 필드 ===
     [Header("UI Elements")]
     [SerializeField] private TMP_Text betInfoText;
     [SerializeField] private TMP_Text betAmountText;
     [SerializeField] private Button removeButton;
     [SerializeField] private Image backgroundImage;
     
+    // === 데이터 필드 ===
     private BetData betData;
     
     public void Initialize(BetData bet)

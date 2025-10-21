@@ -350,8 +350,8 @@ namespace StateMachine
         /// <exception cref="StateNotFoundException">레이어 현재 상태가 없는 경우</exception>
         public FSMState<TEntityType> GetCurrentState(int layer = StateMachineConstants.DEFAULT_LAYER)
         {
-            Debug.Assert(currentStates.TryGetValue(layer, out var stateData) && stateData != null,
-                $"Layer {layer}에 현재 상태가 없습니다!");
+            if (!currentStates.TryGetValue(layer, out var stateData) || stateData == null)
+                return null;
 
             return stateData.State;
         }
@@ -364,8 +364,8 @@ namespace StateMachine
         /// <exception cref="StateNotFoundException">레이어 현재 상태가 없는 경우</exception>
         public Type GetCurrentStateType(int layer = StateMachineConstants.DEFAULT_LAYER)
         {
-            Debug.Assert(currentStates.TryGetValue(layer, out var stateData) && stateData != null,
-                $"Layer {layer}에 현재 상태가 없습니다!");
+            if (!currentStates.TryGetValue(layer, out var stateData) || stateData == null)
+                return null;
 
             return stateData.StateType;
         }

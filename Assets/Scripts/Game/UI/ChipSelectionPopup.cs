@@ -44,22 +44,31 @@ public class ChipSelectionPopup : UIScreen
         }
     }
 
-    [Header("UI Elements")]
-    [SerializeField] private int objectID;
-    [SerializeField] private BetType betType;
+    // === 데이터 필드 ===
+    private int objectID;
+    private BetType betType;
+    private ChipCollection availableChips;
+    private Action<BetConfirmMessage> onConfirmWithType;
+    
+    // === 상태 필드 ===
+    private int maxChips;
+    private ChipType selectedChipType = ChipType.Chip1;
+    private bool isHatWingActive = false;
+    
+    // === UI 필드들 ===
+    [Header("Basic UI")]
     [SerializeField] private TMP_Text titleText;
     [SerializeField] private Slider chipSlider;
     [SerializeField] private TMP_Text chipCountText;
     [SerializeField] private Button confirmButton;
     [SerializeField] private Button cancelButton;
-
-
-    [Header("Chip Type Selection (Optional)")]
+    
+    [Header("Chip Type Selection")]
     [SerializeField] private TMP_Dropdown chipTypeDropdown;
-    [SerializeField] private GameObject chipTypePanel; // 칩 타입 선택 패널 (있으면 표시)
+    [SerializeField] private GameObject chipTypePanel;
     
     [Header("Item Buttons")]
-    [SerializeField] private GameObject itemButtonsPanel; // 아이템 버튼들을 그룹으로 관리하는 패널
+    [SerializeField] private GameObject itemButtonsPanel;
     [SerializeField] private Button plusSpotButton;
     [SerializeField] private Button copySpotButton;
     [SerializeField] private Button upgradedMultiSpotButton;
@@ -72,15 +81,7 @@ public class ChipSelectionPopup : UIScreen
     [SerializeField] private TMP_Text hatWingCountText;
     
     [Header("HatWing Status")]
-    [SerializeField] private UnityEngine.UI.Image hatWingStatusImage; // HatWing ON/OFF 이미지
-
-    private int maxChips;
-    private ChipType selectedChipType = ChipType.Chip1;
-    private ChipCollection availableChips;
-    private Action<BetConfirmMessage> onConfirmWithType;
-    
-    // HatWing 로컬 상태 (팝업별로 관리)
-    private bool isHatWingActive = false;
+    [SerializeField] private UnityEngine.UI.Image hatWingStatusImage;
 
     /// <summary>
     /// UIScreen SetData 오버라이드
@@ -142,7 +143,8 @@ public class ChipSelectionPopup : UIScreen
         {
             bool isNumberBet = (betType == BetType.Number);
             itemButtonsPanel.SetActive(isNumberBet);
-            Debug.Log($"[ChipSelectionPopup] Item buttons panel {(isNumberBet ? "shown" : "hidden")} for bet type: {betType}");
+            string logMessage = isNumberBet ? ConstDef.ITEM_BUTTONS_PANEL_SHOWN : ConstDef.ITEM_BUTTONS_PANEL_HIDDEN;
+            Debug.Log(string.Format(logMessage, betType));
         }
         
         // 아이템 버튼 갱신 (GameState가 바뀌었을 수 있으므로)
@@ -193,14 +195,14 @@ public class ChipSelectionPopup : UIScreen
         {            
             plusSpotButton.gameObject.SetActive(true);
 
-            bool hasPlusSpot = gameState != null && gameState.HasItem("PLUS_SPOT");
+            bool hasPlusSpot = gameState != null && gameState.HasItem(ConstDef.PLUS_SPOT);
             plusSpotButton.interactable = hasPlusSpot;
 
-            var item = gameState?.GetItemByID("PLUS_SPOT");
+            var item = gameState?.GetItemByID(ConstDef.PLUS_SPOT);
 
             if (plusSpotCountText != null && item != null && item.count > 0)
             {
-                plusSpotCountText.text = $"• <sprite={item.SpriteIndex}> {item.itemID} : ({item.count})\n";
+                plusSpotCountText.text = string.Format(ConstDef.ITEM_COUNT_FORMAT, item.SpriteIndex, item.itemID, item.count);
             }
             else if (plusSpotCountText != null)
             {
@@ -214,14 +216,14 @@ public class ChipSelectionPopup : UIScreen
         {
             copySpotButton.gameObject.SetActive(true);
             
-            bool hasCopySpot = gameState != null && gameState.HasItem("COPY_SPOT");
+            bool hasCopySpot = gameState != null && gameState.HasItem(ConstDef.COPY_SPOT);
             copySpotButton.interactable = hasCopySpot;
 
-            var item = gameState?.GetItemByID("COPY_SPOT");
+            var item = gameState?.GetItemByID(ConstDef.COPY_SPOT);
 
             if (copySpotCountText != null && item != null && item.count > 0)
             {
-                copySpotCountText.text = $"• <sprite={item.SpriteIndex}> {item.itemID} : ({item.count})\n";
+                copySpotCountText.text = string.Format(ConstDef.ITEM_COUNT_FORMAT, item.SpriteIndex, item.itemID, item.count);
             }
             else if (copySpotCountText != null)
             {
@@ -235,14 +237,14 @@ public class ChipSelectionPopup : UIScreen
         {
             upgradedMultiSpotButton.gameObject.SetActive(true);
 
-            bool hasUpgradedMultiSpot = gameState != null && gameState.HasItem("UPGRADED_MULTI_SPOT");
+            bool hasUpgradedMultiSpot = gameState != null && gameState.HasItem(ConstDef.UPGRADED_MULTI_SPOT);
             upgradedMultiSpotButton.interactable = hasUpgradedMultiSpot;
 
-            var item = gameState?.GetItemByID("UPGRADED_MULTI_SPOT");
+            var item = gameState?.GetItemByID(ConstDef.UPGRADED_MULTI_SPOT);
 
             if (upgradedMultiSpotCountText != null && item != null && item.count > 0)
             {
-                upgradedMultiSpotCountText.text = $"• <sprite={item.SpriteIndex}> {item.itemID} : ({item.count})\n";
+                upgradedMultiSpotCountText.text = string.Format(ConstDef.ITEM_COUNT_FORMAT, item.SpriteIndex, item.itemID, item.count);
             }
             else if (upgradedMultiSpotCountText != null)
             {
@@ -256,14 +258,14 @@ public class ChipSelectionPopup : UIScreen
         {
             hatWingButton.gameObject.SetActive(true);
 
-            bool hasHatWing = gameState != null && gameState.HasItem("HAT_WING");
+            bool hasHatWing = gameState != null && gameState.HasItem(ConstDef.HAT_WING);
             hatWingButton.interactable = hasHatWing;
 
-            var item = gameState?.GetItemByID("HAT_WING");
+            var item = gameState?.GetItemByID(ConstDef.HAT_WING);
 
             if (hatWingCountText != null && item != null && item.count > 0)
             {
-                hatWingCountText.text = $"• <sprite={item.SpriteIndex}> {item.itemID} : ({item.count})\n";
+                hatWingCountText.text = string.Format(ConstDef.ITEM_COUNT_FORMAT, item.SpriteIndex, item.itemID, item.count);
             }
             else if (hatWingCountText != null)
             {
@@ -281,10 +283,10 @@ public class ChipSelectionPopup : UIScreen
     /// </summary>
     private void OnItemButtonClicked(string itemID)
     {
-        Debug.Log($"[ChipSelectionPopup] Item button clicked: {itemID} for object {objectID}");
+        Debug.Log(string.Format(ConstDef.ITEM_BUTTON_CLICKED, itemID, objectID));
         
         // HatWing은 토글 방식
-        if (itemID == "HAT_WING")
+        if (itemID == ConstDef.HAT_WING)
         {
             OnHatWingToggle();
         }
@@ -316,21 +318,21 @@ public class ChipSelectionPopup : UIScreen
     private void OnHatWingToggle()
     {
         // 현재 HatWing 보유 개수 확인
-        int hatWingCount = currentGameState != null ? (currentGameState.GetItemByID("HAT_WING")?.count ?? 0) : 0;
+        int hatWingCount = currentGameState != null ? (currentGameState.GetItemByID(ConstDef.HAT_WING)?.count ?? 0) : 0;
         
         Debug.Log($"[ChipSelectionPopup] HatWing toggle clicked - Current Active: {isHatWingActive}, Available: {hatWingCount}");
         
         // HatWing이 없으면 토글 불가
         if (!isHatWingActive && hatWingCount <= 0)
         {
-            Debug.LogWarning("[ChipSelectionPopup] Cannot toggle HatWing - no items available!");
+            Debug.LogWarning(ConstDef.CANNOT_TOGGLE_HAT_WING);
             return;
         }
         
         // 로컬 HatWing 상태 토글
         isHatWingActive = !isHatWingActive;
         
-        Debug.Log($"[ChipSelectionPopup] HatWing toggled to: {isHatWingActive}");
+        Debug.Log(string.Format(ConstDef.HAT_WING_TOGGLED, isHatWingActive));
         
         // HatWing 상태 UI 즉시 업데이트
         UpdateHatWingStatus();
@@ -446,7 +448,7 @@ public class ChipSelectionPopup : UIScreen
             
             // 항상 0개 선택으로 시작 (사용자가 증가시켜서 1/Max 형태가 되도록)
             chipSlider.value = 0;
-            Debug.Log($"[ChipSelectionPopup] Slider set to 0 / {maxChips}");
+            Debug.Log(string.Format(ConstDef.SLIDER_SET, maxChips));
             
             chipSlider.onValueChanged.RemoveAllListeners();
             chipSlider.onValueChanged.AddListener(OnSliderChanged);
@@ -455,8 +457,7 @@ public class ChipSelectionPopup : UIScreen
         // 0개 기준으로 텍스트 업데이트 & Confirm 버튼 상태 반영
         int current = (int)(chipSlider != null ? chipSlider.value : 0);
         UpdateChipCountText(current);
-        if (confirmButton != null)
-            confirmButton.interactable = (current > 0);
+        UpdateButtonStates();
     }
 
     private void OnSliderChanged(float value)
@@ -465,8 +466,7 @@ public class ChipSelectionPopup : UIScreen
         UpdateChipCountText(count);
         
         // 0개면 Confirm 비활성화, 1개 이상이면 활성화
-        if (confirmButton != null)
-            confirmButton.interactable = (count > 0);
+        UpdateButtonStates();
     }
 
     private void UpdateChipCountText(int count)
@@ -475,7 +475,7 @@ public class ChipSelectionPopup : UIScreen
         {
             string chipSprite = ChipTypeCache.ToSpriteTag(selectedChipType);
             int totalValue = count * ChipTypeCache.Values[selectedChipType];
-            chipCountText.text = $"{count}chips × {chipSprite} = ${totalValue}";
+            chipCountText.text = string.Format(ConstDef.CHIP_COUNT_FORMAT, count, chipSprite, totalValue);
         }
     }
 
@@ -484,7 +484,7 @@ public class ChipSelectionPopup : UIScreen
         int chipCount = chipSlider != null ? (int)chipSlider.value : 0;
         if (chipCount <= 0)
         {
-            Debug.LogWarning("[ChipSelectionPopup] Cannot confirm with 0 chips selected");
+            Debug.LogWarning(ConstDef.CANNOT_CONFIRM_ZERO_CHIPS);
             return;
         }
         
@@ -495,27 +495,21 @@ public class ChipSelectionPopup : UIScreen
         if (isHatWingActive)
         {
             // 같은 배팅(betType + targetValue + isHatWingApplied)이 이미 있는지 확인
-            bool existingBetWithHatWing = false;
-            
-            if (currentGameState != null && currentGameState.currentBets != null)
-            {
-                existingBetWithHatWing = currentGameState.currentBets.Exists(b =>
-                    b.betType == betType && b.targetValue == objectID && b.isHatWingApplied);
-            }
+            bool existingBetWithHatWing = HasExistingHatWingBet();
             
             // 이미 HatWing이 적용된 배팅이 없으면 사용
             if (!existingBetWithHatWing)
             {
                 // HatWing은 배팅당 1개만 사용 (중복 사용 방지)
-                GB.Presenter.Send(Game.DOMAIN, Game.Keys.CMD_USE_ITEM_BY_ID, new object[] { "HAT_WING", new int[] { objectID } });
-                appliedItems.Add("HAT_WING");
-                Debug.Log($"[ChipSelectionPopup] HatWing used for new bet: {betType} on {objectID}");
+                GB.Presenter.Send(Game.DOMAIN, Game.Keys.CMD_USE_ITEM_BY_ID, new object[] { ConstDef.HAT_WING, new int[] { objectID } });
+                appliedItems.Add(ConstDef.HAT_WING);
+                Debug.Log(string.Format(ConstDef.HAT_WING_USED, betType, objectID));
             }
             else
             {
                 // 기존 배팅에 칩만 추가 (HatWing 재사용하지 않음)
-                appliedItems.Add("HAT_WING"); // BetConfirmMessage에는 포함 (isHatWingApplied 플래그용)
-                Debug.Log($"[ChipSelectionPopup] HatWing already applied to existing bet: {betType} on {objectID}, not using item again");
+                appliedItems.Add(ConstDef.HAT_WING); // BetConfirmMessage에는 포함 (isHatWingApplied 플래그용)
+                Debug.Log(string.Format(ConstDef.HAT_WING_ALREADY_APPLIED, betType, objectID));
             }
             
             // HatWing 사용 후 로컬 상태 리셋 (중복 사용 방지)
@@ -537,7 +531,7 @@ public class ChipSelectionPopup : UIScreen
         {
             isHatWingActive = false;
             UpdateHatWingStatus();
-            Debug.Log("[ChipSelectionPopup] HatWing state reset on cancel");
+            Debug.Log(ConstDef.HAT_WING_STATE_RESET);
         }
         
         OnClose();
@@ -548,5 +542,42 @@ public class ChipSelectionPopup : UIScreen
         GB.Presenter.Send<int>(Game.DOMAIN, Game.Keys.CMD_POPUP_CLOSED, 0);
         gameObject.SetActive(false);
     }
+    
+    #region Common Logic Methods
+    
+    /// <summary>
+    /// 배팅 유효성 검사 (공통 로직)
+    /// </summary>
+    private bool IsValidBetting()
+    {
+        int chipCount = chipSlider != null ? (int)chipSlider.value : 0;
+        return chipCount > 0;
+    }
+    
+    /// <summary>
+    /// HatWing 중복 사용 체크 (공통 로직)
+    /// </summary>
+    private bool HasExistingHatWingBet()
+    {
+        if (currentGameState?.currentBets == null) return false;
+        
+        return currentGameState.currentBets.Exists(b =>
+            b.betType == betType && 
+            b.targetValue == objectID && 
+            b.isHatWingApplied);
+    }
+    
+    /// <summary>
+    /// 버튼 활성화 상태 업데이트 (공통 로직)
+    /// </summary>
+    private void UpdateButtonStates()
+    {
+        if (confirmButton != null)
+        {
+            confirmButton.interactable = IsValidBetting();
+        }
+    }
+    
+    #endregion
 }
 

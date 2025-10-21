@@ -8,13 +8,16 @@ using DG.Tweening;
 /// </summary>
 public class Board : MonoBehaviour
 {
+    // === 3D 오브젝트 필드 ===
     [SerializeField] private SpotObject[] spotObjects = new SpotObject[36];
     [SerializeField] private BetObject[] betObjects; // Color, OddEven, Dozen, Column 등
 
+    // === Win/Lose 효과 필드 ===
     [Header("Win/Lose Effects")]
     [SerializeField] private GameObject winObject; // Win 오브젝트
     [SerializeField] private GameObject loseObject; // Lose 오브젝트
 
+    // === 데이터 필드 ===
     private Dictionary<int, Spot> spotDataDictionary;
 
     /// <summary>

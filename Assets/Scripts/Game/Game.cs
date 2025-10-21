@@ -60,29 +60,26 @@ public class Game : MonoBehaviour, IView
 
     #region Private Fields
 
-    // 게임 상태
+    // === 게임 상태 필드 ===
     private GameState gameState;
-    private bool isSpinning = false;  // 현재 스핀 중인지 여부
-    private int currentWinningSpotID = -1; // 현재 스핀의 당첨 번호 (미리 결정됨)
+    private bool isSpinning = false;
+    private int currentWinningSpotID = -1;
+    private int copySpotSourceID = -1;
+    private ItemManager itemManager;
 
-    public bool IsSpinning => isSpinning; // 외부에서 스핀 상태 확인용
-
-    // 상태 플래그
+    // === 정적 상태 플래그 ===
     public static bool isPopupOpen = false;
     public static bool isClickLocked = false;
-    public static bool isCopySpotMode = false;  // CopySpot 선택 모드 (호버링/하이라이트 차단용)
+    public static bool isCopySpotMode = false;
 
-    // CopySpot 선택 모드
-    private int copySpotSourceID = -1;
-
-    // 아이템 관리
-    private ItemManager itemManager;
+    // === 공개 프로퍼티 ===
+    public bool IsSpinning => isSpinning;
 
     #region Unity Lifecycle
 
     private void Awake()
     {
-        Debug.Log("[Game] Awake called");
+        Debug.Log(ConstDef.GAME_AWAKE_CALLED);
 
         _board.Init();
         InitializeGame();
@@ -90,13 +87,13 @@ public class Game : MonoBehaviour, IView
 
     private void Start()
     {
-        Debug.Log("[Game] Start called");
+        Debug.Log(ConstDef.GAME_START_CALLED);
 
         // 이벤트 구독
         if (_wheelController != null)
         {
             _wheelController.OnSpinComplete += OnSpinComplete;
-            Debug.Log("[Game] WheelController event subscribed");
+            Debug.Log(ConstDef.WHEEL_CONTROLLER_SUBSCRIBED);
         }
 
         // UI 초기 상태 설정
@@ -105,7 +102,7 @@ public class Game : MonoBehaviour, IView
 
         // 스핀 버튼 비활성화 (초기 상태, 배팅 없음)
         GB.Presenter.Send("GameUI", Keys.UPDATE_SPIN_BUTTON, false);
-        Debug.Log($"[Game] Spin button disabled (no bets on initialization)");
+        Debug.Log(ConstDef.SPIN_BUTTON_DISABLED);
 
         StartNewTurn();
     }
@@ -118,13 +115,13 @@ public class Game : MonoBehaviour, IView
 
     private void OnDestroy()
     {
-        Debug.Log("[Game] OnDestroy called");
+        Debug.Log(ConstDef.GAME_DESTROY_CALLED);
 
         // 이벤트 구독 해제
         if (_wheelController != null)
         {
             _wheelController.OnSpinComplete -= OnSpinComplete;
-            Debug.Log("[Game] WheelController event unsubscribed");
+            Debug.Log(ConstDef.WHEEL_CONTROLLER_UNSUBSCRIBED);
         }
     }
 
@@ -137,8 +134,8 @@ public class Game : MonoBehaviour, IView
     /// </summary>
     private void InitializeGame()
     {
-        Debug.Log("[Game] InitializeGame called");
-        Debug.Log("[Game] ========== Initializing Game ==========");
+        Debug.Log(ConstDef.GAME_INITIALIZE_CALLED);
+        Debug.Log(ConstDef.GAME_INITIALIZING);
 
         // 클릭 락 초기화 (게임 시작 시 해제)
         Game.isClickLocked = false;
@@ -165,7 +162,7 @@ public class Game : MonoBehaviour, IView
         }
         else
         {
-            Debug.LogWarning("[Game] ItemTable is null! No items will be initialized.");
+            Debug.LogWarning(ConstDef.ITEM_TABLE_NULL);
         }
 
         UIManager.I.Init();
