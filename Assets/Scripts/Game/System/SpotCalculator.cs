@@ -6,6 +6,8 @@ using UnityEngine;
 /// </summary>
 public static class SpotCalculator
 {
+    // currentNumber별 확률 저장 (외부에서 접근 가능)
+    public static Dictionary<int, double> numberProbabilities = new Dictionary<int, double>();
     // ===================================================
     // 메인 계산 메서드
     // ===================================================
@@ -64,16 +66,27 @@ public static class SpotCalculator
         foreach (var record in spot.appliedRecords)
         {
             // PlusSpot: 숫자 변경
-            if (record.itemData.itemType == ItemType.SpotItem && 
-                record.itemData.spotItemType == SpotItemType.PlusSpot)
+            if (record.itemType == ItemType.SpotItem && 
+                record.spotItemType == SpotItemType.PlusSpot)
             {
                 spot.currentNumber = record.appliedValue;
                 Debug.Log($"    - PlusSpot: → {record.appliedValue}");
             }
             
+            // CopySpot: 복사된 숫자/색상 적용
+            if (record.itemType == ItemType.SpotItem && 
+                record.spotItemType == SpotItemType.CopySpot)
+            {
+                spot.currentNumber = record.appliedNumber;
+                spot.currentColor = record.appliedColor;
+                Debug.Log($"    - CopySpot: → Number={record.appliedNumber}, Color={record.appliedColor}");
+            }
+            
+            // Chameleon은 CollectMultipliers에서 처리됨 (여기서는 처리 안 함)
+            
             // Death: 파괴 상태 적용
-            if (record.itemData.itemType == ItemType.CharmItem && 
-                record.itemData.charmType == CharmType.Death)
+            if (record.itemType == ItemType.CharmItem && 
+                record.charmType == CharmType.Death)
             {
                 spot.isDestroyed = true;
                 Debug.Log($"    - Death: Destroyed");
@@ -93,10 +106,7 @@ public static class SpotCalculator
     {
         Debug.Log("[SpotCalculator] === Step 2: Calculating Probabilities ===");
         
-        // 배수 효과 수집 (확률 계산에는 UpgradedMultiSpot만 영향)
-        Dictionary<int, double> multipliers = CollectMultipliers(spots);
-        
-        // 각 Spot의 가중치 계산
+        // 1단계: 모든 Spot의 개별 확률 계산 (배수 효과 제외, 기본 가중치만)
         Dictionary<int, double> weights = new Dictionary<int, double>();
         double totalWeight = 0.0;
         
@@ -114,20 +124,14 @@ public static class SpotCalculator
                 continue;
             }
             
-            // 기본 가중치 = 1.0
-            double weight = 1.0;
-            
-            // 배수 효과 적용
-            if (multipliers.ContainsKey(spotID))
-            {
-                weight *= multipliers[spotID];
-            }
+            // 기본 가중치 = 100.0 (배수 효과 제거)
+            double weight = 100.0;
             
             weights[spotID] = weight;
             totalWeight += weight;
         }
         
-        // 3단계: 정규화 (전체 합 = 1.0)
+        // 2단계: 정규화 (개별 Spot 확률 계산)
         if (totalWeight > 0)
         {
             foreach (var pair in spots)
@@ -145,6 +149,69 @@ public static class SpotCalculator
         else
         {
             Debug.LogError("[SpotCalculator] Total weight is 0! All spots destroyed?");
+        }
+        
+        // 3단계: currentNumber별 확률 합산 (클래스 멤버 사용)
+        numberProbabilities.Clear();
+        
+        foreach (var pair in spots)
+        {
+            int spotID = pair.Key;
+            Spot spot = pair.Value;
+            
+            if (spot.isDestroyed)
+                continue;
+            
+            int currentNumber = spot.currentNumber;
+            
+            // currentNumber별로 확률 누적
+            if (numberProbabilities.ContainsKey(currentNumber))
+            {
+                numberProbabilities[currentNumber] += spot.currentProbability;
+            }
+            else
+            {
+                numberProbabilities[currentNumber] = spot.currentProbability;
+            }
+        }
+        
+        // 4단계: currentNumber별 확률을 각 Spot에 적용
+        // 같은 숫자를 가진 Spot들은 확률을 공유 (중복 계산 방지)
+        foreach (var pair in spots)
+        {
+            int spotID = pair.Key;
+            Spot spot = pair.Value;
+            
+            if (spot.isDestroyed)
+                continue;
+            
+            int currentNumber = spot.currentNumber;
+            
+            if (numberProbabilities.ContainsKey(currentNumber))
+            {
+                // 같은 숫자를 가진 Spot의 개수로 나누어 확률 공유
+                int sameNumberCount = 0;
+                foreach (var otherPair in spots)
+                {
+                    if (!otherPair.Value.isDestroyed && otherPair.Value.currentNumber == currentNumber)
+                    {
+                        sameNumberCount++;
+                    }
+                }
+                
+                if (sameNumberCount > 0)
+                {
+                    spot.currentProbability = numberProbabilities[currentNumber] / sameNumberCount;
+                    Debug.Log($"  Spot {spotID} (Number {currentNumber}): {spot.currentProbability * 100:F2}% (shared among {sameNumberCount} spots)");
+                }
+            }
+        }
+        
+        // numberProbabilities 로그 출력
+        Debug.Log("[SpotCalculator] === Number Probabilities Summary ===");
+        foreach (var kvp in numberProbabilities)
+        {
+            Debug.Log($"  Number {kvp.Key}: {kvp.Value * 100:F2}%");
         }
         
         // 4단계: 검증 (합이 1.0인지)
@@ -174,10 +241,10 @@ public static class SpotCalculator
     {
         Debug.Log("[SpotCalculator] === Step 3: Calculating Payouts ===");
         
-        // 배수 효과 수집 (UpgradedMultiSpot, Chameleon 통합)
+        // 배수 효과 수집 (배당률에만 적용)
         Dictionary<int, double> multipliers = CollectMultipliers(spots);
         
-        // 각 Spot의 배당률 계산
+        // 각 Spot의 배당률 계산 (배수 효과 적용)
         foreach (var pair in spots)
         {
             int spotID = pair.Key;
@@ -191,17 +258,21 @@ public static class SpotCalculator
                 continue;
             }
             
-            // 기본 배당 = x36
+            // 기본 배당
             double payout = spot.basePayoutMultiplier;
             
             // 배수 효과 적용
             if (multipliers.ContainsKey(spotID))
             {
                 payout *= multipliers[spotID];
+                Debug.Log($"  Spot {spotID}: x{spot.basePayoutMultiplier:F2} * {multipliers[spotID]:F2} = x{payout:F2}");
+            }
+            else
+            {
+                Debug.Log($"  Spot {spotID}: x{payout:F2} (base only)");
             }
             
             spot.currentPayoutMultiplier = payout;
-            Debug.Log($"  Spot {spotID}: x{payout:F2}");
         }
     }
     
@@ -229,21 +300,24 @@ public static class SpotCalculator
             return false;
         }
         
-        // 기록 생성 (생성자에서 자동으로 +1 계산)
-        var record = new AppliedItemRecord(item, targetSpotID, targetSpot.currentNumber);
+        // 새 숫자 계산
+        int newNumber = UnityEngine.Mathf.Min(targetSpot.currentNumber + 1, 36);
         
-        if (targetSpot.currentNumber == record.appliedValue)
+        if (targetSpot.currentNumber == newNumber)
         {
             Debug.LogWarning($"[SpotCalculator] Spot {targetSpotID} is already 36!");
             return false;
         }
         
+        // 기록 생성
+        var record = new AppliedItemRecord(item, targetSpot.currentNumber, newNumber, 0, SpotColor.Red, 1.0);
         targetSpot.AddRecord(record);
+        
+        Debug.Log($"[SpotCalculator] PlusSpot applied: Spot {targetSpotID} → {newNumber}");
         
         // 숫자 변경 트리거 (Chameleon 등)
         TriggerOnNumberChanged(gameState, targetSpotID);
         
-        Debug.Log($"[SpotCalculator] PlusSpot applied: Spot {targetSpotID} → {record.appliedValue}");
         return true;
     }
     
@@ -267,6 +341,11 @@ public static class SpotCalculator
             return false;
         }
         
+        // CopySpot 자체 기록 추가 (복사된 숫자/색상 저장)
+        var copyRecord = new AppliedItemRecord(item, destSpot.currentNumber, 0, 
+            sourceSpot.currentNumber, sourceSpot.currentColor, 1.0);
+        destSpot.AddRecord(copyRecord);
+        
         // 원본의 모든 상태를 대상에 복사
         destSpot.currentNumber = sourceSpot.currentNumber;
         destSpot.currentColor = sourceSpot.currentColor;
@@ -278,7 +357,10 @@ public static class SpotCalculator
             destSpot.AddRecord(sourceRecord);
         }
         
-        Debug.Log($"[SpotCalculator] CopySpot applied: {sourceSpotID} → {destSpotID} (Number: {destSpot.currentNumber}, Color: {destSpot.currentColor}, {copiedCount} records)");
+        // 숫자 변경 트리거 (Chameleon 등)
+        TriggerOnNumberChanged(gameState, destSpotID);
+        
+        Debug.Log($"[SpotCalculator] CopySpot applied: {sourceSpotID} → {destSpotID} (Number: {destSpot.currentNumber}, Color: {destSpot.currentColor}, {copiedCount} records + CopySpot record)");
         return true;
     }
     
@@ -311,7 +393,7 @@ public static class SpotCalculator
         // 각 스팟에 개별 record 추가 (각자 확률 계산)
         foreach (int spotID in affectedIDs)
         {
-            var record = new AppliedItemRecord(item, spotID);
+            var record = new AppliedItemRecord(item, gameState.spots[spotID].currentNumber, 0, 0, SpotColor.Red, item.multiplier);
             gameState.spots[spotID].AddRecord(record);
         }
         
@@ -345,18 +427,23 @@ public static class SpotCalculator
         
         Spot changedSpot = gameState.spots[changedSpotID];
         
-        // 1. Chameleon 트리거
+        // 1. Chameleon 트리거 (Charm은 패시브라서 count 상관없이 보유만 하면 됨)
         ItemData chameleonCharm = gameState.GetItemByID("CHAMELEON_CHARM");
-        if (chameleonCharm != null && chameleonCharm.count > 0)
+        Debug.Log($"[SpotCalculator] TriggerOnNumberChanged: Spot {changedSpotID}, Chameleon={chameleonCharm?.itemID}, Count={chameleonCharm?.count}");
+        
+        if (chameleonCharm != null)
         {
+            Debug.Log($"[SpotCalculator] Chameleon detected! Triggering effect on Spot {changedSpotID}");
             TriggerChameleon(changedSpot, chameleonCharm, changedSpotID);
         }
+        else
+        {
+            Debug.Log($"[SpotCalculator] No Chameleon charm found in inventory");
+        }
         
-        // 2. 추가 트리거 (미래 확장용)
-        // if (gameState.HasXxxCharm())
-        // {
-        //     TriggerXxx(changedSpot, gameState.GetXxxCharm(), changedSpotID);
-        // }
+        // 숫자 변경 후 항상 재계산 (확률/배당 업데이트)
+        Debug.Log($"[SpotCalculator] Recalculating after number change...");
+        RecalculateAll(gameState);
     }
     
     /// <summary>
@@ -364,26 +451,12 @@ public static class SpotCalculator
     /// </summary>
     private static void TriggerChameleon(Spot spot, ItemData chameleonCharm, int spotID)
     {
-        // 기존 Chameleon 기록 찾기
-        var existingRecord = spot.appliedRecords.Find(r => 
-            r.itemData.itemType == ItemType.CharmItem && 
-            r.itemData.charmType == CharmType.Chameleon);
-        
-        if (existingRecord != null)
-        {
-            // multiplierValue 누적 (1.3 * 1.3 = 1.69)
-            existingRecord.multiplierValue *= 1.3;
-            Debug.Log($"[SpotCalculator] Chameleon boosted: Spot {spotID} (x{existingRecord.multiplierValue:F2})");
-        }
-        else
-        {
-            // 새 Chameleon 기록 생성
-            var chameleonRecord = new AppliedItemRecord(chameleonCharm, spotID);
-            spot.AddRecord(chameleonRecord);
-            Debug.Log($"[SpotCalculator] Chameleon triggered: Spot {spotID} (x1.3)");
-        }
+        // 새 Chameleon 기록 생성 (중복 누적 허용)
+        var chameleonRecord = new AppliedItemRecord(chameleonCharm, spot.currentNumber, 0, 0, SpotColor.Red, chameleonCharm.multiplier);
+        spot.AddRecord(chameleonRecord);
+        Debug.Log($"[SpotCalculator] Chameleon triggered: Spot {spotID} (x{chameleonCharm.multiplier:F2}) - Total records: {spot.appliedRecords.Count}");
     }
-    
+
     /// <summary>
     /// Death Charm 처리: 4 포함 Spot 파괴
     /// </summary>
@@ -392,20 +465,21 @@ public static class SpotCalculator
         ItemData deathCharm = gameState.GetItemByID("DEATH_CHARM");
         if (deathCharm == null || deathCharm.count <= 0)
             return;
-        
+
         Spot winningSpot = gameState.spots[winningSpotID];
-        
+
         if (!winningSpot.HasNumber4())
             return;
-        
+
         // 파괴 처리
         winningSpot.isDestroyed = true;
-        
+
         // Death 기록 추가 (targetSpotID에 파괴된 스팟 정보 포함)
-        var deathRecord = new AppliedItemRecord(deathCharm, winningSpotID);
-        
+        var deathRecord = new AppliedItemRecord(deathCharm, winningSpot.currentNumber, 0, 0, SpotColor.Red, 1.0);
+
         winningSpot.AddRecord(deathRecord);
-        
+        RecalculateAll(gameState);
+
         Debug.Log($"[SpotCalculator] Death Charm: Spot {winningSpotID} destroyed! (Number: {winningSpot.currentNumber})");
     }
     
@@ -429,14 +503,10 @@ public static class SpotCalculator
             // 각 Spot의 모든 record를 확인
             foreach (var record in spot.appliedRecords)
             {
-                // multiplierValue가 1.0보다 크면 적용
-                if (record.multiplierValue > 1.0 && record.targetSpotID == spotID)
-                {
                     if (!multipliers.ContainsKey(spotID))
                         multipliers[spotID] = 1.0;
                     
                     multipliers[spotID] *= record.multiplierValue;
-                }
             }
         }
         
@@ -455,44 +525,69 @@ public static class SpotCalculator
     {
         Debug.Log("[SpotCalculator] === Determining Winner ===");
         
-        // 1. 누적 확률 배열 생성
-        List<int> spotIDs = new List<int>();
+        // 1. Number별 누적 확률 배열 생성
+        List<int> numbers = new List<int>();
         List<double> cumulativeProbabilities = new List<double>();
         double cumulative = 0.0;
         
-        foreach (var pair in gameState.spots)
+        foreach (var kvp in numberProbabilities)
         {
-            int spotID = pair.Key;
-            Spot spot = pair.Value;
+            int number = kvp.Key;
+            double probability = kvp.Value;
             
-            if (spot.isDestroyed || spot.currentProbability <= 0)
+            if (probability <= 0)
                 continue;
             
-            spotIDs.Add(spotID);
-            cumulative += spot.currentProbability;
+            numbers.Add(number);
+            cumulative += probability;
             cumulativeProbabilities.Add(cumulative);
         }
         
         // 2. 랜덤 값 생성 (0.0 ~ 1.0)
         double randomValue = UnityEngine.Random.value;
         
-        // 3. 누적 확률에서 당첨 SpotID 찾기
+        // 3. 누적 확률에서 당첨 Number 찾기
+        int winningNumber = -1;
         for (int i = 0; i < cumulativeProbabilities.Count; i++)
         {
             if (randomValue <= cumulativeProbabilities[i])
             {
-                int winningSpotID = spotIDs[i];
-                Spot winningSpot = gameState.spots[winningSpotID];
-                
-                Debug.Log($"[SpotCalculator] Winner: Spot {winningSpotID} (Number: {winningSpot.currentNumber}, Probability: {winningSpot.currentProbability * 100:F2}%)");
-                return winningSpotID;
+                winningNumber = numbers[i];
+                break;
             }
         }
         
-        // 예외: 마지막 Spot 반환
-        int fallbackID = spotIDs[spotIDs.Count - 1];
-        Debug.LogWarning($"[SpotCalculator] Fallback winner: Spot {fallbackID}");
-        return fallbackID;
+        if (winningNumber == -1)
+        {
+            Debug.LogError("[SpotCalculator] No winning number found!");
+            return -1;
+        }
+        
+        // 4. 해당 Number를 가진 Spot들 중에서 랜덤 선택
+        List<int> spotsWithNumber = new List<int>();
+        foreach (var pair in gameState.spots)
+        {
+            int spotID = pair.Key;
+            Spot spot = pair.Value;
+            
+            if (!spot.isDestroyed && spot.currentNumber == winningNumber)
+            {
+                spotsWithNumber.Add(spotID);
+            }
+        }
+        
+        if (spotsWithNumber.Count == 0)
+        {
+            Debug.LogError($"[SpotCalculator] No spots found with number {winningNumber}!");
+            return -1;
+        }
+        
+        // 5. 같은 Number를 가진 Spot들 중에서 랜덤 선택
+        int winningSpotID = spotsWithNumber[UnityEngine.Random.Range(0, spotsWithNumber.Count)];
+        Spot winningSpot = gameState.spots[winningSpotID];
+        
+        Debug.Log($"[SpotCalculator] Winner: Spot {winningSpotID} (Number: {winningNumber}, Probability: {numberProbabilities[winningNumber] * 100:F2}%, Total spots with this number: {spotsWithNumber.Count})");
+        return winningSpotID;
     }
     
     /// <summary>
@@ -507,11 +602,11 @@ public static class SpotCalculator
         
         foreach (var bet in bets)
         {
-            bool hasWing = bet.isAppliedItem(ChipItemType.HatWing);
+            bool hasHatWing = bet.isHatWingApplied;
             bool isWin = IsBetWin(bet, winningSpotID, winningSpot);
             
-            // Wing 적용: 당첨되지 않아도 당첨 처리 (보상 50%)
-            if (!isWin && !hasWing)
+            // HatWing 적용: 당첨되지 않아도 당첨 처리 (보상 50%)
+            if (!isWin && !hasHatWing)
             {
                 Debug.Log($"  Bet: {bet.betType} {bet.targetValue} → LOSE");
                 continue;
@@ -523,15 +618,15 @@ public static class SpotCalculator
             // 배당률 (BetType별)
             double payoutMultiplier = GetPayoutMultiplier(bet, winningSpot);
             
-            // Wing 적용 시 50% 지급
-            if (hasWing && !isWin)
+            // HatWing 적용 시 50% 지급
+            if (hasHatWing && !isWin)
             {
                 payoutMultiplier *= 0.5;
-                Debug.Log($"  Bet: {bet.betType} {bet.targetValue} → LOSE but WING | ${betAmount} x {payoutMultiplier:F2} = ${betAmount * (float)payoutMultiplier:F2}");
+                Debug.Log($"  Bet: {bet.betType} {bet.targetValue} → LOSE but HATWING! | ${betAmount} x {payoutMultiplier:F2} = ${betAmount * (float)payoutMultiplier:F2}");
             }
-            else if (hasWing && isWin)
+            else if (hasHatWing && isWin)
             {
-                Debug.Log($"  Bet: {bet.betType} {bet.targetValue} → WIN (with Wing) | ${betAmount} x {payoutMultiplier:F2} = ${betAmount * (float)payoutMultiplier:F2}");
+                Debug.Log($"  Bet: {bet.betType} {bet.targetValue} → WIN (with HatWing) | ${betAmount} x {payoutMultiplier:F2} = ${betAmount * (float)payoutMultiplier:F2}");
             }
             else
             {
@@ -603,36 +698,6 @@ public static class SpotCalculator
             case BetType.Dozen:
             case BetType.Column:
                 // 3배 배팅
-                return 3.0;
-                
-            default:
-                return 1.0;
-        }
-    }
-    
-    /// <summary>
-    /// 배팅 타입별 기본 배당률 반환 (UI 표시용)
-    /// Number 타입의 경우 특정 Spot이 필요하면 GameState를 넘겨서 조회 가능
-    /// </summary>
-    public static double GetBasePayout(BetType betType, GameState gameState = null, int spotID = -1)
-    {
-        switch (betType)
-        {
-            case BetType.Number:
-                // 숫자 배팅: GameState가 있고 spotID가 유효하면 Spot의 배당률 반환
-                if (gameState != null && spotID >= 0 && gameState.spots.ContainsKey(spotID))
-                {
-                    return gameState.spots[spotID].currentPayoutMultiplier;
-                }
-                return 36.0; // 기본값
-                
-            case BetType.Color:
-            case BetType.OddEven:
-            case BetType.HighLow:
-                return 2.0;
-                
-            case BetType.Dozen:
-            case BetType.Column:
                 return 3.0;
                 
             default:

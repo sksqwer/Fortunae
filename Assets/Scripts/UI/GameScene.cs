@@ -29,10 +29,7 @@ public class GameScene : UIScreen
 
     public void OnButtonClick(string key)
     {
-        switch(key)
-        {
-
-        }
+        
     }
     public override void ViewQuick(string key, IOData data)
     {

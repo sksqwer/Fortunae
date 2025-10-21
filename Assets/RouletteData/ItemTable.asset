@@ -24,10 +24,10 @@ MonoBehaviour:
     maxCount: 5
     isConsumable: 1
     isStackable: 1
-    multiplier: 0
+    multiplier: 1
     addValue: 1
-    targetCount: 0
-    icon: {fileID: -7012710134733120385, guid: 60c0360a2e5fd5f4ca1839b0713ed7ed, type: 3}
+    targetCount: 1
+    SpriteIndex: 5
     itemColor: {r: 1, g: 1, b: 1, a: 0}
   - itemID: COPY_SPOT
     itemName: Copy Spot
@@ -41,10 +41,10 @@ MonoBehaviour:
     maxCount: 5
     isConsumable: 1
     isStackable: 1
-    multiplier: 0
+    multiplier: 1
     addValue: 0
-    targetCount: 0
-    icon: {fileID: 201472674591762203, guid: 3bf152ed2bc578b4dabbbdae3b01e05e, type: 3}
+    targetCount: 2
+    SpriteIndex: 4
     itemColor: {r: 1, g: 1, b: 1, a: 0}
   - itemID: UPGRADED_MULTI_SPOT
     itemName: Upgraded Multi Spot
@@ -59,9 +59,9 @@ MonoBehaviour:
     isConsumable: 1
     isStackable: 1
     multiplier: 1.2
-    addValue: 1
-    targetCount: 0
-    icon: {fileID: -7107532474056750921, guid: e5348def00f22e24fbf0e54e5dbaf3dd, type: 3}
+    addValue: 0
+    targetCount: 1
+    SpriteIndex: 7
     itemColor: {r: 1, g: 1, b: 1, a: 0}
   - itemID: HAT_WING
     itemName: Wing
@@ -76,10 +76,10 @@ MonoBehaviour:
     maxCount: 5
     isConsumable: 1
     isStackable: 1
-    multiplier: 0
+    multiplier: 1
     addValue: 1
-    targetCount: 0
-    icon: {fileID: -62535250835104902, guid: aabed621eb4c7424d96d5936940e4ed8, type: 3}
+    targetCount: 1
+    SpriteIndex: 8
     itemColor: {r: 1, g: 1, b: 1, a: 0}
   - itemID: DEATH_CHARM
     itemName: Death
@@ -89,14 +89,14 @@ MonoBehaviour:
     spotItemType: 0
     chipItemType: 0
     charmType: 1
-    baseCount: 0
-    maxCount: 0
-    isConsumable: 1
-    isStackable: 1
-    multiplier: 0
-    addValue: 1
-    targetCount: 0
-    icon: {fileID: 703743461650552282, guid: ed55f5c97d9c51b48bb68d31f395fef3, type: 3}
+    baseCount: 1
+    maxCount: 1
+    isConsumable: 0
+    isStackable: 0
+    multiplier: 1
+    addValue: 0
+    targetCount: 1
+    SpriteIndex: 9
     itemColor: {r: 1, g: 1, b: 1, a: 0}
   - itemID: CHAMELEON_CHARM
     itemName: Chameleon
@@ -107,14 +107,14 @@ MonoBehaviour:
     spotItemType: 0
     chipItemType: 0
     charmType: 2
-    baseCount: 0
-    maxCount: 0
-    isConsumable: 1
-    isStackable: 1
-    multiplier: 0
+    baseCount: 1
+    maxCount: 1
+    isConsumable: 0
+    isStackable: 0
+    multiplier: 1.3
     addValue: 0
-    targetCount: 0
-    icon: {fileID: -8880590609113154749, guid: fe43d6d36e93a4d43888ad367d69dac2, type: 3}
+    targetCount: 1
+    SpriteIndex: 6
     itemColor: {r: 1, g: 1, b: 1, a: 0}
   tableName: Roulette Item Table
   version: 1.0.0

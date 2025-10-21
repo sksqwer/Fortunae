@@ -23,8 +23,6 @@ public class Game : MonoBehaviour, IView
 
     #endregion
     
-    public static bool isPopupOpen = false;
-    
     #region Presenter Constants
     
     public const string DOMAIN = "Game";
@@ -34,14 +32,15 @@ public class Game : MonoBehaviour, IView
     {
         // UI -> Game (Command)
         public const string CMD_START_SPIN = "CMD_START_SPIN";
-        public const string CMD_PLACE_BET = "CMD_PLACE_BET";
         public const string CMD_REMOVE_BET = "CMD_REMOVE_BET";
         public const string CMD_USE_ITEM = "CMD_USE_ITEM";
         public const string CMD_USE_ITEM_BY_ID = "CMD_USE_ITEM_BY_ID";
         public const string CMD_RESET_GAME = "CMD_RESET_GAME";
         public const string CMD_SPOT_CLICKED = "CMD_SPOT_CLICKED";
         public const string CMD_BET_OBJECT_CLICKED = "CMD_BET_OBJECT_CLICKED";
-        public const string CMD_SHOW_BET_POPUP = "CMD_SHOW_BET_POPUP";
+        public const string CMD_POPUP_CLOSED = "CMD_POPUP_CLOSED";
+        public const string CMD_SHOW_SPOT_INFO = "CMD_SHOW_SPOT_INFO";
+        public const string CMD_START_COPY_SPOT = "CMD_START_COPY_SPOT";
 
         // Game -> UI (Update)
         public const string UPDATE_GAME_STATE = "UPDATE_GAME_STATE";
@@ -54,6 +53,7 @@ public class Game : MonoBehaviour, IView
         public const string UPDATE_RESET_BUTTON = "UPDATE_RESET_BUTTON";
         public const string UPDATE_ITEM_USED = "UPDATE_ITEM_USED";
         public const string UPDATE_GAME_RESET = "UPDATE_GAME_RESET";
+        public const string UPDATE_INVENTORY = "UPDATE_INVENTORY";
     }
     
     #endregion
@@ -67,6 +67,14 @@ public class Game : MonoBehaviour, IView
     
     public bool IsSpinning => isSpinning; // 외부에서 스핀 상태 확인용
     
+    // 상태 플래그
+    public static bool isPopupOpen = false;
+    public static bool isClickLocked = false;
+    public static bool isCopySpotMode = false;  // CopySpot 선택 모드 (호버링/하이라이트 차단용)
+    
+    // CopySpot 선택 모드
+    private int copySpotSourceID = -1;
+    
     // 아이템 관리
     private ItemManager itemManager;
     
@@ -75,6 +83,11 @@ public class Game : MonoBehaviour, IView
     private void Awake()
     {
         Debug.Log("[Game] Awake called");
+        
+        // Static 변수 초기화 (Unity 재시작 없이도 확실하게)
+        Game.isClickLocked = false;
+        Game.isPopupOpen = false;
+        Debug.Log($"<color=green>[Game] Variables reset - isClickLocked: {Game.isClickLocked}, isPopupOpen: {Game.isPopupOpen}</color>");
         
         _board.Init();
         InitializeGame();
@@ -91,7 +104,14 @@ public class Game : MonoBehaviour, IView
             Debug.Log("[Game] WheelController event subscribed");
         }
         
+        // UI 초기 상태 설정
+        GB.Presenter.Send("GameUI", Keys.UPDATE_GAME_STATE, gameState);
         GB.Presenter.Send("GameUI", Keys.UPDATE_GAME_RESET, maxTurns);
+        
+        // 스핀 버튼 비활성화 (초기 상태, 배팅 없음)
+        GB.Presenter.Send("GameUI", Keys.UPDATE_SPIN_BUTTON, false);
+        Debug.Log($"[Game] Spin button disabled (no bets on initialization)");
+        
         StartNewTurn();
     }
 
@@ -125,6 +145,10 @@ public class Game : MonoBehaviour, IView
         Debug.Log("[Game] InitializeGame called");
         Debug.Log("[Game] ========== Initializing Game ==========");
         
+        // 클릭 락 초기화 (게임 시작 시 해제)
+        Game.isClickLocked = false;
+        Debug.Log($"<color=green>[Game] Click unlocked - game initialized</color>");
+        
         // ItemManager 초기화
         itemManager = new ItemManager(itemTable);
         
@@ -141,9 +165,9 @@ public class Game : MonoBehaviour, IView
             
             // 기본 아이템 추가
             gameState.AddItem(itemManager.CreateItem("PLUS_SPOT", 3));
-            gameState.AddItem(itemManager.CreateItem("COPY_SPOT", 2));
-            gameState.AddItem(itemManager.CreateItem("UPGRADED_MULTI_SPOT", 1));
-            gameState.AddItem(itemManager.CreateItem("HAT_WING", 2));
+            gameState.AddItem(itemManager.CreateItem("COPY_SPOT", 3));
+            gameState.AddItem(itemManager.CreateItem("UPGRADED_MULTI_SPOT", 3));
+            gameState.AddItem(itemManager.CreateItem("HAT_WING", 3));
             Debug.Log("[Game] Initial items added using ItemManager");
         }
         else
@@ -155,12 +179,13 @@ public class Game : MonoBehaviour, IView
         
         Debug.Log($"[Game] Initialized: {gameState.spots.Count} spots, {gameState.inventory.Count} items");
         
+        // 초기 확률/배당 계산
+        SpotCalculator.RecalculateAll(gameState);
+        Debug.Log("[Game] Initial probability and payout calculated");
+        
         // Board와 데이터 연결
         if (_board != null)
             _board.ConnectData(gameState.spots);
-            
-        // 게임 상태 변경 메시지 전송
-        GB.Presenter.Send("GameUI", Keys.UPDATE_GAME_STATE, gameState);
     }
     
     
@@ -171,6 +196,10 @@ public class Game : MonoBehaviour, IView
     {
         Debug.Log("[Game] ResetGame called");
         Debug.Log("[Game] ========== Resetting Game ==========");
+        
+        // 클릭 락 풀기 (게임 리셋)
+        Game.isClickLocked = false;
+        Debug.Log($"<color=green>[Game] Click unlocked - game reset</color>");
         
         // 게임 리셋 메시지 전송 (maxTurns 포함)
         GB.Presenter.Send("GameUI", Keys.UPDATE_GAME_RESET, maxTurns);
@@ -189,14 +218,6 @@ public class Game : MonoBehaviour, IView
     private void StartNewTurn()
     {
         Debug.Log($"[Game] StartNewTurn called - Turn {gameState.currentTurn + 1}");
-        
-        // 게임 종료 체크
-        if (gameState.currentTurn > maxTurns)
-        {
-            Debug.Log("[Game] Max turns reached, ending game");
-            EndGame();
-            return;
-        }
         
         Debug.Log($"[Game] Clearing current bets");
         gameState.currentBets.Clear();
@@ -225,6 +246,10 @@ public class Game : MonoBehaviour, IView
         
         // 리셋 버튼 활성화 (턴 시작 시 항상 활성화)
         GB.Presenter.Send("GameUI", Keys.UPDATE_RESET_BUTTON, true);
+        
+        // 클릭 락 풀기 (새 턴 시작)
+        Game.isClickLocked = false;
+        Debug.Log($"<color=green>[Game] Click unlocked - new turn started</color>");
     }
     
     /// <summary>
@@ -235,6 +260,12 @@ public class Game : MonoBehaviour, IView
         Debug.Log("[Game] EndGame called");
         Debug.Log("[Game] ========== Game Over ==========");
         
+        // 클릭 락 걸기 (게임 종료)
+        Game.isClickLocked = true;
+        Debug.Log($"<color=red>[Game] Click locked - game over</color>");
+        
+        gameState.currentTurn = maxTurns;
+            
         // 총 획득 금액 계산
         double totalEarned = 0.0;
         foreach (var turnData in gameState.turnHistory)
@@ -244,6 +275,21 @@ public class Game : MonoBehaviour, IView
         
         Debug.Log($"[Game] Total Earned: ${totalEarned:F2}");
         Debug.Log($"[Game] Press R to restart");
+        
+        // 배팅 리스트 초기화
+        gameState.currentBets.Clear();
+        Debug.Log($"[Game] Bet list cleared");
+        
+        // UI 업데이트
+        GB.Presenter.Send("GameUI", Keys.UPDATE_BET_LIST, gameState);
+        
+        // 스핀 버튼 비활성화
+        GB.Presenter.Send("GameUI", Keys.UPDATE_SPIN_BUTTON, false);
+        Debug.Log($"[Game] Spin button disabled (game over)");
+        
+        // 리셋 버튼 활성화 (게임 종료 시)
+        GB.Presenter.Send("GameUI", Keys.UPDATE_RESET_BUTTON, true);
+        Debug.Log($"[Game] Reset button enabled (game over)");
         
         // 게임 종료 메시지 전송
         GB.Presenter.Send("GameUI", Keys.UPDATE_GAME_OVER, totalEarned);
@@ -304,11 +350,15 @@ public class Game : MonoBehaviour, IView
         GB.Presenter.Send("GameUI", Keys.UPDATE_BET_LIST, gameState);
         GB.Presenter.Send("GameUI", Keys.UPDATE_TURN_INFO, gameState);
         
-        // 배팅이 0개면 스핀 버튼 비활성화
+        // 배팅이 0개면 스핀 버튼 비활성화 & 클릭 락 풀기
         if (gameState.currentBets.Count == 0)
         {
             GB.Presenter.Send("GameUI", Keys.UPDATE_SPIN_BUTTON, false);
             Debug.Log($"[Game] No bets remaining - spin button disabled");
+            
+            // 클릭 락 풀기 (배팅 제거해서 0개됨)
+            Game.isClickLocked = false;
+            Debug.Log($"<color=green>[Game] Click unlocked - bet removed</color>");
         }
     }
     
@@ -323,9 +373,9 @@ public class Game : MonoBehaviour, IView
     /// <summary>
     /// 배팅 추가
     /// </summary>
-    public void PlaceBet(BetType betType, int targetValue, ChipType chipType, int chipCount)
+    public void PlaceBet(BetType betType, int targetValue, ChipType chipType, int chipCount, bool isHatWingApplied = false)
     {
-        Debug.Log($"[Game] PlaceBet called: {betType} on {targetValue}, {chipType} x{chipCount}");
+        Debug.Log($"[Game] PlaceBet called: {betType} on {targetValue}, {chipType} x{chipCount}, HatWing: {isHatWingApplied}");
         
         // 이미 배팅이 있는지 확인 (한 턴에 한 번만 배팅 가능)
         if (gameState.currentBets.Count > 0)
@@ -334,7 +384,7 @@ public class Game : MonoBehaviour, IView
             return;
         }
         
-        // 칩 보유 여부 확인
+        // 칩 보유 여부 확인 (전액 배팅)
         if (!gameState.availableChips.HasChip(chipType, chipCount))
         {
             Debug.LogWarning($"[Game] Not enough chips! Available: {gameState.availableChips[chipType]}, Needed: {chipCount}");
@@ -348,15 +398,15 @@ public class Game : MonoBehaviour, IView
             return;
         }
         
-        // 배팅 생성
-        BetData bet = new BetData(betType, targetValue);
+        // 배팅 생성 (HatWing 플래그 저장)
+        BetData bet = new BetData(betType, targetValue, isHatWingApplied);
         bet.AddChip(chipType, chipCount);
         gameState.currentBets.Add(bet);
         
-        // 칩 차감
+        // 칩 차감 (전액 차감)
         Debug.Log($"[Game] Before RemoveChip: {gameState.availableChips.ToString()}");
         gameState.availableChips.RemoveChip(chipType, chipCount);
-        Debug.Log($"[Game] After RemoveChip: {gameState.availableChips.ToString()}");
+        Debug.Log($"[Game] After RemoveChip: {gameState.availableChips.ToString()} (removed {chipCount})");
         
         int chipValue = ChipTypeCache.Values[chipType];
         Debug.Log($"[Game] Bet placed: {betType} {targetValue} | {chipCount}x ${chipValue} chips");
@@ -369,6 +419,10 @@ public class Game : MonoBehaviour, IView
         Debug.Log($"<color=cyan>[Game] Sending UPDATE_SPIN_BUTTON with value: true</color>");
         GB.Presenter.Send("GameUI", Keys.UPDATE_SPIN_BUTTON, true);
         Debug.Log($"<color=cyan>[Game] UPDATE_SPIN_BUTTON sent successfully</color>");
+        
+        // 클릭 락 걸기 (배팅했으므로 더 이상 배팅 불가)
+        Game.isClickLocked = true;
+        Debug.Log($"<color=red>[Game] Click locked - bet placed</color>");
     }
     
     /// <summary>
@@ -379,7 +433,7 @@ public class Game : MonoBehaviour, IView
         Debug.Log($"[Game] IsValidBet called: {betType} on {targetValue}");
         
         switch (betType)
-        {
+        {   
             case BetType.Number:
                 return targetValue >= 1 && targetValue <= 36;
             case BetType.Color:
@@ -431,7 +485,7 @@ public class Game : MonoBehaviour, IView
                 if (targetIDs.Length >= 1)
                 {
                     SpotCalculator.ApplyPlusSpot(gameState, item, targetIDs[0]);
-                    SpotCalculator.RecalculateAll(gameState);
+                    // RecalculateAll은 ApplyPlusSpot 내부의 TriggerOnNumberChanged에서 호출됨
                     
                     // Board 갱신 및 상태 메시지 전송
                     if (_board != null)
@@ -506,6 +560,10 @@ public class Game : MonoBehaviour, IView
         // WheelController 없어도 계산은 진행 (룰렛 비주얼 없이도 테스트 가능)
         isSpinning = true;
         
+        // 클릭 락 걸기 (스핀 중에는 클릭 불가)
+        Game.isClickLocked = true;
+        Debug.Log($"<color=red>[Game] Click locked - spinning</color>");
+        
         Debug.Log($"[Game] ========== Spin Started (Turn {gameState.currentTurn}) ==========");
         
         // 전체 재계산
@@ -558,10 +616,20 @@ public class Game : MonoBehaviour, IView
         List<BetData> winningBets = new List<BetData>();
         foreach (var bet in gameState.currentBets)
         {
-            if (SpotCalculator.IsBetWin(bet, winningSpotID, winningSpot))
+            bool isWin = SpotCalculator.IsBetWin(bet, winningSpotID, winningSpot);
+            
+            // HatWing 적용 시 미당첨도 당첨으로 처리
+            if (isWin || bet.isHatWingApplied)
             {
                 winningBets.Add(bet);
-                Debug.Log($"[Game] Winning bet: {bet.betType} on {bet.targetValue}");
+                if (bet.isHatWingApplied && !isWin)
+                {
+                    Debug.Log($"[Game] HatWing activated! Losing bet treated as WIN: {bet.betType} on {bet.targetValue}");
+                }
+                else
+                {
+                    Debug.Log($"[Game] Winning bet: {bet.betType} on {bet.targetValue}");
+                }
             }
         }
         
@@ -598,7 +666,7 @@ public class Game : MonoBehaviour, IView
         }
         else
         {
-            Debug.Log($"[Game] LOSE! No payout");
+            Debug.Log($"[Game] LOSE! No payout (HatWing would have been processed above if applied)");
             Debug.Log($"[Game] After loss - availableChips: {gameState.availableChips.ToString()}");
         }
         
@@ -621,7 +689,7 @@ public class Game : MonoBehaviour, IView
         Debug.Log($"[Game] Total Payout: ${totalPayout:F2}");
         
         // 스핀 완료 메시지 전송 (모든 배팅 + 당첨 배팅 + 색상 포함)
-        SpinResult spinResult = new SpinResult(
+        SpinResultMessage spinResult = new SpinResultMessage(
             winningSpotID, 
             winningSpot.currentNumber, 
             winningSpot.currentColor, 
@@ -634,48 +702,16 @@ public class Game : MonoBehaviour, IView
         
         isSpinning = false;
         
+        // 게임 종료 체크 (모든 턴 완료)
+        if (gameState.currentTurn >= maxTurns)
+        {
+            Debug.Log("[Game] All turns completed, ending game");
+            EndGame();
+            return;
+        }
+        
         // 다음 턴
         StartNewTurn();
-    }
-    
-    #endregion
-    
-    #region Debug & Test
-    
-    /// <summary>
-    /// 테스트: 배팅 + 스핀
-    /// </summary>
-    private void TestBettingAndSpin()
-    {
-        Debug.Log("[Game] TestBettingAndSpin called");
-        Debug.Log("[Game] ========== Test Betting ==========");
-        
-        // 테스트 아이템 사용
-        Debug.Log("[Game] Using test items");
-        ItemData plusSpot = itemManager.CreateItem("PLUS_SPOT");
-        Debug.Log("[Game] Created PLUS_SPOT item");
-        UseItem(plusSpot, 5); // Spot 5를 6으로
-        Debug.Log("[Game] PLUS_SPOT item used");
-        
-        ItemData upgradeMulti = itemManager.CreateItem("UPGRADED_MULTI_SPOT");
-        Debug.Log("[Game] Created UPGRADED_MULTI_SPOT item");
-        UseItem(upgradeMulti, 10); // Spot 10 + 인접 강화
-        Debug.Log("[Game] UPGRADED_MULTI_SPOT item used");
-        
-        // 테스트 배팅 - 다양한 타입
-        Debug.Log("[Game] Placing test bets");
-        PlaceBet(BetType.Number, 6, ChipType.Chip1, 2);     // 숫자 배팅 (x36)
-        PlaceBet(BetType.Color, 0, ChipType.Chip1, 1);      // 빨간색 배팅 (x2)
-        PlaceBet(BetType.OddEven, 1, ChipType.Chip1, 1);    // 짝수 배팅 (x2)
-        PlaceBet(BetType.HighLow, 0, ChipType.Chip1, 1);    // Low(1-18) 배팅 (x2)
-        PlaceBet(BetType.Dozen, 1, ChipType.Chip1, 1);      // 1-12 배팅 (x3)
-        PlaceBet(BetType.Column, 2, ChipType.Chip1, 1);     // 2열 배팅 (x3)
-        Debug.Log("[Game] All test bets placed");
-        
-        // 스핀
-        Debug.Log("[Game] Starting test spin");
-        StartSpin();
-        Debug.Log("[Game] Test spin started");
     }
     
     #endregion
@@ -723,6 +759,10 @@ public class Game : MonoBehaviour, IView
         // UI 업데이트 메시지 전송
         GB.Presenter.Send("GameUI", Keys.UPDATE_BET_LIST, gameState);
         GB.Presenter.Send("GameUI", Keys.UPDATE_TURN_INFO, gameState);
+        
+        // 클릭 락 풀기 (모든 배팅 제거)
+        Game.isClickLocked = false;
+        Debug.Log($"<color=green>[Game] Click unlocked - all bets removed</color>");
     }
     
     #endregion
@@ -762,10 +802,6 @@ public class Game : MonoBehaviour, IView
                 HandleBetObjectClicked(data);
                 break;
                 
-            case Keys.CMD_PLACE_BET:
-                HandlePlaceBet(data);
-                break;
-                
             case Keys.CMD_REMOVE_BET:
                 HandleRemoveBet(data);
                 break;
@@ -786,9 +822,19 @@ public class Game : MonoBehaviour, IView
                 ResetGame();
                 break;
                 
-            case Keys.CMD_SHOW_BET_POPUP:
-                HandleShowBetPopup(data);
+            case Keys.CMD_POPUP_CLOSED:
+                Game.isPopupOpen = false;
+                Debug.Log($"<color=yellow>[Game] Popup closed (via message)</color>");
                 break;
+            
+            case Keys.CMD_SHOW_SPOT_INFO:
+                ShowSpotInfoPopup();
+                break;
+            
+            case Keys.CMD_START_COPY_SPOT:
+                HandleStartCopySpot(data);
+                break;
+                
         }
     }
     
@@ -797,7 +843,7 @@ public class Game : MonoBehaviour, IView
     #region Message Handlers
     
     /// <summary>
-    /// Spot 클릭 처리 - 팝업 표시 요청
+    /// Spot 클릭 처리 - 팝업 표시 요청 또는 CopySpot 두 번째 선택
     /// </summary>
     private void HandleSpotClicked(IOData data)
     {
@@ -807,6 +853,21 @@ public class Game : MonoBehaviour, IView
         {
             int spotID = spotData.Get();
             Debug.Log($"[Game] Spot clicked: {spotID}");
+            
+            // CopySpot 모드인 경우, 두 번째 Spot 선택 처리
+            if (Game.isCopySpotMode)
+            {
+                HandleCopySpotSecondSelection(spotID);
+                return;
+            }
+        
+            // 팝업이 이미 열려있으면 무시
+            if (Game.isPopupOpen)
+            {
+                Debug.LogWarning($"[Game] Popup already open, ignoring spot click");
+                return;
+            }
+            
             GameState gameState = GetGameState();
             
             if (gameState == null)
@@ -832,51 +893,25 @@ public class Game : MonoBehaviour, IView
     {
         Debug.Log($"[Game] HandleBetObjectClicked called with data: {data?.GetType()}");
         
-        if (data is OData<BetObjectClickData> clickData)
+        // 팝업이 이미 열려있으면 무시
+        if (Game.isPopupOpen)
         {
-            BetObjectClickData betData = clickData.Get();
-            Debug.Log($"[Game] BetObject clicked: {betData.objectID}, Type: {betData.betType}, Value: {betData.targetValue}");
-            GameState gameState = GetGameState();
-            
-            if (gameState == null)
-            {
-                Debug.LogError("[Game] GameState is null!");
-                return;
-            }
+            Debug.LogWarning($"[Game] Popup already open, ignoring bet object click");
+            return;
+        }
+        
+        if (data is OData<BetObjectClickMessage> clickData)
+        {
+            BetObjectClickMessage betData = clickData.Get();
+
+            Debug.Log($"[Game] {betData.objectID} - BetObject clicked: {betData.betType} on {betData.targetValue}");
             
             // 칩 선택 팝업 직접 표시
             ShowChipSelectionPopupForBetObject(betData, gameState);
-            Debug.Log($"[Game] BetObject {betData.betType} {betData.targetValue} popup shown directly");
         }
         else
         {
             Debug.LogError($"[Game] Invalid data type for CMD_BET_OBJECT_CLICKED: {data?.GetType()}");
-        }
-    }
-    
-    /// <summary>
-    /// 배팅 처리
-    /// </summary>
-    private void HandlePlaceBet(IOData data)
-    {
-        Debug.Log($"[Game] HandlePlaceBet called with data: {data?.GetType()}");
-        
-        if (data is OData<object[]> paramData)
-        {
-            object[] parameters = paramData.Get();
-            if (parameters.Length >= 4)
-            {
-                BetType betType = (BetType)parameters[0];
-                int targetValue = (int)parameters[1];
-                ChipType chipType = (ChipType)parameters[2];
-                int chipCount = (int)parameters[3];
-                Debug.Log($"[Game] Placing bet: {betType} on {targetValue}, {chipType} x{chipCount}");
-                PlaceBet(betType, targetValue, chipType, chipCount);
-            }
-        }
-        else
-        {
-            Debug.LogError($"[Game] Invalid data type for CMD_PLACE_BET: {data?.GetType()}");
         }
     }
     
@@ -941,46 +976,35 @@ public class Game : MonoBehaviour, IView
     }
     
     /// <summary>
-    /// ID로 아이템 사용
+    /// ID로 아이템 사용 (인벤토리에서 가져와서 사용)
     /// </summary>
     public void UseItemByID(string itemID, params int[] targetIDs)
     {
         Debug.Log($"[Game] UseItemByID called: {itemID} with targets: [{string.Join(", ", targetIDs)}]");
         
-        if (itemManager == null)
+        // 인벤토리에서 아이템 확인
+        ItemData item = gameState.GetItemByID(itemID);
+        if (item == null || item.count <= 0)
         {
-            Debug.LogError("[Game] ItemManager is null!");
+            Debug.LogWarning($"[Game] Item not found in inventory or count is 0: {itemID}");
             return;
         }
         
-        ItemData item = itemManager.CreateItem(itemID);
-        if (item == null)
+        // 인벤토리에서 아이템 사용 (개수 감소)
+        bool success = gameState.UseItemFromInventory(itemID);
+        if (!success)
         {
-            Debug.LogWarning($"[Game] Item not found: {itemID}");
+            Debug.LogError($"[Game] Failed to use item from inventory: {itemID}");
             return;
         }
         
+        Debug.Log($"[Game] Item used from inventory: {itemID}, remaining: {gameState.GetItemByID(itemID)?.count ?? 0}");
+        
+        // 아이템 효과 적용
         UseItem(item, targetIDs);
-    }
-    
-    /// <summary>
-    /// 베팅 팝업 표시 처리
-    /// </summary>
-    private void HandleShowBetPopup(IOData data)
-    {
-        Debug.Log($"[Game] HandleShowBetPopup called with data: {data?.GetType()}");
         
-        if (data is OData<object[]> paramData)
-        {
-            object[] parameters = paramData.Get();
-            if (parameters.Length >= 2)
-            {
-                BetType betType = (BetType)parameters[0];
-                int targetValue = (int)parameters[1];
-                Debug.Log($"[Game] Showing bet popup: {betType} on {targetValue}");
-                ShowBetPopup(betType, targetValue);
-            }
-        }
+        // 인벤토리 UI 업데이트
+        GB.Presenter.Send("GameUI", Keys.UPDATE_INVENTORY, gameState);
     }
     
     #endregion
@@ -995,45 +1019,123 @@ public class Game : MonoBehaviour, IView
         Debug.Log($"[Game] Showing chip selection popup for Spot {spotID}");
         
         // UIManager를 통해 팝업 표시
-        ChipSelectionData chipData = new ChipSelectionData(spotID, gameState.availableChips, OnChipSelected);
+        ChipSelectionMessage chipData = new ChipSelectionMessage( BetType.Number,spotID, gameState, OnChipSelected);
         
         UIManager.ShowPopup("ChipSelectionPopup", chipData);
         Game.isPopupOpen = true;
+        Debug.Log($"<color=yellow>[Game] Popup opened</color>");
     }
     
     /// <summary>
     /// 칩 선택 팝업 표시 (BetObject용)
     /// </summary>
-    private void ShowChipSelectionPopupForBetObject(BetObjectClickData betData, GameState gameState)
+    private void ShowChipSelectionPopupForBetObject(BetObjectClickMessage betData, GameState gameState)
     {
         Debug.Log($"[Game] Showing chip selection popup for BetObject: {betData.betType} on {betData.targetValue}");
         
         // BetObject용 콜백을 사용하여 팝업 표시
-        ChipSelectionData chipData = new ChipSelectionData(
+        ChipSelectionMessage chipData = new ChipSelectionMessage(
+            betData.betType,
             betData.targetValue,
-            gameState.availableChips,
-            (targetValue, chipType, chipCount) =>
-            {
-                Debug.Log($"[Game] BetObject chip selected: {betData.betType} on {targetValue}, {chipType} x{chipCount}");
-                
-                // 배팅 처리
-                PlaceBet(betData.betType, betData.targetValue, chipType, chipCount);
-                
-                Game.isPopupOpen = false;
-            }
+            gameState,
+            OnChipSelected
         );
         
         UIManager.ShowPopup("ChipSelectionPopup", chipData);
         Game.isPopupOpen = true;
+        Debug.Log($"<color=yellow>[Game] Popup opened</color>");
+    }
+
+    /// <summary>
+    /// Spot 정보 팝업 표시
+    /// </summary>
+    private void ShowSpotInfoPopup()
+    {
+        Debug.Log("[Game] ShowSpotInfoPopup called");
+        Game.isPopupOpen = true;
+        UIManager.ShowPopup("SpotInfoPopup", gameState);
+    }
+    
+    /// <summary>
+    /// CopySpot 모드 시작 (첫 번째 Spot 선택 완료)
+    /// </summary>
+    private void HandleStartCopySpot(IOData data)
+    {
+        if (data is OData<int> sourceData)
+        {
+            copySpotSourceID = sourceData.Get();
+            Game.isCopySpotMode = true;
+            
+            Debug.Log($"[Game] CopySpot mode started - Source: Spot {copySpotSourceID}");
+            
+            // 원본 Spot 하이라이트
+            if (_board != null)
+            {
+                _board.HighlightSpot(copySpotSourceID, true);
+            }
+            
+            // UI에 메시지 전송 (화면에 표시)
+            GB.Presenter.Send("GameUI", "SHOW_COPY_SPOT_MESSAGE", $"Source Spot #{copySpotSourceID} selected\nClick target Spot to copy");
+        }
+    }
+    
+    /// <summary>
+    /// CopySpot 두 번째 선택 처리
+    /// </summary>
+    private void HandleCopySpotSecondSelection(int destSpotID)
+    {
+        Debug.Log($"[Game] CopySpot second selection: {copySpotSourceID} → {destSpotID}");
+        
+        // 같은 Spot 선택 시 취소
+        if (destSpotID == copySpotSourceID)
+        {
+            Debug.LogWarning($"[Game] Cannot copy to the same Spot! Cancelling CopySpot mode.");
+            
+            // 하이라이트 끄기
+            if (_board != null)
+            {
+                _board.HighlightSpot(copySpotSourceID, false);
+            }
+            
+            // 모드 해제
+            Game.isCopySpotMode = false;
+            copySpotSourceID = -1;
+            
+            // UI 메시지 제거
+            GB.Presenter.Send("GameUI", "HIDE_COPY_SPOT_MESSAGE");
+            return;
+        }
+        
+        // CopySpot 실행 (직접 호출)
+        UseItemByID("COPY_SPOT", copySpotSourceID, destSpotID);
+        
+        // 하이라이트 끄기
+        if (_board != null)
+        {
+            _board.HighlightSpot(copySpotSourceID, false);
+        }
+        
+        // 모드 해제
+        Game.isCopySpotMode = false;
+        copySpotSourceID = -1;
+        
+        // UI 메시지 제거
+        GB.Presenter.Send("GameUI", "HIDE_COPY_SPOT_MESSAGE");
+        
+        Debug.Log($"[Game] CopySpot completed and mode deactivated");
     }
     
     /// <summary>
     /// 칩 선택 완료 콜백
     /// </summary>
-    private void OnChipSelected(int SpotID, ChipType chipType, int chipCount)
+    private void OnChipSelected(BetConfirmMessage confirmData)
     {
-        Debug.Log($"[Game] OnChipSelected called: Spot {SpotID}, Chip {chipType} x{chipCount}");
+        Debug.Log($"[Game] OnChipSelected called: {confirmData.betType} on {confirmData.targetValue}, {confirmData.chipType} x{confirmData.chipCount}");
+        Debug.Log($"[Game] Applied items: {string.Join(", ", confirmData.appliedItems)}");
+        Debug.Log($"[Game] HatWing applied: {confirmData.HasHatWing()}");
         
+        // 팝업 닫기는 ChipSelectionPopup에서 POPUP_CLOSED 메시지로 처리됨
+
         // 배팅 처리
         GameState gameState = GetGameState();
         if (gameState == null)
@@ -1041,21 +1143,10 @@ public class Game : MonoBehaviour, IView
             Debug.LogError("[Game] GameState is null!");
             return;
         }
-        
-        // PlaceBet 호출 (통일된 로직 사용)
-        PlaceBet(BetType.Number, SpotID, chipType, chipCount);
-        
-        Game.isPopupOpen = false;
+
+        PlaceBet(confirmData.betType, confirmData.targetValue, confirmData.chipType, confirmData.chipCount, confirmData.HasHatWing());
     }
     
-    /// <summary>
-    /// 베팅 팝업 표시
-    /// </summary>
-    private void ShowBetPopup(BetType betType, int targetValue)
-    {
-        Debug.Log($"[Game] ShowBetPopup called: {betType} on {targetValue}");
-        // TODO: 베팅 팝업 표시 로직 구현
-    }
     
     #endregion
     

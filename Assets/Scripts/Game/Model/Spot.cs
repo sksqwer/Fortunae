@@ -66,16 +66,17 @@ public class Spot
         return adjacent;
     }
     
-    // 리셋 (턴 시작 시 - Active 아이템만 제거, Passive는 유지)
+    // 리셋 (턴 시작 시 - ChipItem만 제거, SpotItem/CharmItem은 유지)
     public void ResetForNewTurn()
     {
         Debug.Log($"[Spot] ResetForNewTurn called for Spot {spotBase.id}");
         
-        // Active 아이템만 제거 (Passive는 유지, 순서 보존)
-        int removedCount = appliedRecords.RemoveAll(record => record.effectType == EffectType.Active);
-        Debug.Log($"[Spot] Removed {removedCount} Active records from Spot {spotBase.id}");
+        // ChipItem만 제거 (SpotItem/CharmItem은 유지, 순서 보존)
+        int removedCount = appliedRecords.RemoveAll(record => 
+            record.itemType == ItemType.ChipItem);
+        Debug.Log($"[Spot] Removed {removedCount} ChipItem records from Spot {spotBase.id}");
         
-        // Passive 아이템이 남아있으면 재계산하지 않고 유지
+        // SpotItem/CharmItem이 남아있으면 재계산하지 않고 유지
         // isDestroyed, currentNumber, currentColor, currentProbability, currentPayoutMultiplier는 
         // 아이템 적용 결과를 유지해야 하므로 리셋하지 않음
         
@@ -105,15 +106,17 @@ public class Spot
         appliedRecords.Add(record);
     }
     
-    // Active 기록만 가져오기
-    public List<AppliedItemRecord> GetActiveRecords()
+    // ChipItem 기록만 가져오기
+    public List<AppliedItemRecord> GetChipItemRecords()
     {
-        return appliedRecords.FindAll(r => r.effectType == EffectType.Active);
+        return appliedRecords.FindAll(r => r.itemType == ItemType.ChipItem);
     }
     
-    // Passive 기록만 가져오기
-    public List<AppliedItemRecord> GetPassiveRecords()
+    // SpotItem/CharmItem 기록만 가져오기 (지속 효과)
+    public List<AppliedItemRecord> GetPersistentRecords()
     {
-        return appliedRecords.FindAll(r => r.effectType == EffectType.Passive);
+        return appliedRecords.FindAll(r => 
+            r.itemType == ItemType.SpotItem || 
+            r.itemType == ItemType.CharmItem);
     }
 }

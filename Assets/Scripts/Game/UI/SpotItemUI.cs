@@ -46,9 +46,9 @@ public class SpotItemUI : UIScreen
         {
             ShowSpotInfo(spotData);
         }
-        else if (data is TooltipData tooltipData)
+        else if (data is TooltipMessage tooltipData)
         {
-            // TooltipData 구조체로 받은 경우 (박싱/언박싱 없음)
+            // TooltipMessage 구조체로 받은 경우 (박싱/언박싱 없음)
             ShowSpotInfo(tooltipData.spotData, tooltipData.screenPos);
         }
         else if (data is object[] parameters && parameters.Length >= 2)
@@ -83,7 +83,6 @@ public class SpotItemUI : UIScreen
         }
         
         gameObject.SetActive(true);
-        Debug.Log($"[SpotItemUI] Tooltip activated for Spot {spotData.SpotID}");
     }
     
     /// <summary>
@@ -166,13 +165,24 @@ public class SpotItemUI : UIScreen
                 numberText.text = spot.currentNumber.ToString();
         }
         
-        // 확률
+        // 확률 (numberProbabilities 사용)
         if (probabilityText != null)
         {
             if (spot.isDestroyed)
                 probabilityText.text = "0%";
             else
-                probabilityText.text = $"{spot.currentProbability * 100:F2}%";
+            {
+                // currentNumber별 확률 사용
+                if (SpotCalculator.numberProbabilities.ContainsKey(spot.currentNumber))
+                {
+                    double numberProbability = SpotCalculator.numberProbabilities[spot.currentNumber];
+                    probabilityText.text = $"{numberProbability * 100:F2}%";
+                }
+                else
+                {
+                    probabilityText.text = "0%";
+                }
+            }
         }
         
         // 배당률
@@ -192,7 +202,8 @@ public class SpotItemUI : UIScreen
                 string itemsInfo = "Applied Items:\n";
                 foreach (var record in spot.appliedRecords)
                 {
-                    itemsInfo += $"• {record.itemData.itemID} (x{record.multiplierValue:F2})\n";
+                    string itemName = GetItemName(record);
+                    itemsInfo += $"• {itemName} (x{record.multiplierValue:F2})\n";
                 }
                 appliedItemsText.text = itemsInfo;
             }
@@ -217,6 +228,35 @@ public class SpotItemUI : UIScreen
     private void OnCloseClicked()
     {
         Close();
+    }
+    
+    private string GetItemName(AppliedItemRecord record)
+    {
+        switch (record.itemType)
+        {
+            case ItemType.SpotItem:
+                switch (record.spotItemType)
+                {
+                    case SpotItemType.PlusSpot: return "PlusSpot";
+                    case SpotItemType.CopySpot: return "CopySpot";
+                    case SpotItemType.UpgradedMultiSpot: return "UpgradedMultiSpot";
+                    default: return "SpotItem";
+                }
+            
+            case ItemType.CharmItem:
+                switch (record.charmType)
+                {
+                    case CharmType.Death: return "Death";
+                    case CharmType.Chameleon: return "Chameleon";
+                    default: return "Charm";
+                }
+            
+            case ItemType.ChipItem:
+                return "HatWing";
+            
+            default:
+                return "Unknown";
+        }
     }
 }
 

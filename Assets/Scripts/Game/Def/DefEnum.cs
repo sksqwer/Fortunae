@@ -40,13 +40,6 @@ public enum CharmType
     Chameleon   // 변경 시 x1.3
 }
 
-// === 효과 적용 구분 (아이템 내역 관리용) ===
-public enum EffectType
-{
-    Active,   // 턴마다 리셋되는 아이템 효과 (PlusSpot, UpgradedMultiSpot 등)
-    Passive   // 게임 내내 유지되는 효과 (Chameleon, Death)
-}
-
 // 1. 기본 배팅 유형
 public enum BetType
 {

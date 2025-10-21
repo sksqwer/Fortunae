@@ -103,40 +103,40 @@ MonoBehaviour:
   - m_ElementType: 2
     m_Unicode: 65534
     m_GlyphIndex: 0
-    m_Scale: 1
+    m_Scale: 1.5
     m_Name: RedStar
   - m_ElementType: 2
     m_Unicode: 65534
     m_GlyphIndex: 2
-    m_Scale: 1
+    m_Scale: 1.5
     m_Name: iconAtlas-Photoroom_2
   - m_ElementType: 2
     m_Unicode: 65534
     m_GlyphIndex: 3
-    m_Scale: 1
+    m_Scale: 1.5
     m_Name: iconAtlas-Photoroom_4
   - m_ElementType: 2
     m_Unicode: 65534
     m_GlyphIndex: 5
-    m_Scale: 1
+    m_Scale: 1.5
     m_Name: iconAtlas-Photoroom_6
   - m_ElementType: 2
     m_Unicode: 65534
     m_GlyphIndex: 7
-    m_Scale: 1
+    m_Scale: 1.5
     m_Name: iconAtlas-Photoroom_7
   - m_ElementType: 2
     m_Unicode: 65534
     m_GlyphIndex: 8
-    m_Scale: 1
+    m_Scale: 1.5
     m_Name: iconAtlas-Photoroom_9
   m_GlyphTable:
   - m_Index: 0
     m_Metrics:
       m_Width: 28
       m_Height: 27
-      m_HorizontalBearingX: -14
-      m_HorizontalBearingY: 13.5
+      m_HorizontalBearingX: 0
+      m_HorizontalBearingY: 20
       m_HorizontalAdvance: 28
     m_GlyphRect:
       m_X: 100
@@ -167,8 +167,8 @@ MonoBehaviour:
     m_Metrics:
       m_Width: 28
       m_Height: 28
-      m_HorizontalBearingX: -14
-      m_HorizontalBearingY: 14
+      m_HorizontalBearingX: 0
+      m_HorizontalBearingY: 20
       m_HorizontalAdvance: 28
     m_GlyphRect:
       m_X: 100
@@ -183,8 +183,8 @@ MonoBehaviour:
     m_Metrics:
       m_Width: 28
       m_Height: 28
-      m_HorizontalBearingX: -14
-      m_HorizontalBearingY: 14
+      m_HorizontalBearingX: 0
+      m_HorizontalBearingY: 20
       m_HorizontalAdvance: 28
     m_GlyphRect:
       m_X: 100
@@ -215,8 +215,8 @@ MonoBehaviour:
     m_Metrics:
       m_Width: 32
       m_Height: 28
-      m_HorizontalBearingX: -16
-      m_HorizontalBearingY: 14
+      m_HorizontalBearingX: 0
+      m_HorizontalBearingY: 20
       m_HorizontalAdvance: 32
     m_GlyphRect:
       m_X: 96
@@ -247,8 +247,8 @@ MonoBehaviour:
     m_Metrics:
       m_Width: 28
       m_Height: 30
-      m_HorizontalBearingX: -14
-      m_HorizontalBearingY: 15
+      m_HorizontalBearingX: 0
+      m_HorizontalBearingY: 20
       m_HorizontalAdvance: 28
     m_GlyphRect:
       m_X: 100
@@ -263,8 +263,8 @@ MonoBehaviour:
     m_Metrics:
       m_Width: 26
       m_Height: 32
-      m_HorizontalBearingX: -13
-      m_HorizontalBearingY: 16
+      m_HorizontalBearingX: 0
+      m_HorizontalBearingY: 20
       m_HorizontalAdvance: 26
     m_GlyphRect:
       m_X: 102

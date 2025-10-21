@@ -9,8 +9,8 @@ public class ItemData
     public ItemType itemType;           // Spot/Chip/Charm
     public string itemID;                // 고유 ID
     public int count;                    // 보유 개수
-    public EffectType effectType;        // Active/Passive
     public double multiplier;            // 배수 값 (ItemDefinition에서 가져옴)
+    public int SpriteIndex;             // 아이템 아이콘 인덱스
     
     // === Spot 아이템 전용 ===
     public SpotItemType spotItemType;
@@ -37,8 +37,9 @@ public class ItemData
         itemType = definition.itemType;
         itemID = definition.itemID;
         this.count = count >= 0 ? count : definition.baseCount;
-        effectType = definition.itemType == ItemType.CharmItem ? EffectType.Passive : EffectType.Active;
+        
         multiplier = definition.multiplier; // ItemDefinition에서 배수 값 가져오기
+        SpriteIndex = definition.SpriteIndex;
         
         // 아이템 타입별 세부 설정
         switch (itemType)
@@ -51,7 +52,6 @@ public class ItemData
                 break;
             case ItemType.CharmItem:
                 charmType = definition.charmType;
-                this.count = 1; // Charm은 항상 1개
                 break;
         }
         

@@ -61,6 +61,10 @@ public class WheelController : MonoStateMachine<WheelController>
     protected override void InitializeOwner()
     {
         owner = this;
+        ballController.OnBallSettled += (winningNumberv) =>
+        {
+            NotifySpinComplete();
+        };
         SetupPockets();
     }
     

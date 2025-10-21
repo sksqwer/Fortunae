@@ -42,7 +42,7 @@ public class WheelSpinningState : FSMState<WheelController>
                 Actor.resultText.text = $"결과: {Actor.winningNumber}";
             
             // 스핀 완료 통보 및 상태 전환
-            Actor.NotifySpinComplete();
+            // Actor.NotifySpinComplete();
             StateMachine.ExecuteCommand(WheelController.WheelCommands.ToIdle);
             return;
         }

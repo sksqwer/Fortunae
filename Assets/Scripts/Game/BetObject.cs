@@ -11,7 +11,7 @@ public class BetObject : MonoBehaviour, IPointerClickHandler
 {
     [Header("Basic Info")]
     [SerializeField] protected int objectID;
-    [SerializeField] protected Renderer objectRenderer;
+    [SerializeField] protected SpriteRenderer objectRenderer;
     [SerializeField] protected SpriteRenderer highlightRenderer;
     [SerializeField] protected TextMeshPro displayText;
     
@@ -33,10 +33,9 @@ public class BetObject : MonoBehaviour, IPointerClickHandler
     public virtual void Initialize(int id)
     {
         objectID = id;
-        objectRenderer = GetComponent<Renderer>();
+        objectRenderer = GetComponent<SpriteRenderer>();
         // 자신의 SpriteRenderer는 제외하고 자식에서만 찾기
         SpriteRenderer[] allSpriteRenderers = GetComponentsInChildren<SpriteRenderer>();
-
 
         // 자신을 제외한 자식 오브젝트에서만 찾기
         if(highlightRenderer == null)
@@ -51,29 +50,24 @@ public class BetObject : MonoBehaviour, IPointerClickHandler
             }
         
         displayText = GetComponentInChildren<TextMeshPro>();
-        Debug.Log($"[BetObject] Basic initialization for ID: {id}");
     }
     
     /// <summary>
     /// 비주얼 업데이트 (하위 클래스에서 override)
     /// </summary>
     public virtual void UpdateVisual()
-    {
-        Debug.Log($"[BetObject] UpdateVisual: {GetType().Name} {objectID}");
-        
-        if (objectRenderer != null)
-        {
-            objectRenderer.material.color = normalColor;
-        }
+    {        
+        // if (objectRenderer != null)
+        // {
+        //     objectRenderer.color = normalColor;
+        // }
     }
     
     /// <summary>
     /// 강조 표시
     /// </summary>
     public virtual void SetHighlight(bool highlight)
-    {
-        Debug.Log($"[BetObject] SetHighlight: {GetType().Name} {objectID}, highlight={highlight}");
-        
+    {        
         if (highlightRenderer != null)
         {
             if (highlight)
@@ -93,7 +87,6 @@ public class BetObject : MonoBehaviour, IPointerClickHandler
     /// </summary>
     public virtual void OnPointerClick(PointerEventData eventData)
     {
-        Debug.Log($"[BetObject] OnPointerClick: {GetType().Name} {objectID}");
         HandleClick();
     }
     
@@ -102,7 +95,6 @@ public class BetObject : MonoBehaviour, IPointerClickHandler
     /// </summary>
     protected virtual void OnMouseDown()
     {
-        Debug.Log($"[BetObject] OnMouseDown called for {GetType().Name} {objectID}");
         HandleClick();
     }
     
@@ -111,26 +103,15 @@ public class BetObject : MonoBehaviour, IPointerClickHandler
     /// </summary>
     protected virtual void HandleClick()
     {
-        // 팝업이 켜져 있으면 클릭 차단
-        if (Game.isPopupOpen)
+        // 클릭 락이 걸려있으면 차단 (배팅/스핀/게임종료)
+        if (Game.isClickLocked)
         {
-            Debug.Log($"[BetObject] Popup is open, blocking click for {GetType().Name} {objectID}");
             return;
         }
-        
-        // 스핀 중이면 클릭 차단
-        var game = FindFirstObjectByType<Game>();
-        if (game != null && game.IsSpinning)
-        {
-            Debug.LogWarning($"[BetObject] Spinning in progress, blocking click for {GetType().Name} {objectID}");
-            return;
-        }
-        
-        Debug.Log($"[BetObject] {GetType().Name} {objectID} clicked! Type: {GetBetType()}");
         
         // Game으로 클릭 이벤트 전달 (Game이 직접 처리)
         GB.Presenter.Send(Game.DOMAIN, Game.Keys.CMD_BET_OBJECT_CLICKED, 
-                         new BetObjectClickData(objectID, GetBetType(), GetTargetValue()));
+                         new BetObjectClickMessage(objectID, GetBetType(), GetTargetValue()));
     }
     
     /// <summary>
@@ -146,8 +127,7 @@ public class BetObject : MonoBehaviour, IPointerClickHandler
     /// </summary>
     protected virtual int GetTargetValue()
     {
-        // BetType.Number인 경우 objectID 사용, 그 외엔 targetValue 사용
-        return betType == BetType.Number ? objectID : targetValue;
+        return targetValue;
     }
     
     
@@ -156,31 +136,20 @@ public class BetObject : MonoBehaviour, IPointerClickHandler
     /// </summary>
     protected virtual void OnMouseEnter()
     {
-        Debug.Log($"[BetObject] OnMouseEnter: {GetType().Name} {objectID}");
+        // 팝업이 열려있으면 툴팁 표시 안 함
+        if (Game.isPopupOpen)
+            return;
+        
+        // CopySpot 모드에서는 호버링/하이라이트 차단
+        if (Game.isCopySpotMode)
+            return;
+        
         SetHighlight(true);
     }
     
     protected virtual void OnMouseExit()
     {
-        Debug.Log($"[BetObject] OnMouseExit: {GetType().Name} {objectID}");
         SetHighlight(false);
     }
 }
 
-/// <summary>
-/// BetObject 클릭 데이터
-/// </summary>
-[System.Serializable]
-public class BetObjectClickData
-{
-    public int objectID;
-    public BetType betType;
-    public int targetValue;
-    
-    public BetObjectClickData(int id, BetType type, int value)
-    {
-        objectID = id;
-        betType = type;
-        targetValue = value;
-    }
-}

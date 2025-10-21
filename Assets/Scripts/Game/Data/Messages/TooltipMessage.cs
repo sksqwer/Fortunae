@@ -1,16 +1,17 @@
 using UnityEngine;
 
 /// <summary>
-/// 툴팁 데이터 구조체 (박싱/언박싱 방지)
+/// 툴팁 메시지 구조체 (통신용)
 /// </summary>
-public struct TooltipData
+public struct TooltipMessage
 {
     public readonly Spot spotData;
     public readonly Vector2 screenPos;
     
-    public TooltipData(Spot spotData, Vector2 screenPos)
+    public TooltipMessage(Spot spotData, Vector2 screenPos)
     {
         this.spotData = spotData;
         this.screenPos = screenPos;
     }
 }
+

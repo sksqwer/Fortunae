@@ -31,7 +31,7 @@ public class ItemDefinition
     public int targetCount;         // 대상 개수 (복사, 파괴 등)
     
     [Header("UI 설정")]
-    public Sprite icon;             // 아이템 아이콘
+    public int SpriteIndex;         // 아이템 아이콘 인덱스
     public Color itemColor;         // 아이템 색상
     
     /// <summary>
@@ -53,6 +53,7 @@ public class ItemDefinition
         multiplier = 1.0f;
         addValue = 0;
         targetCount = 1;
+        SpriteIndex = 0;
         itemColor = Color.white;
     }
     

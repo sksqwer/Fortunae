@@ -26,6 +26,9 @@ public class BetData
 
     [Tooltip("이 배팅에 적용된 아이템 (Wing 등)")]
     public List<ItemData> appliedItems;
+    
+    [Tooltip("HatWing 적용 여부 (반값 배팅)")]
+    public bool isHatWingApplied;
 
     /// <summary>
     /// (참고) 가독성을 위해 베팅 대상을 상수로 정의해둘 수 있습니다.
@@ -36,12 +39,13 @@ public class BetData
     /// <summary>
     /// 배팅 생성자
     /// </summary>
-    public BetData(BetType type, int target)
+    public BetData(BetType type, int target, bool hatWingApplied = false)
     {
         this.betType = type;
         this.targetValue = target;
         this.chips = new ChipCollection();
         this.appliedItems = new List<ItemData>();
+        this.isHatWingApplied = hatWingApplied;
     }
     
     // 칩 추가
