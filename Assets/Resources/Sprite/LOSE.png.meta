@@ -1,0 +1,728 @@
+fileFormatVersion: 2
+guid: be0eb692f00affd41988d412ffc83f6f
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -2033248612065093184
+    second: LOSE-Photoroom_0
+  - first:
+      213: -464012333788854361
+    second: LOSE-Photoroom_1
+  - first:
+      213: 765169615348284679
+    second: LOSE-Photoroom_2
+  - first:
+      213: 2138647273627096185
+    second: LOSE-Photoroom_3
+  - first:
+      213: -8726502690895959755
+    second: LOSE-Photoroom_4
+  - first:
+      213: -5448823273012626494
+    second: LOSE-Photoroom_5
+  - first:
+      213: -1975104479538502685
+    second: LOSE-Photoroom_6
+  - first:
+      213: 6346862679530035720
+    second: LOSE-Photoroom_7
+  - first:
+      213: 7616282157317071002
+    second: LOSE-Photoroom_8
+  - first:
+      213: -857175461761652416
+    second: LOSE-Photoroom_9
+  - first:
+      213: 1530207146168358430
+    second: LOSE-Photoroom_10
+  - first:
+      213: 1967605038574995405
+    second: LOSE-Photoroom_11
+  - first:
+      213: 5746908007646034501
+    second: LOSE-Photoroom_12
+  - first:
+      213: -1410824051887525887
+    second: LOSE-Photoroom_13
+  - first:
+      213: 8506364763984651107
+    second: LOSE-Photoroom_14
+  - first:
+      213: -3935451714812999542
+    second: LOSE-Photoroom_15
+  - first:
+      213: 501724862084476852
+    second: LOSE-Photoroom_16
+  - first:
+      213: 5221034185649895348
+    second: LOSE-Photoroom_17
+  - first:
+      213: -252737809853786990
+    second: LOSE-Photoroom_18
+  - first:
+      213: 8510053955007236339
+    second: LOSE-Photoroom_19
+  - first:
+      213: -8071265789033121032
+    second: LOSE-Photoroom_20
+  - first:
+      213: 3473806868609297631
+    second: LOSE-Photoroom_21
+  - first:
+      213: 1791796580482070031
+    second: LOSE-Photoroom_22
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 1
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: LOSE-Photoroom_0
+      rect:
+        serializedVersion: 2
+        x: 33
+        y: 208
+        width: 14
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0c9ddc1f82378c3e0800000000000000
+      internalID: -2033248612065093184
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LOSE-Photoroom_1
+      rect:
+        serializedVersion: 2
+        x: 163
+        y: 213
+        width: 11
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7a78d19ad3f7f89f0800000000000000
+      internalID: -464012333788854361
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LOSE-Photoroom_2
+      rect:
+        serializedVersion: 2
+        x: 217
+        y: 215
+        width: 6
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 70db1cb06bd6e9a00800000000000000
+      internalID: 765169615348284679
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LOSE-Photoroom_3
+      rect:
+        serializedVersion: 2
+        x: 242
+        y: 215
+        width: 14
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 97496644d500ead10800000000000000
+      internalID: 2138647273627096185
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LOSE-Photoroom_4
+      rect:
+        serializedVersion: 2
+        x: 311
+        y: 207
+        width: 9
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 539e7a1a90c35e680800000000000000
+      internalID: -8726502690895959755
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LOSE-Photoroom_5
+      rect:
+        serializedVersion: 2
+        x: 376
+        y: 210
+        width: 9
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2cb73303a14e164b0800000000000000
+      internalID: -5448823273012626494
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LOSE-Photoroom_6
+      rect:
+        serializedVersion: 2
+        x: 26
+        y: 58
+        width: 94
+        height: 139
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3e323deb0f40794e0800000000000000
+      internalID: -1975104479538502685
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LOSE-Photoroom_7
+      rect:
+        serializedVersion: 2
+        x: 75
+        y: 194
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 80a529bdaf5941850800000000000000
+      internalID: 6346862679530035720
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LOSE-Photoroom_8
+      rect:
+        serializedVersion: 2
+        x: 110
+        y: 52
+        width: 131
+        height: 146
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a90a700f44872b960800000000000000
+      internalID: 7616282157317071002
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LOSE-Photoroom_9
+      rect:
+        serializedVersion: 2
+        x: 124
+        y: 196
+        width: 8
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 049e3838573ba14f0800000000000000
+      internalID: -857175461761652416
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LOSE-Photoroom_10
+      rect:
+        serializedVersion: 2
+        x: 237
+        y: 58
+        width: 99
+        height: 139
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e161124ca436c3510800000000000000
+      internalID: 1530207146168358430
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LOSE-Photoroom_11
+      rect:
+        serializedVersion: 2
+        x: 338
+        y: 57
+        width: 144
+        height: 143
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dc708869b565e4b10800000000000000
+      internalID: 1967605038574995405
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LOSE-Photoroom_12
+      rect:
+        serializedVersion: 2
+        x: 55
+        y: 56
+        width: 7
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 54af690726e11cf40800000000000000
+      internalID: 5746908007646034501
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LOSE-Photoroom_13
+      rect:
+        serializedVersion: 2
+        x: 113
+        y: 58
+        width: 9
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 100baaaeffebb6ce0800000000000000
+      internalID: -1410824051887525887
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LOSE-Photoroom_14
+      rect:
+        serializedVersion: 2
+        x: 262
+        y: 59
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 36364372fadac0670800000000000000
+      internalID: 8506364763984651107
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LOSE-Photoroom_15
+      rect:
+        serializedVersion: 2
+        x: 340
+        y: 54
+        width: 9
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a888edb24877269c0800000000000000
+      internalID: -3935451714812999542
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LOSE-Photoroom_16
+      rect:
+        serializedVersion: 2
+        x: 186
+        y: 48
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4bfe6839a1c76f600800000000000000
+      internalID: 501724862084476852
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LOSE-Photoroom_17
+      rect:
+        serializedVersion: 2
+        x: 146
+        y: 38
+        width: 7
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4b735dbfde6d47840800000000000000
+      internalID: 5221034185649895348
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LOSE-Photoroom_18
+      rect:
+        serializedVersion: 2
+        x: 169
+        y: 16
+        width: 52
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 294da5e0d481e7cf0800000000000000
+      internalID: -252737809853786990
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LOSE-Photoroom_19
+      rect:
+        serializedVersion: 2
+        x: 224
+        y: 16
+        width: 36
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3f84d9fdbf8c91670800000000000000
+      internalID: 8510053955007236339
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LOSE-Photoroom_20
+      rect:
+        serializedVersion: 2
+        x: 262
+        y: 16
+        width: 38
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8fafaec378a1dff80800000000000000
+      internalID: -8071265789033121032
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LOSE-Photoroom_21
+      rect:
+        serializedVersion: 2
+        x: 302
+        y: 16
+        width: 13
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fdce4c521f0753030800000000000000
+      internalID: 3473806868609297631
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LOSE-Photoroom_22
+      rect:
+        serializedVersion: 2
+        x: 314
+        y: 16
+        width: 32
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f06b4612f7dbdd810800000000000000
+      internalID: 1791796580482070031
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      LOSE-Photoroom_0: -2033248612065093184
+      LOSE-Photoroom_1: -464012333788854361
+      LOSE-Photoroom_10: 1530207146168358430
+      LOSE-Photoroom_11: 1967605038574995405
+      LOSE-Photoroom_12: 5746908007646034501
+      LOSE-Photoroom_13: -1410824051887525887
+      LOSE-Photoroom_14: 8506364763984651107
+      LOSE-Photoroom_15: -3935451714812999542
+      LOSE-Photoroom_16: 501724862084476852
+      LOSE-Photoroom_17: 5221034185649895348
+      LOSE-Photoroom_18: -252737809853786990
+      LOSE-Photoroom_19: 8510053955007236339
+      LOSE-Photoroom_2: 765169615348284679
+      LOSE-Photoroom_20: -8071265789033121032
+      LOSE-Photoroom_21: 3473806868609297631
+      LOSE-Photoroom_22: 1791796580482070031
+      LOSE-Photoroom_3: 2138647273627096185
+      LOSE-Photoroom_4: -8726502690895959755
+      LOSE-Photoroom_5: -5448823273012626494
+      LOSE-Photoroom_6: -1975104479538502685
+      LOSE-Photoroom_7: 6346862679530035720
+      LOSE-Photoroom_8: 7616282157317071002
+      LOSE-Photoroom_9: -857175461761652416
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -22,6 +22,9 @@ public class GameUI : UIScreen
     [SerializeField] private GameObject copySpotMessagePanel;
     [SerializeField] private TMP_Text copySpotMessageText;
     
+    [Header("Result Scroll")]
+    [SerializeField] private ScrollRect resultScrollRect;
+    
     // 동적 생성된 UI 요소들
     private List<GameObject> betItems = new List<GameObject>();
     
@@ -33,8 +36,6 @@ public class GameUI : UIScreen
     
     public override void Initialize()
     {
-        Debug.Log("[GameUI] Initialize called");
-
         base.Initialize();
 
         Regist();
@@ -53,10 +54,8 @@ public class GameUI : UIScreen
     
     private void OnEnable()
     {
-        Debug.Log("<color=cyan>[GameUI] OnEnable - Binding to GameUI domain</color>");
         // Game으로부터 메시지 수신용 바인드
         Presenter.Bind("GameUI", this);
-        Debug.Log("<color=cyan>[GameUI] Successfully bound to GameUI domain</color>");
     }
 
     private void OnDisable() 
@@ -70,8 +69,6 @@ public class GameUI : UIScreen
     /// </summary>
     private void RegisterButtonEvents()
     {
-        Debug.Log("[GameUI] RegisterButtonEvents called");
-
         if (mButtons.ContainsKey("SpinButton"))
             mButtons["SpinButton"].onClick.AddListener(OnSpinButtonClicked);
         
@@ -87,7 +84,6 @@ public class GameUI : UIScreen
     
     public override void ViewQuick(string key, IOData data)
     {
-        Debug.Log($"[GameUI] ViewQuick called with key: {key}");
         switch (key)
         {
             case Game.Keys.UPDATE_GAME_STATE:
@@ -105,37 +101,21 @@ public class GameUI : UIScreen
                 break;
                 
             case Game.Keys.UPDATE_SPIN_START:
-                Debug.Log("[GameUI] Spin started - disable spin and reset buttons");
-                
-                // 스핀 버튼과 리셋 버튼 비활성화
                 if (mButtons.ContainsKey("SpinButton"))
                     mButtons["SpinButton"].interactable = false;
                 if (mButtons.ContainsKey("ResetButton"))
-                    mButtons["ResetButton"].interactable = false;
-                    
+                    mButtons["ResetButton"].interactable = false;                                        
                 break;
                 
             case Game.Keys.UPDATE_SPIN_BUTTON:
-                Debug.Log($"<color=magenta>[GameUI] UPDATE_SPIN_BUTTON received! data: {data?.GetType()}</color>");
                 if (data != null && data is OData<bool> buttonData)
                 {
                     bool isEnabled = buttonData.Get();
-                    Debug.Log($"<color=magenta>[GameUI] Setting spin button enabled: {isEnabled}</color>");
-                    
-                    // 스핀 버튼만 활성화/비활성화
+
                     if (mButtons.ContainsKey("SpinButton"))
                     {
-                        mButtons["SpinButton"].interactable = isEnabled;
-                        Debug.Log($"<color=magenta>[GameUI] SpinButton.interactable = {isEnabled}</color>");
+                        mButtons["SpinButton"].interactable = isEnabled;                        
                     }
-                    else
-                    {
-                        Debug.LogError("[GameUI] SpinButton not found in mButtons!");
-                    }
-                }
-                else
-                {
-                    Debug.LogError($"[GameUI] Invalid data type for UPDATE_SPIN_BUTTON: {data?.GetType()}");
                 }
                 break;
                 
@@ -143,8 +123,7 @@ public class GameUI : UIScreen
                 if (data != null && data is OData<bool> resetButtonData)
                 {
                     bool isEnabled = resetButtonData.Get();
-                    Debug.Log($"[GameUI] Setting reset button enabled: {isEnabled}");
-                    
+
                     if (mButtons.ContainsKey("ResetButton"))
                     {
                         mButtons["ResetButton"].interactable = isEnabled;
@@ -160,9 +139,9 @@ public class GameUI : UIScreen
                 break;
                 
             case Game.Keys.UPDATE_GAME_OVER:
-                if (data != null && data is OData<double> totalData)
+                if (data != null && data is OData<GameState> gameOverState)
                 {
-                    ShowGameOver(totalData.Get());
+                    ShowGameOver(gameOverState.Get());
                 }
                 break;
                 
@@ -194,8 +173,6 @@ public class GameUI : UIScreen
             case "HIDE_COPY_SPOT_MESSAGE":
                 HideCopySpotMessage();
                 break;
-                
-            // CMD_SPOT_CLICKED와 CMD_BET_OBJECT_CLICKED는 Game에서 직접 팝업 처리
         }
     }
     
@@ -205,29 +182,20 @@ public class GameUI : UIScreen
     
     private void SetGameState(GameState gameState)
     {
-        Debug.Log($"[GameUI] SetGameState called");
-        
         if (gameState == null)
         {
-            Debug.LogWarning("[GameUI] Received null GameState!");
             return;
         }
-        
-        Debug.Log($"[GameUI] Updating UI with GameState: Turn {gameState.currentTurn}, Money ${gameState.GetTotalMoney():F2}");
         
         // UI 전체 업데이트 (파라미터로 gameState 전달)
         RefreshTurnInfo(gameState);
         RefreshSpotList(gameState);
         RefreshBettingInfo(gameState);
         RefreshInventory(gameState);
-        
-        Debug.Log($"[GameUI] SetGameState completed");
     }
     
     private void RefreshTurnInfo(GameState gameState)
-    {
-        Debug.Log($"[GameUI] RefreshTurnInfo: Turn {gameState.currentTurn}, Money ${gameState.GetTotalMoney():F2}");
-        
+    {        
         if (mTMPText.ContainsKey("TurnText"))
             mTMPText["TurnText"].text = $"Turn {gameState.currentTurn} / 3";
         
@@ -240,25 +208,18 @@ public class GameUI : UIScreen
     
     private void RefreshSpotList(GameState gameState)
     {
-        if (gameState == null || gameState.spots == null) return;
-        
-        // SpotItemUI는 더 이상 GameUI에서 관리하지 않음 (3D SpotObject가 직접 관리)
-        Debug.Log($"[GameUI] Spot list refresh requested (handled by 3D objects)");
+        if (gameState == null || gameState.spots == null) return;        
     }
     
     private void RefreshBettingInfo(GameState gameState)
-    {
-        Debug.Log($"[GameUI] RefreshBettingInfo called");
-        
+    {        
         if (gameState == null)
         {
-            Debug.LogWarning("[GameUI] RefreshBettingInfo: gameState is null");
             return;
         }
         
         // 배팅 리스트는 gameState에서 직접 가져오기
         var currentBets = gameState.currentBets;
-        Debug.Log($"[GameUI] RefreshBettingInfo: {currentBets.Count} bets to display");
         
         // 기존 BetItemUI들 제거
         foreach (var betItem in betItems)
@@ -282,21 +243,14 @@ public class GameUI : UIScreen
                 }
             }
         }
-        
-        Debug.Log($"[GameUI] Betting info refreshed: {currentBets.Count} bets");
     }
     
     private void RefreshInventory(GameState gameState)
-    {
-        Debug.Log($"[GameUI] RefreshInventory called");
-        
+    {        
         if (gameState == null)
         {
-            Debug.LogWarning("[GameUI] RefreshInventory: gameState is null");
             return;
         }
-        
-        Debug.Log($"[GameUI] RefreshInventory: {gameState.inventory.Count} items in inventory");
         
         // 인벤토리 아이템 표시 업데이트
         if (mTMPText.ContainsKey("InventoryText"))
@@ -333,47 +287,22 @@ public class GameUI : UIScreen
     }
     
     private void OnResetButtonClicked()
-    {
-        Debug.Log("[GameUI] Reset button clicked");
-        
+    {        
         // Game에 게임 리셋 명령 전송
         GB.Presenter.Send(Game.DOMAIN, Game.Keys.CMD_RESET_GAME);
     }
     
     private void OnSpotInfoButtonClicked()
     {
-        Debug.Log("[GameUI] Spot Info button clicked");
-        
-        // Game에 Spot 정보 팝업 표시 명령 전송
         GB.Presenter.Send(Game.DOMAIN, Game.Keys.CMD_SHOW_SPOT_INFO);
-    }
-    
-    #endregion
-    
-    #region Spot Click Handling
-        
-    private ChipType GetFirstAvailableChipType(GameState gameState)
-    {
-        foreach (ChipType type in ChipTypeCache.AllTypes)
-        {
-            if (gameState.availableChips[type] > 0)
-            {
-                return type;
-            }
-        }
-        return ChipType.Chip1; // 기본값
     }
     
     #endregion
     
     #region Game Event Display
     
-    // OnSpinStarted 메서드 제거됨 - Presenter.Send로 통일
-    
     private void ShowResult(SpinResultMessage result)
-    {
-        Debug.Log($"[GameUI] ShowResult called");
-        
+    {        
         // 색깔 이름과 Rich Text 색상 코드
         string colorName = result.winningColor == SpotColor.Red ? "Red" : "Black";
         string colorCodeConsole = result.winningColor == SpotColor.Red ? "red" : "white";
@@ -469,29 +398,101 @@ public class GameUI : UIScreen
                 }
             }
             
+            // 마지막 턴이면 GameOver 정보도 추가
+            if (result.isLastTurn)
+            {
+                resultMessage += "\n\n";
+                resultMessage += GetGameOverSummary(result.gameState);
+            }
+            
             mTMPText["ResultText"].text = resultMessage;
         }
-        
-        // 스핀 버튼 재활성화
-        if (mButtons.ContainsKey("SpinButton"))
-            mButtons["SpinButton"].interactable = true;
     }
     
     /// <summary>
-    /// BetType을 읽기 쉬운 이름으로 변환
+    /// 게임 종료 화면 표시 (UPDATE_GAME_OVER 전용, 사용 안 함)
     /// </summary>
-    private string GetBetTypeName(BetType betType)
+    private void ShowGameOver(GameState gameState)
     {
-        switch (betType)
+        // ShowResult에서 마지막 턴과 함께 표시하므로 비워둠
+    }
+    
+    /// <summary>
+    /// GameOver 요약 정보 생성
+    /// </summary>
+    private string GetGameOverSummary(GameState gameState)
+    {
+        string summary = "";
+        
+        // 게임 오버 헤더
+        summary += $"<color=#FF0000><b>═══════════════════════</b></color>\n";
+        summary += $"<color=#FF4444><size=28><b>GAME OVER</b></size></color>\n";
+        summary += $"<color=#FF0000><b>═══════════════════════</b></color>\n\n";
+        
+        // 최종 결과 계산
+        int startingChips = 5;
+        int startingValue = startingChips; // Chip1 기준
+        double finalValue = gameState.availableChips.GetTotalValue();
+        double totalEarned = finalValue - startingValue;
+        
+        summary += $"<color=#FFFFFF><b>Final Result:</b></color>\n";
+        summary += $"<color=#AAFFAA>Starting Chips: <sprite=0> x{startingChips} (${startingValue})</color>\n";
+        
+        // 최종 칩 구성 표시 (Sprite로)
+        summary += $"<color=#AAFFAA>Final Chips: {gameState.availableChips.ToSpriteString()}</color>\n";
+        
+        // 각 칩 타입별 개수 표시
+        foreach (ChipType chipType in ChipTypeCache.AllTypesReversed)
         {
-            case BetType.Number: return "Number";
-            case BetType.Color: return "Color";
-            case BetType.OddEven: return "Odd/Even";
-            case BetType.HighLow: return "High/Low";
-            case BetType.Dozen: return "Dozen";
-            case BetType.Column: return "Column";
-            default: return betType.ToString();
+            int count = gameState.availableChips[chipType];
+            if (count > 0)
+            {
+                string chipSprite = ChipTypeCache.ToSpriteTag(chipType);
+                summary += $"  <color=#CCCCCC>• {chipSprite} x{count}</color>\n";
+            }
         }
+        
+        summary += $"<color=#AAFFAA>Total Value: <b>${finalValue:F0}</b></color>\n";
+        
+        if (totalEarned > 0)
+            summary += $"<color=#00FF00><size=22><b>Total Earned: +${totalEarned:F0}</b></size></color>\n\n";
+        else if (totalEarned < 0)
+            summary += $"<color=#FF0000><size=22><b>Total Lost: ${totalEarned:F0}</b></size></color>\n\n";
+        else
+            summary += $"<color=#FFFF00><size=22><b>Break Even: $0</b></size></color>\n\n";
+        
+        // 턴별 내역
+        summary += $"<color=#00FFFF><b>═══ Turn History ═══</b></color>\n\n";
+        
+        for (int i = 0; i < gameState.turnHistory.Count; i++)
+        {
+            TurnData turn = gameState.turnHistory[i];
+            
+            summary += $"<color=#FFFF00><b>Turn {turn.turnNumber}:</b></color>\n";
+            summary += $"<color=#AAAAAA>Win: Spot #{turn.winningSpotID} (Num {turn.winningNumber})</color>\n";
+            
+            // 배팅 내역
+            if (turn.bets.Count > 0)
+            {
+                summary += $"<color=#CCCCCC>Bets ({turn.bets.Count}):</color>\n";
+                
+                foreach (var bet in turn.bets)
+                {
+                    string betDetail = GetBetDetail(bet);
+                    summary += $"  • {betDetail}\n";
+                }
+            }
+            
+            // 수익
+            if (turn.totalPayout > 0)
+                summary += $"<color=#00FF00>Payout: +{turn.totalPayout:F0}</color>\n";
+            else
+                summary += $"<color=#FF6666>Lost all bets</color>\n";
+            
+            summary += "\n";
+        }
+        
+        return summary;
     }
     
     /// <summary>
@@ -501,40 +502,8 @@ public class GameUI : UIScreen
     {
         string betInfo = "";
         
-        switch (bet.betType)
-        {
-            case BetType.Number:
-                betInfo = $"Number {bet.targetValue}";
-                break;
-                
-            case BetType.Color:
-                string colorName = bet.targetValue == 0 ? "Red" : "Black";
-                betInfo = $"Color: {colorName}";
-                break;
-                
-            case BetType.OddEven:
-                string oddEven = bet.targetValue == 0 ? "Odd" : "Even";
-                betInfo = $"{oddEven}";
-                break;
-                
-            case BetType.HighLow:
-                string highLow = bet.targetValue == 0 ? "Low(1-18)" : "High(19-36)";
-                betInfo = $"{highLow}";
-                break;
-                
-            case BetType.Dozen:
-                string dozenRange = bet.targetValue == 1 ? "1-12" : bet.targetValue == 2 ? "13-24" : "25-36";
-                betInfo = $"Dozen {bet.targetValue} ({dozenRange})";
-                break;
-                
-            case BetType.Column:
-                betInfo = $"Column {bet.targetValue}";
-                break;
-                
-            default:
-                betInfo = $"{bet.betType} ({bet.targetValue})";
-                break;
-        }
+        // BetTypeHelper 사용
+        betInfo = BetTypeHelper.GetBetDisplayName(bet.betType, bet.targetValue);
         
         // 칩 정보 추가
         betInfo += $" - {bet.chips.ToSpriteString()}";
@@ -555,19 +524,18 @@ public class GameUI : UIScreen
             mTMPText["GameOverText"].text = $"Game Over!\nTotal Earned: ${totalEarned:F2}";
             mGameObject["GameOverText"].SetActive(true);
         }
-        
-        Debug.Log($"[GameUI] Game Over: ${totalEarned:F2}");
     }
     
     private void ShowGameReset(int maxTurns)
     {
         Debug.Log($"<color=cyan>[GameUI] ═══════════ GAME RESET ═══════════</color>");
         
+        
         if (mTMPText.ContainsKey("ResultText"))
         {
             string resetMessage = "";
             resetMessage += $"<color=#00FFFF><b>═══════════════════════</b></color>\n";
-            resetMessage += $"<color=#FFFF00><size=24><b>- GAME RESET -</b></size></color>\n";
+            resetMessage += $"<color=#FFFF00><size=24><b>- GAME START -</b></size></color>\n";
             resetMessage += $"<color=#00FFFF><b>═══════════════════════</b></color>\n\n";
             resetMessage += $"<color=#FFFFFF>New game started!</color>\n";
             resetMessage += $"<color=#AAFFAA>• Starting chips: <b><sprite=0> x5</b></color>\n";
@@ -575,9 +543,8 @@ public class GameUI : UIScreen
             resetMessage += $"<color=#FFAA44>Place your bet and spin!</color>";
             
             mTMPText["ResultText"].text = resetMessage;
+            
         }
-        
-        Debug.Log($"<color=lime>[GameUI] Game reset message displayed (maxTurns: {maxTurns})</color>");
     }
     
     /// <summary>

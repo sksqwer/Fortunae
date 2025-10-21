@@ -167,22 +167,22 @@ public class SpotInfoPopup : UIScreen
             case ItemType.SpotItem:
                 switch (record.spotItemType)
                 {
-                    case SpotItemType.PlusSpot: return "P";
-                    case SpotItemType.CopySpot: return "C";
-                    case SpotItemType.UpgradedMultiSpot: return "M";
-                    default: return "S";
+                    case SpotItemType.PlusSpot: return "PlusSpot";
+                    case SpotItemType.CopySpot: return "CopySpot";
+                    case SpotItemType.UpgradedMultiSpot: return "UpgradedMultiSpot";
+                    default: return "SpotItem";
                 }
             
             case ItemType.CharmItem:
                 switch (record.charmType)
                 {
-                    case CharmType.Death: return "D";
-                    case CharmType.Chameleon: return "Ch";
-                    default: return "Ch";
+                    case CharmType.Death: return "Death";
+                    case CharmType.Chameleon: return "Chameleon";
+                    default: return "CharmItem";
                 }
             
             case ItemType.ChipItem:
-                return "HW";
+                return "ChipItem";
             
             default:
                 return "?";

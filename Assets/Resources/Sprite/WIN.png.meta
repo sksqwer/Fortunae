@@ -1,0 +1,2132 @@
+fileFormatVersion: 2
+guid: 2df7c92bfcaa42441a7ce7d3864d6438
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -6833090754897418865
+    second: WIN-Photoroom_0
+  - first:
+      213: -3394758744013194519
+    second: WIN-Photoroom_1
+  - first:
+      213: 2889839829315227362
+    second: WIN-Photoroom_2
+  - first:
+      213: 7043570427384388641
+    second: WIN-Photoroom_3
+  - first:
+      213: -688823180384887825
+    second: WIN-Photoroom_4
+  - first:
+      213: -397316002393093881
+    second: WIN-Photoroom_5
+  - first:
+      213: -3759321280723296271
+    second: WIN-Photoroom_6
+  - first:
+      213: 308896466635128027
+    second: WIN-Photoroom_7
+  - first:
+      213: 8178534456327864627
+    second: WIN-Photoroom_8
+  - first:
+      213: -5537497180851039380
+    second: WIN-Photoroom_9
+  - first:
+      213: -8712910758553747802
+    second: WIN-Photoroom_10
+  - first:
+      213: 3954752379484883739
+    second: WIN-Photoroom_11
+  - first:
+      213: -7570224686634300794
+    second: WIN-Photoroom_12
+  - first:
+      213: -8243143166569020722
+    second: WIN-Photoroom_13
+  - first:
+      213: 3272752253963135325
+    second: WIN-Photoroom_14
+  - first:
+      213: -4119441636929291027
+    second: WIN-Photoroom_15
+  - first:
+      213: -7760422218385334633
+    second: WIN-Photoroom_16
+  - first:
+      213: 1338872832257937872
+    second: WIN-Photoroom_17
+  - first:
+      213: 7760523460173546765
+    second: WIN-Photoroom_18
+  - first:
+      213: 3572129923544194164
+    second: WIN-Photoroom_19
+  - first:
+      213: -5658036639418062618
+    second: WIN-Photoroom_20
+  - first:
+      213: 6754737057785201078
+    second: WIN-Photoroom_21
+  - first:
+      213: 2568234175605664685
+    second: WIN-Photoroom_22
+  - first:
+      213: -2462968183254140634
+    second: WIN-Photoroom_23
+  - first:
+      213: -5208693400058110393
+    second: WIN-Photoroom_24
+  - first:
+      213: -1460772276924733230
+    second: WIN-Photoroom_25
+  - first:
+      213: -7247106214148571395
+    second: WIN-Photoroom_26
+  - first:
+      213: 672311299737606963
+    second: WIN-Photoroom_27
+  - first:
+      213: 8600470210239792680
+    second: WIN-Photoroom_28
+  - first:
+      213: 3361710594561588972
+    second: WIN-Photoroom_29
+  - first:
+      213: 3483187754679254826
+    second: WIN-Photoroom_30
+  - first:
+      213: 3992583494762193841
+    second: WIN-Photoroom_31
+  - first:
+      213: 932323888312694627
+    second: WIN-Photoroom_32
+  - first:
+      213: 8700296641750341091
+    second: WIN-Photoroom_33
+  - first:
+      213: -7904619698841266901
+    second: WIN-Photoroom_34
+  - first:
+      213: 9138137977915133845
+    second: WIN-Photoroom_35
+  - first:
+      213: 1628569775430355164
+    second: WIN-Photoroom_36
+  - first:
+      213: 5874985132631276130
+    second: WIN-Photoroom_37
+  - first:
+      213: 1056507061737476275
+    second: WIN-Photoroom_38
+  - first:
+      213: -8789894897348904418
+    second: WIN-Photoroom_39
+  - first:
+      213: -7006362447243916710
+    second: WIN-Photoroom_40
+  - first:
+      213: -7647486147594497136
+    second: WIN-Photoroom_41
+  - first:
+      213: -4851973020002869651
+    second: WIN-Photoroom_42
+  - first:
+      213: -3304263655590621233
+    second: WIN-Photoroom_43
+  - first:
+      213: 2260405596420909512
+    second: WIN-Photoroom_44
+  - first:
+      213: -6734817726357252831
+    second: WIN-Photoroom_45
+  - first:
+      213: 1365090355594487431
+    second: WIN-Photoroom_46
+  - first:
+      213: 194366491522817660
+    second: WIN-Photoroom_47
+  - first:
+      213: -6014553471357273790
+    second: WIN-Photoroom_48
+  - first:
+      213: -1604654403094877655
+    second: WIN-Photoroom_49
+  - first:
+      213: -3147348716948212789
+    second: WIN-Photoroom_50
+  - first:
+      213: -2837020702931785869
+    second: WIN-Photoroom_51
+  - first:
+      213: -5721013517984893965
+    second: WIN-Photoroom_52
+  - first:
+      213: 2009427095121670556
+    second: WIN-Photoroom_53
+  - first:
+      213: 2599059539920308045
+    second: WIN-Photoroom_54
+  - first:
+      213: -4279013800650288345
+    second: WIN-Photoroom_55
+  - first:
+      213: 1341023896806922722
+    second: WIN-Photoroom_56
+  - first:
+      213: -687328220883364058
+    second: WIN-Photoroom_57
+  - first:
+      213: 4983682913263418685
+    second: WIN-Photoroom_58
+  - first:
+      213: -8113405867862242837
+    second: WIN-Photoroom_59
+  - first:
+      213: -8640253153665773673
+    second: WIN-Photoroom_60
+  - first:
+      213: 5872742400288804454
+    second: WIN-Photoroom_61
+  - first:
+      213: 4648041553512813529
+    second: WIN-Photoroom_62
+  - first:
+      213: 7329943890468233251
+    second: WIN-Photoroom_63
+  - first:
+      213: 3802113537789541820
+    second: WIN-Photoroom_64
+  - first:
+      213: -1490586396577807200
+    second: WIN-Photoroom_65
+  - first:
+      213: 8615358009320929622
+    second: WIN-Photoroom_66
+  - first:
+      213: 3524321707726239857
+    second: WIN-Photoroom_67
+  - first:
+      213: 1578207891068444520
+    second: WIN-Photoroom_68
+  - first:
+      213: 8814564444981937942
+    second: WIN-Photoroom_69
+  - first:
+      213: -4043318033132870072
+    second: WIN-Photoroom_70
+  - first:
+      213: -495514979684375945
+    second: WIN-Photoroom_71
+  - first:
+      213: -5787480842834223295
+    second: WIN-Photoroom_72
+  - first:
+      213: -3236062401080981365
+    second: WIN-Photoroom_73
+  - first:
+      213: -259336352223244842
+    second: WIN-Photoroom_74
+  - first:
+      213: -3787728524014975387
+    second: WIN-Photoroom_75
+  - first:
+      213: -3555522257722417849
+    second: WIN-Photoroom_76
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 1
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: WIN-Photoroom_0
+      rect:
+        serializedVersion: 2
+        x: 419
+        y: 377
+        width: 7
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f856554692cfb21a0800000000000000
+      internalID: -6833090754897418865
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WIN-Photoroom_1
+      rect:
+        serializedVersion: 2
+        x: 267
+        y: 361
+        width: 7
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9ea31f498e463e0d0800000000000000
+      internalID: -3394758744013194519
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WIN-Photoroom_2
+      rect:
+        serializedVersion: 2
+        x: 302
+        y: 347
+        width: 17
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2ee0c148306ca1820800000000000000
+      internalID: 2889839829315227362
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WIN-Photoroom_3
+      rect:
+        serializedVersion: 2
+        x: 323
+        y: 358
+        width: 15
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 12c51ba3cf9cfb160800000000000000
+      internalID: 7043570427384388641
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WIN-Photoroom_4
+      rect:
+        serializedVersion: 2
+        x: 414
+        y: 356
+        width: 8
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: feb9a1c87fec076f0800000000000000
+      internalID: -688823180384887825
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WIN-Photoroom_5
+      rect:
+        serializedVersion: 2
+        x: 587
+        y: 352
+        width: 9
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 70908cd63337c7af0800000000000000
+      internalID: -397316002393093881
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WIN-Photoroom_6
+      rect:
+        serializedVersion: 2
+        x: 640
+        y: 359
+        width: 14
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1ffdbe1863534dbc0800000000000000
+      internalID: -3759321280723296271
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WIN-Photoroom_7
+      rect:
+        serializedVersion: 2
+        x: 219
+        y: 353
+        width: 7
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bdcf82623bb694400800000000000000
+      internalID: 308896466635128027
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WIN-Photoroom_8
+      rect:
+        serializedVersion: 2
+        x: 604
+        y: 346
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 33107bc91cdff7170800000000000000
+      internalID: 8178534456327864627
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WIN-Photoroom_9
+      rect:
+        serializedVersion: 2
+        x: 665
+        y: 350
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c6395a627abd623b0800000000000000
+      internalID: -5537497180851039380
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WIN-Photoroom_10
+      rect:
+        serializedVersion: 2
+        x: 339
+        y: 336
+        width: 7
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6ae79bcf3d5851780800000000000000
+      internalID: -8712910758553747802
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WIN-Photoroom_11
+      rect:
+        serializedVersion: 2
+        x: 345
+        y: 333
+        width: 16
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b1bc3d1065a12e630800000000000000
+      internalID: 3954752379484883739
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WIN-Photoroom_12
+      rect:
+        serializedVersion: 2
+        x: 447
+        y: 338
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 68a054b91c821f690800000000000000
+      internalID: -7570224686634300794
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WIN-Photoroom_13
+      rect:
+        serializedVersion: 2
+        x: 54
+        y: 300
+        width: 44
+        height: 33
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ec207fbc6f87a9d80800000000000000
+      internalID: -8243143166569020722
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WIN-Photoroom_14
+      rect:
+        serializedVersion: 2
+        x: 187
+        y: 329
+        width: 7
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d59e45fc5d62b6d20800000000000000
+      internalID: 3272752253963135325
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WIN-Photoroom_15
+      rect:
+        serializedVersion: 2
+        x: 432
+        y: 322
+        width: 13
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dec30ed28adc4d6c0800000000000000
+      internalID: -4119441636929291027
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WIN-Photoroom_16
+      rect:
+        serializedVersion: 2
+        x: 175
+        y: 312
+        width: 13
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 79ed71edb117d4490800000000000000
+      internalID: -7760422218385334633
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WIN-Photoroom_17
+      rect:
+        serializedVersion: 2
+        x: 245
+        y: 315
+        width: 15
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0d1d72e4fb1a49210800000000000000
+      internalID: 1338872832257937872
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WIN-Photoroom_18
+      rect:
+        serializedVersion: 2
+        x: 495
+        y: 318
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d05cab258fae2bb60800000000000000
+      internalID: 7760523460173546765
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WIN-Photoroom_19
+      rect:
+        serializedVersion: 2
+        x: 566
+        y: 300
+        width: 17
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 47c15605d31c29130800000000000000
+      internalID: 3572129923544194164
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WIN-Photoroom_20
+      rect:
+        serializedVersion: 2
+        x: 345
+        y: 281
+        width: 27
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6e8675d67ad9a71b0800000000000000
+      internalID: -5658036639418062618
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WIN-Photoroom_21
+      rect:
+        serializedVersion: 2
+        x: 519
+        y: 302
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6b14470e095adbd50800000000000000
+      internalID: 6754737057785201078
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WIN-Photoroom_22
+      rect:
+        serializedVersion: 2
+        x: 526
+        y: 308
+        width: 7
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dab6ef8206334a320800000000000000
+      internalID: 2568234175605664685
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WIN-Photoroom_23
+      rect:
+        serializedVersion: 2
+        x: 161
+        y: 299
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6293c089c77c1ddd0800000000000000
+      internalID: -2462968183254140634
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WIN-Photoroom_24
+      rect:
+        serializedVersion: 2
+        x: 226
+        y: 300
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 74e5d9113f007b7b0800000000000000
+      internalID: -5208693400058110393
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WIN-Photoroom_25
+      rect:
+        serializedVersion: 2
+        x: 498
+        y: 301
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2d8a9288a5b4abbe0800000000000000
+      internalID: -1460772276924733230
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WIN-Photoroom_26
+      rect:
+        serializedVersion: 2
+        x: 607
+        y: 298
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dfef5288b4b1d6b90800000000000000
+      internalID: -7247106214148571395
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WIN-Photoroom_27
+      rect:
+        serializedVersion: 2
+        x: 135
+        y: 293
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 33b5757a097845900800000000000000
+      internalID: 672311299737606963
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WIN-Photoroom_28
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 285
+        width: 9
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8260ca6c6120b5770800000000000000
+      internalID: 8600470210239792680
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WIN-Photoroom_29
+      rect:
+        serializedVersion: 2
+        x: 264
+        y: 281
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ceeb28289f137ae20800000000000000
+      internalID: 3361710594561588972
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WIN-Photoroom_30
+      rect:
+        serializedVersion: 2
+        x: 558
+        y: 275
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a2fb5a3eec4c65030800000000000000
+      internalID: 3483187754679254826
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WIN-Photoroom_31
+      rect:
+        serializedVersion: 2
+        x: 81
+        y: 252
+        width: 8
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1b3636de881886730800000000000000
+      internalID: 3992583494762193841
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WIN-Photoroom_32
+      rect:
+        serializedVersion: 2
+        x: 136
+        y: 135
+        width: 186
+        height: 135
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3673d7203a740fc00800000000000000
+      internalID: 932323888312694627
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WIN-Photoroom_33
+      rect:
+        serializedVersion: 2
+        x: 327
+        y: 60
+        width: 40
+        height: 210
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3e59d0413b9adb870800000000000000
+      internalID: 8700296641750341091
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WIN-Photoroom_34
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 135
+        width: 124
+        height: 135
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b25d20ea3462d4290800000000000000
+      internalID: -7904619698841266901
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WIN-Photoroom_35
+      rect:
+        serializedVersion: 2
+        x: 519
+        y: 177
+        width: 48
+        height: 93
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 59f4322331031de70800000000000000
+      internalID: 9138137977915133845
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WIN-Photoroom_36
+      rect:
+        serializedVersion: 2
+        x: 567
+        y: 255
+        width: 12
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cd8c67c0597d99610800000000000000
+      internalID: 1628569775430355164
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WIN-Photoroom_37
+      rect:
+        serializedVersion: 2
+        x: 601
+        y: 260
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 26a3033e9d3288150800000000000000
+      internalID: 5874985132631276130
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WIN-Photoroom_38
+      rect:
+        serializedVersion: 2
+        x: 639
+        y: 259
+        width: 7
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3b0dd85339779ae00800000000000000
+      internalID: 1056507061737476275
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WIN-Photoroom_39
+      rect:
+        serializedVersion: 2
+        x: 114
+        y: 217
+        width: 16
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e1aff766925040680800000000000000
+      internalID: -8789894897348904418
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WIN-Photoroom_40
+      rect:
+        serializedVersion: 2
+        x: 594
+        y: 227
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a5ac36cb97664ce90800000000000000
+      internalID: -7006362447243916710
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WIN-Photoroom_41
+      rect:
+        serializedVersion: 2
+        x: 637
+        y: 225
+        width: 12
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 093d8ebeddbaed590800000000000000
+      internalID: -7647486147594497136
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WIN-Photoroom_42
+      rect:
+        serializedVersion: 2
+        x: 52
+        y: 220
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d6e13f2ce345aacb0800000000000000
+      internalID: -4851973020002869651
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WIN-Photoroom_43
+      rect:
+        serializedVersion: 2
+        x: 647
+        y: 200
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fcf894446b5e422d0800000000000000
+      internalID: -3304263655590621233
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WIN-Photoroom_44
+      rect:
+        serializedVersion: 2
+        x: 44
+        y: 190
+        width: 7
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8c929fee9e29e5f10800000000000000
+      internalID: 2260405596420909512
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WIN-Photoroom_45
+      rect:
+        serializedVersion: 2
+        x: 122
+        y: 183
+        width: 11
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 125d871e5fe1982a0800000000000000
+      internalID: -6734817726357252831
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WIN-Photoroom_46
+      rect:
+        serializedVersion: 2
+        x: 628
+        y: 185
+        width: 9
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 78665832276c1f210800000000000000
+      internalID: 1365090355594487431
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WIN-Photoroom_47
+      rect:
+        serializedVersion: 2
+        x: 11
+        y: 161
+        width: 12
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c7ed4735b4782b200800000000000000
+      internalID: 194366491522817660
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WIN-Photoroom_48
+      rect:
+        serializedVersion: 2
+        x: 127
+        y: 175
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2493829fb73088ca0800000000000000
+      internalID: -6014553471357273790
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WIN-Photoroom_49
+      rect:
+        serializedVersion: 2
+        x: 519
+        y: 133
+        width: 51
+        height: 43
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 92a634c725f1bb9e0800000000000000
+      internalID: -1604654403094877655
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WIN-Photoroom_50
+      rect:
+        serializedVersion: 2
+        x: 79
+        y: 144
+        width: 15
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bc3350e640f5254d0800000000000000
+      internalID: -3147348716948212789
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WIN-Photoroom_51
+      rect:
+        serializedVersion: 2
+        x: 95
+        y: 151
+        width: 16
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 377625da3b0e0a8d0800000000000000
+      internalID: -2837020702931785869
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WIN-Photoroom_52
+      rect:
+        serializedVersion: 2
+        x: 42
+        y: 133
+        width: 12
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3f37d414480ea90b0800000000000000
+      internalID: -5721013517984893965
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WIN-Photoroom_53
+      rect:
+        serializedVersion: 2
+        x: 62
+        y: 126
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c91b5ceeb4be2eb10800000000000000
+      internalID: 2009427095121670556
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WIN-Photoroom_54
+      rect:
+        serializedVersion: 2
+        x: 643
+        y: 129
+        width: 8
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d474a0391e6b11420800000000000000
+      internalID: 2599059539920308045
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WIN-Photoroom_55
+      rect:
+        serializedVersion: 2
+        x: 168
+        y: 114
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 723de379e93ed94c0800000000000000
+      internalID: -4279013800650288345
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WIN-Photoroom_56
+      rect:
+        serializedVersion: 2
+        x: 216
+        y: 117
+        width: 9
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2e99c7c01264c9210800000000000000
+      internalID: 1341023896806922722
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WIN-Photoroom_57
+      rect:
+        serializedVersion: 2
+        x: 490
+        y: 58
+        width: 14
+        height: 60
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 627552eef9e1676f0800000000000000
+      internalID: -687328220883364058
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WIN-Photoroom_58
+      rect:
+        serializedVersion: 2
+        x: 511
+        y: 118
+        width: 8
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d3dff367439992540800000000000000
+      internalID: 4983682913263418685
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WIN-Photoroom_59
+      rect:
+        serializedVersion: 2
+        x: 576
+        y: 115
+        width: 8
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: be9408f8954676f80800000000000000
+      internalID: -8113405867862242837
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WIN-Photoroom_60
+      rect:
+        serializedVersion: 2
+        x: 186
+        y: 98
+        width: 12
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 79f8d46e887a71880800000000000000
+      internalID: -8640253153665773673
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WIN-Photoroom_61
+      rect:
+        serializedVersion: 2
+        x: 552
+        y: 92
+        width: 8
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 66ec692191c208150800000000000000
+      internalID: 5872742400288804454
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WIN-Photoroom_62
+      rect:
+        serializedVersion: 2
+        x: 569
+        y: 98
+        width: 14
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9d3d262aa29218040800000000000000
+      internalID: 4648041553512813529
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WIN-Photoroom_63
+      rect:
+        serializedVersion: 2
+        x: 602
+        y: 108
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 32067e6f12139b560800000000000000
+      internalID: 7329943890468233251
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WIN-Photoroom_64
+      rect:
+        serializedVersion: 2
+        x: 121
+        y: 98
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cbd36af3e12d3c430800000000000000
+      internalID: 3802113537789541820
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WIN-Photoroom_65
+      rect:
+        serializedVersion: 2
+        x: 525
+        y: 89
+        width: 8
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0a443fcd19f505be0800000000000000
+      internalID: -1490586396577807200
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WIN-Photoroom_66
+      rect:
+        serializedVersion: 2
+        x: 230
+        y: 71
+        width: 18
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 659f36e9676ef8770800000000000000
+      internalID: 8615358009320929622
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WIN-Photoroom_67
+      rect:
+        serializedVersion: 2
+        x: 633
+        y: 76
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1787837abe7e8e030800000000000000
+      internalID: 3524321707726239857
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WIN-Photoroom_68
+      rect:
+        serializedVersion: 2
+        x: 156
+        y: 63
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 86f5ad817bbe6e510800000000000000
+      internalID: 1578207891068444520
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WIN-Photoroom_69
+      rect:
+        serializedVersion: 2
+        x: 220
+        y: 58
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 617cfe049af935a70800000000000000
+      internalID: 8814564444981937942
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WIN-Photoroom_70
+      rect:
+        serializedVersion: 2
+        x: 422
+        y: 36
+        width: 8
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8462f29dbaf33e7c0800000000000000
+      internalID: -4043318033132870072
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WIN-Photoroom_71
+      rect:
+        serializedVersion: 2
+        x: 165
+        y: 44
+        width: 12
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 772270750c39f19f0800000000000000
+      internalID: -495514979684375945
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WIN-Photoroom_72
+      rect:
+        serializedVersion: 2
+        x: 259
+        y: 50
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 14fdc7a36dcbeafa0800000000000000
+      internalID: -5787480842834223295
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WIN-Photoroom_73
+      rect:
+        serializedVersion: 2
+        x: 58
+        y: 35
+        width: 9
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b88029044623713d0800000000000000
+      internalID: -3236062401080981365
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WIN-Photoroom_74
+      rect:
+        serializedVersion: 2
+        x: 453
+        y: 42
+        width: 8
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6dd436036f6a66cf0800000000000000
+      internalID: -259336352223244842
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WIN-Photoroom_75
+      rect:
+        serializedVersion: 2
+        x: 545
+        y: 30
+        width: 11
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5660974c9f84f6bc0800000000000000
+      internalID: -3787728524014975387
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WIN-Photoroom_76
+      rect:
+        serializedVersion: 2
+        x: 457
+        y: 24
+        width: 14
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 74dd575385f38aec0800000000000000
+      internalID: -3555522257722417849
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      WIN-Photoroom_0: -6833090754897418865
+      WIN-Photoroom_1: -3394758744013194519
+      WIN-Photoroom_10: -8712910758553747802
+      WIN-Photoroom_11: 3954752379484883739
+      WIN-Photoroom_12: -7570224686634300794
+      WIN-Photoroom_13: -8243143166569020722
+      WIN-Photoroom_14: 3272752253963135325
+      WIN-Photoroom_15: -4119441636929291027
+      WIN-Photoroom_16: -7760422218385334633
+      WIN-Photoroom_17: 1338872832257937872
+      WIN-Photoroom_18: 7760523460173546765
+      WIN-Photoroom_19: 3572129923544194164
+      WIN-Photoroom_2: 2889839829315227362
+      WIN-Photoroom_20: -5658036639418062618
+      WIN-Photoroom_21: 6754737057785201078
+      WIN-Photoroom_22: 2568234175605664685
+      WIN-Photoroom_23: -2462968183254140634
+      WIN-Photoroom_24: -5208693400058110393
+      WIN-Photoroom_25: -1460772276924733230
+      WIN-Photoroom_26: -7247106214148571395
+      WIN-Photoroom_27: 672311299737606963
+      WIN-Photoroom_28: 8600470210239792680
+      WIN-Photoroom_29: 3361710594561588972
+      WIN-Photoroom_3: 7043570427384388641
+      WIN-Photoroom_30: 3483187754679254826
+      WIN-Photoroom_31: 3992583494762193841
+      WIN-Photoroom_32: 932323888312694627
+      WIN-Photoroom_33: 8700296641750341091
+      WIN-Photoroom_34: -7904619698841266901
+      WIN-Photoroom_35: 9138137977915133845
+      WIN-Photoroom_36: 1628569775430355164
+      WIN-Photoroom_37: 5874985132631276130
+      WIN-Photoroom_38: 1056507061737476275
+      WIN-Photoroom_39: -8789894897348904418
+      WIN-Photoroom_4: -688823180384887825
+      WIN-Photoroom_40: -7006362447243916710
+      WIN-Photoroom_41: -7647486147594497136
+      WIN-Photoroom_42: -4851973020002869651
+      WIN-Photoroom_43: -3304263655590621233
+      WIN-Photoroom_44: 2260405596420909512
+      WIN-Photoroom_45: -6734817726357252831
+      WIN-Photoroom_46: 1365090355594487431
+      WIN-Photoroom_47: 194366491522817660
+      WIN-Photoroom_48: -6014553471357273790
+      WIN-Photoroom_49: -1604654403094877655
+      WIN-Photoroom_5: -397316002393093881
+      WIN-Photoroom_50: -3147348716948212789
+      WIN-Photoroom_51: -2837020702931785869
+      WIN-Photoroom_52: -5721013517984893965
+      WIN-Photoroom_53: 2009427095121670556
+      WIN-Photoroom_54: 2599059539920308045
+      WIN-Photoroom_55: -4279013800650288345
+      WIN-Photoroom_56: 1341023896806922722
+      WIN-Photoroom_57: -687328220883364058
+      WIN-Photoroom_58: 4983682913263418685
+      WIN-Photoroom_59: -8113405867862242837
+      WIN-Photoroom_6: -3759321280723296271
+      WIN-Photoroom_60: -8640253153665773673
+      WIN-Photoroom_61: 5872742400288804454
+      WIN-Photoroom_62: 4648041553512813529
+      WIN-Photoroom_63: 7329943890468233251
+      WIN-Photoroom_64: 3802113537789541820
+      WIN-Photoroom_65: -1490586396577807200
+      WIN-Photoroom_66: 8615358009320929622
+      WIN-Photoroom_67: 3524321707726239857
+      WIN-Photoroom_68: 1578207891068444520
+      WIN-Photoroom_69: 8814564444981937942
+      WIN-Photoroom_7: 308896466635128027
+      WIN-Photoroom_70: -4043318033132870072
+      WIN-Photoroom_71: -495514979684375945
+      WIN-Photoroom_72: -5787480842834223295
+      WIN-Photoroom_73: -3236062401080981365
+      WIN-Photoroom_74: -259336352223244842
+      WIN-Photoroom_75: -3787728524014975387
+      WIN-Photoroom_76: -3555522257722417849
+      WIN-Photoroom_8: 8178534456327864627
+      WIN-Photoroom_9: -5537497180851039380
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

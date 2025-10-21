@@ -49,45 +49,7 @@ public class GameState
         {
             availableChips.Clear();
             availableChips.AddChip(ChipType.Chip1, 5);
-            availableChips.AddChip(ChipType.Chip5, 5);
-            availableChips.AddChip(ChipType.Chip10, 5);
-            availableChips.AddChip(ChipType.Chip50, 5);
-            Debug.Log($"[GameState] First turn - initial chips granted: {availableChips.ToString()}");
         }
-        else
-        {
-            Debug.Log($"[GameState] Turn {currentTurn} - chips carried over: {availableChips.ToString()}");
-        }
-    }
-
-    // 턴 시작 시 스팟 리셋 (Active 아이템만)
-    public void ResetSpotsForNewTurn()
-    {
-        Debug.Log($"[GameState] ResetSpotsForNewTurn called - Turn {currentTurn}");
-
-        int spotCount = 0;
-        foreach (var spot in spots.Values)
-        {
-            spot.ResetForNewTurn();
-            spotCount++;
-        }
-
-        Debug.Log($"[GameState] Reset {spotCount} spots for new turn");
-    }
-
-    // 새 게임 시작 시 완전 리셋
-    public void ResetAllSpots()
-    {
-        Debug.Log($"[GameState] ResetAllSpots called");
-
-        int spotCount = 0;
-        foreach (var spot in spots.Values)
-        {
-            spot.ResetAll();
-            spotCount++;
-        }
-
-        Debug.Log($"[GameState] Fully reset {spotCount} spots");
     }
 
     // 아이템 ID로 아이템 가져오기
@@ -152,6 +114,33 @@ public class GameState
         }
 
         return inventoryText;
+    }
+    
+    /// <summary>
+    /// 게임 리셋 (전체 게임 상태 초기화)
+    /// </summary>
+    public void ResetGame()
+    {
+        // 칩 초기화
+        availableChips = new ChipCollection(ChipType.Chip1, 5);
+        
+        // 턴 초기화
+        currentTurn = 0;
+        
+        // 배팅 초기화
+        currentBets.Clear();
+        
+        // 턴 기록 초기화
+        turnHistory.Clear();
+        
+        // 모든 Spot 초기화
+        foreach (var spot in spots.Values)
+        {
+            spot.currentNumber = spot.SpotID;
+            spot.currentColor = spot.OriginalColor;
+            spot.isDestroyed = false;
+            spot.appliedRecords.Clear();
+        }
     }
 }
 

@@ -401,21 +401,6 @@ public static class SpotCalculator
         return true;
     }
     
-    /// <summary>
-    /// Wing 아이템 적용 (BetData에 추가)
-    /// </summary>
-    public static bool ApplyChipItem(ItemData item, BetData bet)
-    {
-        if (bet.isAppliedItem(item.chipItemType))
-        {
-            Debug.LogWarning($"[SpotCalculator] Wing already applied to this bet!");
-            return false;
-        }
-        
-        bet.appliedItems.Add(item);
-        Debug.Log($"[SpotCalculator] Wing applied to bet: {bet.betType} {bet.targetValue}");
-        return true;
-    }
     
     /// <summary>
     /// 숫자/색상 변경 시 트리거 (Chameleon 등 확장 가능)
@@ -424,13 +409,13 @@ public static class SpotCalculator
     {
         if (!gameState.spots.ContainsKey(changedSpotID))
             return;
-        
+
         Spot changedSpot = gameState.spots[changedSpotID];
-        
+
         // 1. Chameleon 트리거 (Charm은 패시브라서 count 상관없이 보유만 하면 됨)
         ItemData chameleonCharm = gameState.GetItemByID("CHAMELEON_CHARM");
         Debug.Log($"[SpotCalculator] TriggerOnNumberChanged: Spot {changedSpotID}, Chameleon={chameleonCharm?.itemID}, Count={chameleonCharm?.count}");
-        
+
         if (chameleonCharm != null)
         {
             Debug.Log($"[SpotCalculator] Chameleon detected! Triggering effect on Spot {changedSpotID}");
@@ -440,7 +425,7 @@ public static class SpotCalculator
         {
             Debug.Log($"[SpotCalculator] No Chameleon charm found in inventory");
         }
-        
+
         // 숫자 변경 후 항상 재계산 (확률/배당 업데이트)
         Debug.Log($"[SpotCalculator] Recalculating after number change...");
         RecalculateAll(gameState);

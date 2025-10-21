@@ -10,6 +10,8 @@ using GB;
 /// </summary>
 public class ChipSelectionPopup : UIScreen
 {       
+    private GameState currentGameState; // 현재 게임 상태 저장
+    
     private void Awake()
     {
         Initialize();
@@ -23,6 +25,23 @@ public class ChipSelectionPopup : UIScreen
         SetupItemButtons(); // 버튼 이벤트 초기화 (한 번만)
 
         Debug.Log("[ChipSelectionPopup] ChipSelectionPopup Initialized");
+    }
+    
+    public override void ViewQuick(string key, IOData data)
+    {
+        base.ViewQuick(key, data);
+        
+        switch (key)
+        {
+            case Game.Keys.UPDATE_INVENTORY:
+                // 인벤토리가 업데이트되면 아이템 버튼 새로고침
+                if (data is OData<GameState> inventoryData)
+                {
+                    currentGameState = inventoryData.Get();
+                    RefreshItemButtons(currentGameState);
+                }
+                break;
+        }
     }
 
     [Header("UI Elements")]
@@ -40,6 +59,7 @@ public class ChipSelectionPopup : UIScreen
     [SerializeField] private GameObject chipTypePanel; // 칩 타입 선택 패널 (있으면 표시)
     
     [Header("Item Buttons")]
+    [SerializeField] private GameObject itemButtonsPanel; // 아이템 버튼들을 그룹으로 관리하는 패널
     [SerializeField] private Button plusSpotButton;
     [SerializeField] private Button copySpotButton;
     [SerializeField] private Button upgradedMultiSpotButton;
@@ -86,11 +106,12 @@ public class ChipSelectionPopup : UIScreen
         // 칩 컬렉션 복사 (원본 보호)
         this.objectID = chipData.objectID;
         this.betType = chipData.betType;
+        this.currentGameState = chipData.gameState; // 게임 상태 저장
         availableChips = chipData.gameState.availableChips.Clone();
         onConfirmWithType = chipData.callback;
 
         if (titleText != null)
-            titleText.text = GetPopupTitle();
+            titleText.text = BetTypeHelper.GetPopupTitle(betType, objectID);
 
         // 칩 타입 드롭다운 설정
         SetupChipTypeDropdown();
@@ -115,6 +136,14 @@ public class ChipSelectionPopup : UIScreen
         }
 
         isHatWingActive = false;
+        
+        // 아이템 버튼 패널 표시/숨김 (Number Bet만 아이템 사용 가능)
+        if (itemButtonsPanel != null)
+        {
+            bool isNumberBet = (betType == BetType.Number);
+            itemButtonsPanel.SetActive(isNumberBet);
+            Debug.Log($"[ChipSelectionPopup] Item buttons panel {(isNumberBet ? "shown" : "hidden")} for bet type: {betType}");
+        }
         
         // 아이템 버튼 갱신 (GameState가 바뀌었을 수 있으므로)
         RefreshItemButtons(chipData.gameState);
@@ -161,58 +190,86 @@ public class ChipSelectionPopup : UIScreen
     {
         // PLUS_SPOT 버튼
         if (plusSpotButton != null)
-        {
+        {            
+            plusSpotButton.gameObject.SetActive(true);
+
             bool hasPlusSpot = gameState != null && gameState.HasItem("PLUS_SPOT");
             plusSpotButton.interactable = hasPlusSpot;
 
             var item = gameState?.GetItemByID("PLUS_SPOT");
 
-            if (plusSpotCountText != null && item != null)
+            if (plusSpotCountText != null && item != null && item.count > 0)
             {
                 plusSpotCountText.text = $"• <sprite={item.SpriteIndex}> {item.itemID} : ({item.count})\n";
+            }
+            else if (plusSpotCountText != null)
+            {
+                plusSpotCountText.text = "";
+                plusSpotButton.gameObject.SetActive(false);
             }
         }
         
         // COPY_SPOT 버튼
         if (copySpotButton != null)
         {
+            copySpotButton.gameObject.SetActive(true);
+            
             bool hasCopySpot = gameState != null && gameState.HasItem("COPY_SPOT");
             copySpotButton.interactable = hasCopySpot;
 
             var item = gameState?.GetItemByID("COPY_SPOT");
 
-            if (copySpotCountText != null && item != null)
+            if (copySpotCountText != null && item != null && item.count > 0)
             {
                 copySpotCountText.text = $"• <sprite={item.SpriteIndex}> {item.itemID} : ({item.count})\n";
+            }
+            else if (copySpotCountText != null)
+            {
+                copySpotCountText.text = "";
+                copySpotButton.gameObject.SetActive(false);
             }
         }
         
         // UPGRADED_MULTI_SPOT 버튼
         if (upgradedMultiSpotButton != null)
         {
+            upgradedMultiSpotButton.gameObject.SetActive(true);
+
             bool hasUpgradedMultiSpot = gameState != null && gameState.HasItem("UPGRADED_MULTI_SPOT");
             upgradedMultiSpotButton.interactable = hasUpgradedMultiSpot;
 
             var item = gameState?.GetItemByID("UPGRADED_MULTI_SPOT");
 
-            if (upgradedMultiSpotCountText != null && item != null)
+            if (upgradedMultiSpotCountText != null && item != null && item.count > 0)
             {
                 upgradedMultiSpotCountText.text = $"• <sprite={item.SpriteIndex}> {item.itemID} : ({item.count})\n";
+            }
+            else if (upgradedMultiSpotCountText != null)
+            {
+                upgradedMultiSpotCountText.text = "";
+                upgradedMultiSpotButton.gameObject.SetActive(false);
             }
         }
         
         // HAT_WING 버튼 (토글 방식)
         if (hatWingButton != null)
         {
+            hatWingButton.gameObject.SetActive(true);
+
             bool hasHatWing = gameState != null && gameState.HasItem("HAT_WING");
             hatWingButton.interactable = hasHatWing;
 
             var item = gameState?.GetItemByID("HAT_WING");
-            
-            if (hatWingCountText != null && item != null)
+
+            if (hatWingCountText != null && item != null && item.count > 0)
             {
                 hatWingCountText.text = $"• <sprite={item.SpriteIndex}> {item.itemID} : ({item.count})\n";
             }
+            else if (hatWingCountText != null)
+            {
+                hatWingCountText.text = "";
+                hatWingButton.gameObject.SetActive(false);
+            }   
             
             // HatWing 상태 표시 (이미지로 ON/OFF)
             UpdateHatWingStatus();
@@ -247,7 +304,7 @@ public class ChipSelectionPopup : UIScreen
         Debug.Log($"[ChipSelectionPopup] CopySpot clicked - Source Spot: {objectID}");
         
         // Game에 CopySpot 모드 활성화 명령 전송 (원본 SpotID 전달)
-        GB.Presenter.Send(Game.DOMAIN, "CMD_START_COPY_SPOT", objectID);
+        GB.Presenter.Send(Game.DOMAIN, Game.Keys.CMD_START_COPY_SPOT, objectID);
         
         // 팝업 닫기
         OnClose();
@@ -258,7 +315,17 @@ public class ChipSelectionPopup : UIScreen
     /// </summary>
     private void OnHatWingToggle()
     {
-        Debug.Log($"[ChipSelectionPopup] HatWing toggle clicked - Current: {isHatWingActive}");
+        // 현재 HatWing 보유 개수 확인
+        int hatWingCount = currentGameState != null ? (currentGameState.GetItemByID("HAT_WING")?.count ?? 0) : 0;
+        
+        Debug.Log($"[ChipSelectionPopup] HatWing toggle clicked - Current Active: {isHatWingActive}, Available: {hatWingCount}");
+        
+        // HatWing이 없으면 토글 불가
+        if (!isHatWingActive && hatWingCount <= 0)
+        {
+            Debug.LogWarning("[ChipSelectionPopup] Cannot toggle HatWing - no items available!");
+            return;
+        }
         
         // 로컬 HatWing 상태 토글
         isHatWingActive = !isHatWingActive;
@@ -424,87 +491,62 @@ public class ChipSelectionPopup : UIScreen
         // 적용된 아이템 리스트 생성
         List<string> appliedItems = new List<string>();
         
-        // HatWing이 활성화되어 있으면 소모 및 리스트 추가
+        // HatWing이 활성화되어 있는지 확인
         if (isHatWingActive)
         {
-            Debug.Log($"[ChipSelectionPopup] HatWing is active - consuming item");
-            GB.Presenter.Send(Game.DOMAIN, Game.Keys.CMD_USE_ITEM_BY_ID, new object[] { "HAT_WING", new int[] { objectID } });
-            appliedItems.Add("HAT_WING");
+            // 같은 배팅(betType + targetValue + isHatWingApplied)이 이미 있는지 확인
+            bool existingBetWithHatWing = false;
+            
+            if (currentGameState != null && currentGameState.currentBets != null)
+            {
+                existingBetWithHatWing = currentGameState.currentBets.Exists(b =>
+                    b.betType == betType && b.targetValue == objectID && b.isHatWingApplied);
+            }
+            
+            // 이미 HatWing이 적용된 배팅이 없으면 사용
+            if (!existingBetWithHatWing)
+            {
+                // HatWing은 배팅당 1개만 사용 (중복 사용 방지)
+                GB.Presenter.Send(Game.DOMAIN, Game.Keys.CMD_USE_ITEM_BY_ID, new object[] { "HAT_WING", new int[] { objectID } });
+                appliedItems.Add("HAT_WING");
+                Debug.Log($"[ChipSelectionPopup] HatWing used for new bet: {betType} on {objectID}");
+            }
+            else
+            {
+                // 기존 배팅에 칩만 추가 (HatWing 재사용하지 않음)
+                appliedItems.Add("HAT_WING"); // BetConfirmMessage에는 포함 (isHatWingApplied 플래그용)
+                Debug.Log($"[ChipSelectionPopup] HatWing already applied to existing bet: {betType} on {objectID}, not using item again");
+            }
+            
+            // HatWing 사용 후 로컬 상태 리셋 (중복 사용 방지)
+            isHatWingActive = false;
+            UpdateHatWingStatus();
         }
         
         // BetConfirmMessage 생성 및 콜백 호출
         var confirmData = new BetConfirmMessage(betType, objectID, selectedChipType, chipCount, appliedItems);
         onConfirmWithType?.Invoke(confirmData);
         
-        Debug.Log($"[ChipSelectionPopup] OnConfirmWithType: object {objectID}, Chip {selectedChipType} x{chipCount}, HatWing: {isHatWingActive}");
-        
         OnClose();
     }
 
     private void OnCancel()
     {
-        Debug.Log($"[ChipSelectionPopup] OnCancel: object {objectID}");
+        // 취소 시 HatWing 상태 리셋 (아이템 복구)
+        if (isHatWingActive)
+        {
+            isHatWingActive = false;
+            UpdateHatWingStatus();
+            Debug.Log("[ChipSelectionPopup] HatWing state reset on cancel");
+        }
         
         OnClose();
     }
     
     private void OnClose()
     {
-        Debug.Log($"[ChipSelectionPopup] OnClose: object {objectID}");
         GB.Presenter.Send<int>(Game.DOMAIN, Game.Keys.CMD_POPUP_CLOSED, 0);
         gameObject.SetActive(false);
-    }
-    
-    /// <summary>
-    /// 팝업 제목 생성 (배팅 타입과 오브젝트 정보에 따라)
-    /// </summary>
-    private string GetPopupTitle()
-    {
-        switch (betType)
-        {
-            case BetType.Number:
-                return $"Select Chip for Number {objectID}";
-                
-            case BetType.Color:
-                return $"Select Chip for {GetColorName(objectID)}";
-                
-            case BetType.OddEven:
-                return $"Select Chip for {(objectID == 0 ? "Even" : "Odd")}";
-                
-            case BetType.HighLow:
-                return $"Select Chip for {(objectID == 0 ? "Low (1-18)" : "High (19-36)")}";
-                
-            case BetType.Dozen:
-                return $"Select Chip for Dozen {GetDozenName(objectID)}";
-                
-            case BetType.Column:
-                return $"Select Chip for Column {objectID}";
-                
-            default:
-                return $"Select Chip for {betType} {objectID}";
-        }
-    }
-    
-    /// <summary>
-    /// 색상 이름 반환
-    /// </summary>
-    private string GetColorName(int colorID)
-    {
-        return colorID == 0 ? "Red" : "Black";
-    }
-    
-    /// <summary>
-    /// Dozen 이름 반환
-    /// </summary>
-    private string GetDozenName(int dozenID)
-    {
-        switch (dozenID)
-        {
-            case 0: return "1st (1-12)";
-            case 1: return "2nd (13-24)";
-            case 2: return "3rd (25-36)";
-            default: return $"{dozenID + 1}th";
-        }
     }
 }
 

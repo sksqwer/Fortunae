@@ -64,59 +64,11 @@ public class Spot
         if (col < 2) adjacent.Add(row * 3 + col + 2);          // 오른쪽
         
         return adjacent;
-    }
-    
-    // 리셋 (턴 시작 시 - ChipItem만 제거, SpotItem/CharmItem은 유지)
-    public void ResetForNewTurn()
-    {
-        Debug.Log($"[Spot] ResetForNewTurn called for Spot {spotBase.id}");
-        
-        // ChipItem만 제거 (SpotItem/CharmItem은 유지, 순서 보존)
-        int removedCount = appliedRecords.RemoveAll(record => 
-            record.itemType == ItemType.ChipItem);
-        Debug.Log($"[Spot] Removed {removedCount} ChipItem records from Spot {spotBase.id}");
-        
-        // SpotItem/CharmItem이 남아있으면 재계산하지 않고 유지
-        // isDestroyed, currentNumber, currentColor, currentProbability, currentPayoutMultiplier는 
-        // 아이템 적용 결과를 유지해야 하므로 리셋하지 않음
-        
-        Debug.Log($"[Spot] Spot {spotBase.id} state: Number={currentNumber}, Multiplier={currentPayoutMultiplier}, Destroyed={isDestroyed}");
-    }
-    
-    // 완전 리셋 (새 게임 시작)
-    public void ResetAll()
-    {
-        Debug.Log($"[Spot] ResetAll called for Spot {spotBase.id}");
-        
-        currentNumber = spotBase.id;
-        currentColor = spotBase.color;
-        isDestroyed = false;
-        currentProbability = baseProbability;
-        currentPayoutMultiplier = basePayoutMultiplier;
-        
-        // 모든 기록 클리어
-        appliedRecords.Clear();
-        
-        Debug.Log($"[Spot] Spot {spotBase.id} fully reset to base state");
-    }
+    }   
     
     // 아이템 기록 추가 (순서대로)
     public void AddRecord(AppliedItemRecord record)
     {
         appliedRecords.Add(record);
-    }
-    
-    // ChipItem 기록만 가져오기
-    public List<AppliedItemRecord> GetChipItemRecords()
-    {
-        return appliedRecords.FindAll(r => r.itemType == ItemType.ChipItem);
-    }
-    
-    // SpotItem/CharmItem 기록만 가져오기 (지속 효과)
-    public List<AppliedItemRecord> GetPersistentRecords()
-    {
-        return appliedRecords.FindAll(r => 
-            r.itemType == ItemType.SpotItem || 
-            r.itemType == ItemType.CharmItem);
     }
 }

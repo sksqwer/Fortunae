@@ -35,9 +35,17 @@ public class BetItemUI : MonoBehaviour
         // 배팅 정보
         if (betInfoText != null)
         {
-            string betTypeStr = GetBetTypeString(betData.betType);
-            string targetStr = GetTargetString(betData);
-            betInfoText.text = $"{betTypeStr}: {targetStr}";
+            string betTypeStr = BetTypeHelper.GetBetTypeName(betData.betType);
+            string targetStr = BetTypeHelper.GetBetDisplayName(betData.betType, betData.targetValue);
+            string betInfo = $"{betTypeStr}: {targetStr}";
+            
+            // HatWing 적용 여부 표시
+            if (betData.isHatWingApplied)
+            {
+                betInfo += " <color=#FFD700>[HW]</color>";
+            }
+            
+            betInfoText.text = betInfo;
         }
         
         // 배팅 금액
@@ -48,42 +56,6 @@ public class BetItemUI : MonoBehaviour
             betAmountText.text = $"${totalValue} ({totalCount} chips)";
         }
     }
-    
-    private string GetBetTypeString(BetType type)
-    {
-        switch (type)
-        {
-            case BetType.Number: return "Number";
-            case BetType.Color: return "Color";
-            case BetType.OddEven: return "Odd/Even";
-            case BetType.HighLow: return "High/Low";
-            case BetType.Dozen: return "Dozen";
-            case BetType.Column: return "Column";
-            default: return "Unknown";
-        }
-    }
-    
-    private string GetTargetString(BetData bet)
-    {
-        switch (bet.betType)
-        {
-            case BetType.Number:
-                return $"Spot {bet.targetValue}";
-            case BetType.Color:
-                return bet.targetValue == 0 ? "Red" : "Black";
-            case BetType.OddEven:
-                return bet.targetValue == 0 ? "Odd" : "Even";
-            case BetType.HighLow:
-                return bet.targetValue == 0 ? "Low (1-18)" : "High (19-36)";
-            case BetType.Dozen:
-                return $"Dozen {bet.targetValue}";
-            case BetType.Column:
-                return $"Column {bet.targetValue}";
-            default:
-                return bet.targetValue.ToString();
-        }
-    }
-    
     private void OnRemoveClicked()
     {
         if (betData != null)

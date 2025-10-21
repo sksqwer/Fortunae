@@ -14,13 +14,9 @@ public class ItemData
     
     // === Spot 아이템 전용 ===
     public SpotItemType spotItemType;
-    public int targetSpotID;            // PlusSpot, UpgradedMultiSpot 대상
-    public int copyFromSpotID;          // CopySpot 원본
-    public int copyToSpotID;            // CopySpot 대상
     
     // === Chip 아이템 전용 ===
     public ChipItemType chipItemType;
-    public List<int> attachedChipIndices; // Wing이 장착된 칩의 인덱스
     
     // === Charm 아이템 전용 ===
     public CharmType charmType;
@@ -54,12 +50,5 @@ public class ItemData
                 charmType = definition.charmType;
                 break;
         }
-        
-        attachedChipIndices = new List<int>();
-    }
-    
-    public void AddCount(int amount)
-    {
-        count += amount;
     }
 }
